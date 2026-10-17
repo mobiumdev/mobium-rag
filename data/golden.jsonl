@@ -1,0 +1,78 @@
+{"id": "q001", "question": "Why doesn't map print what's typed in a password field?", "kind": "fact", "gold": ["CHALLENGES#43"], "status": "reviewed"}
+{"id": "q002", "question": "A hierarchy read fails with 'Cannot set AccessibilityNodeInfo's field mSealed'. What does that mean, and does Mobium retry it?", "kind": "fact", "gold": ["CHALLENGES#51", "CHALLENGES#31", "CHALLENGES#110", "CHALLENGES#254"], "status": "reviewed"}
+{"id": "q003", "question": "I posted a notification with a two-word body and only the first word showed up. Why?", "kind": "fact", "gold": ["CHALLENGES#52"], "status": "reviewed"}
+{"id": "q004", "question": "Why does a testid locator I wrote by hand fail on a React Native app when the ref from map works?", "kind": "fact", "gold": ["CHALLENGES#findings-that-were-not-defects"], "status": "reviewed"}
+{"id": "q005", "question": "I cleared the mock location but dumpsys still reports the mocked position. Is that a bug?", "kind": "fact", "gold": ["CHALLENGES#56", "CHALLENGES#59"], "status": "reviewed"}
+{"id": "q006", "question": "Why does Mobium read a field back after typing into it on iOS?", "kind": "fact", "gold": ["CHALLENGES#61", "CHALLENGES#108"], "status": "reviewed"}
+{"id": "q007", "question": "On an iOS permission prompt, which button does `alert accept` press?", "kind": "fact", "gold": ["CHALLENGES#305"], "status": "reviewed", "found": [305]}
+{"id": "q008", "question": "On Android's notification prompt, where Allow is stacked above Don't allow, which button does `alert dismiss` press, and why?", "kind": "fact", "gold": ["CHALLENGES#305"], "status": "reviewed"}
+{"id": "q009", "question": "Why did every iOS switch show up in map as 0?", "kind": "fact", "gold": ["CHALLENGES#65", "CHALLENGES#77"], "status": "reviewed"}
+{"id": "q010", "question": "A row's button is reported at 0,0 with no size. How does Mobium treat it?", "kind": "fact", "gold": ["CHALLENGES#72", "CHALLENGES#if-you-are-seeing-something-odd-start-here"], "status": "reviewed"}
+{"id": "q011", "question": "What happens if I tap a button that is under an alert on iOS?", "kind": "fact", "gold": ["CHALLENGES#105"], "status": "reviewed"}
+{"id": "q012", "question": "Why is UiAutomator2's idle wait capped at 500 milliseconds?", "kind": "fact", "gold": ["CHALLENGES#109"], "status": "reviewed"}
+{"id": "q013", "question": "Right after writing the clipboard on Android 13, a tap opened Quick Share. Why?", "kind": "fact", "gold": ["CHALLENGES#113"], "status": "reviewed"}
+{"id": "q014", "question": "Once scroll-to has found its target, why does it swipe only part of the way?", "kind": "fact", "gold": ["CHALLENGES#114"], "status": "reviewed"}
+{"id": "q015", "question": "Does a Mobium session on Android silence TalkBack?", "kind": "fact", "gold": ["CHALLENGES#208", "docs/SETUP.md#with-a-screen-reader-on"], "status": "reviewed"}
+{"id": "q016", "question": "On iOS, what happens to the device's orientation when the app refuses to turn?", "kind": "fact", "gold": ["CHALLENGES#218", "CHALLENGES#289"], "status": "reviewed"}
+{"id": "q017", "question": "Why did `mobium wait role=progressbar --for hidden` once finish at once, even with a spinner on screen, and what does Mobium do now?", "kind": "fact", "gold": ["CHALLENGES#222"], "status": "reviewed"}
+{"id": "q018", "question": "How does scroll-to tell a list that is loading its next page from a list that has ended?", "kind": "fact", "gold": ["CHALLENGES#223", "CHALLENGES#303", "CHALLENGES#22"], "status": "reviewed"}
+{"id": "q019", "question": "Why was a wait for text=Internet satisfied while the previous screen was still showing?", "kind": "fact", "gold": ["CHALLENGES#233", "CHALLENGES#306"], "status": "reviewed"}
+{"id": "q020", "question": "Why did every screen read fail while a system toast was up?", "kind": "fact", "gold": ["CHALLENGES#254"], "status": "reviewed"}
+{"id": "q021", "question": "How does Mobium read an iOS screen with thousands of elements, like a long episode list?", "kind": "fact", "gold": ["CHALLENGES#258"], "status": "reviewed"}
+{"id": "q022", "question": "What does map say when the device is locked?", "kind": "fact", "gold": ["CHALLENGES#260"], "status": "reviewed"}
+{"id": "q023", "question": "What does `mobium boot` do if the emulator is already running?", "kind": "fact", "gold": ["CHALLENGES#284"], "status": "reviewed"}
+{"id": "q024", "question": "How does `mobium shutdown` deal with an emulator that has frozen?", "kind": "fact", "gold": ["CHALLENGES#285"], "status": "reviewed"}
+{"id": "q025", "question": "Why did the MCP server answer a saved file's path as a relative path?", "kind": "fact", "gold": ["CHALLENGES#286"], "status": "reviewed"}
+{"id": "q026", "question": "Why did `expect silence` pass on a melody and on a beeping alarm?", "kind": "fact", "gold": ["CHALLENGES#287"], "status": "reviewed"}
+{"id": "q027", "question": "On an Apple TV, what does `alert accept` do?", "kind": "fact", "gold": ["CHALLENGES#298"], "status": "reviewed", "found": [313]}
+{"id": "q028", "question": "On an Apple TV, how does Mobium tell where a D-pad press moved focus?", "kind": "fact", "gold": ["CHALLENGES#297"], "status": "reviewed"}
+{"id": "q029", "question": "Can app_check tick a checkbox inside a WebView?", "kind": "fact", "gold": ["CHALLENGES#299"], "status": "reviewed"}
+{"id": "q030", "question": "What happens now when an agent types from the native context into a read-only field in a WebView?", "kind": "fact", "gold": ["CHALLENGES#301"], "status": "reviewed"}
+{"id": "q031", "question": "Why does map say an Android slider's value is 'in its own steps'?", "kind": "fact", "gold": ["CHALLENGES#302"], "status": "reviewed"}
+{"id": "q032", "question": "How can I find out which Android version a device is running with Mobium?", "kind": "fact", "gold": ["CHALLENGES#304", "docs/guides/cli.md#1-which-devices", "skills/mobile-check/SKILL.md#first-check-there-is-a-device"], "status": "reviewed"}
+{"id": "q033", "question": "Why do dumpsys and user-rotation give different numbers for the same rotation?", "kind": "fact", "gold": ["CHALLENGES#48"], "status": "reviewed"}
+{"id": "q034", "question": "If I set an app's language to zz-ZZ and Mobium confirms it, does the app have that translation?", "kind": "fact", "gold": ["CHALLENGES#49", "skills/mobile-check/SKILL.md#device-state"], "status": "reviewed"}
+{"id": "q035", "question": "Why is press-tap refused on Android 16 and later?", "kind": "fact", "gold": ["CHALLENGES#86", "docs/GESTURES.md#three-ways-a-second-finger-went-wrong"], "status": "reviewed"}
+{"id": "q036", "question": "Can I use press-tap on iOS?", "kind": "fact", "gold": ["CHALLENGES#85", "docs/GESTURES.md#three-ways-a-second-finger-went-wrong"], "status": "reviewed"}
+{"id": "q037", "question": "What does a second connection to webinspectord cost, and how does Mobium avoid it?", "kind": "fact", "gold": ["CHALLENGES#45"], "status": "reviewed"}
+{"id": "q038", "question": "Why did Mobium refuse a tap inside Safari's page, and how does it place one there now?", "kind": "fact", "gold": ["CHALLENGES#47", "CHALLENGES#248"], "status": "reviewed"}
+{"id": "q039", "question": "The emulator fails with 'Cannot find valid sdk root path' although adb works fine. What is wrong?", "kind": "fact", "gold": ["docs/SETUP.md#two-traps-neither-of-which-names-its-own-cause", "CHALLENGES#environment-traps"], "status": "reviewed"}
+{"id": "q040", "question": "In what order should I stop the daemon, simulators, emulators and adb?", "kind": "fact", "gold": ["docs/SHUTDOWN.md#the-order"], "status": "reviewed"}
+{"id": "q041", "question": "Can Mobium drive iOS from a Windows machine?", "kind": "fact", "gold": ["docs/WINDOWS.md#android-only-ios-is-not-possible-on-windows", "docs/SETUP.md#driving-another-machines-devices"], "status": "reviewed"}
+{"id": "q042", "question": "What can Mobium do on an iOS simulator that it refuses on a real iPhone?", "kind": "fact", "gold": ["docs/SETUP.md#what-a-phone-cannot-do"], "status": "reviewed"}
+{"id": "q043", "question": "How do I run two Android emulators side by side?", "kind": "fact", "gold": ["docs/SETUP.md#running-two-at-once", "docs/SETUP.md#parallel-runs"], "status": "reviewed"}
+{"id": "q044", "question": "Can Mobium drive a Flutter app?", "kind": "fact", "gold": ["docs/APP-TYPES.md#cross-platform-or-native-once-removed"], "status": "reviewed"}
+{"id": "q045", "question": "Does `press back` work on iOS?", "kind": "fact", "gold": ["docs/BACK.md#ios", "docs/BACK.md#in-mobium", "skills/mobile-check/SKILL.md#interruptions-and-hardware-buttons"], "status": "reviewed"}
+{"id": "q046", "question": "What do alert accept and dismiss press on Android and on iOS, and why is a dialog of three or more buttons refused?", "kind": "multi", "gold": ["CHALLENGES#106", "CHALLENGES#305"], "status": "reviewed"}
+{"id": "q047", "question": "How did refusals from the native context change for a checkbox and for a read-only field inside a WebView?", "kind": "multi", "gold": ["CHALLENGES#299", "CHALLENGES#300", "CHALLENGES#301"], "status": "reviewed"}
+{"id": "q048", "question": "Why did agents that swiped and mapped stop at row 20 of a 60-row feed when scroll-to does not?", "kind": "multi", "gold": ["CHALLENGES#223", "CHALLENGES#303"], "status": "reviewed"}
+{"id": "q049", "question": "How is a slider filled on iOS compared with an Android seek bar?", "kind": "multi", "gold": ["CHALLENGES#219", "CHALLENGES#227", "CHALLENGES#302"], "status": "reviewed", "found": [318]}
+{"id": "q050", "question": "Why does iOS lose characters when typing, and what happened with a password on a real iPhone?", "kind": "multi", "gold": ["CHALLENGES#61", "CHALLENGES#159"], "status": "reviewed"}
+{"id": "q051", "question": "What happens when a native target is under the keyboard, and why did Android's keyboard over an app's WebView refuse every tap?", "kind": "multi", "gold": ["CHALLENGES#107", "CHALLENGES#294"], "status": "reviewed"}
+{"id": "q052", "question": "What order do I stop things in, and what if the emulator has frozen?", "kind": "multi", "gold": ["docs/SHUTDOWN.md#the-order", "CHALLENGES#285", "docs/SHUTDOWN.md#2-simulators-then-emulators"], "status": "reviewed"}
+{"id": "q053", "question": "On an Apple TV, why did every press go to the runner, and how is an alert answered?", "kind": "multi", "gold": ["CHALLENGES#296", "CHALLENGES#298", "docs/SETUP.md#an-apple-tv-simulator"], "status": "reviewed", "found": [313]}
+{"id": "q054", "question": "How much does a Mobium enterprise license cost?", "kind": "unanswerable", "gold": [], "status": "reviewed"}
+{"id": "q055", "question": "Does Mobium support HarmonyOS devices?", "kind": "fact", "gold": ["README.md#drivers-for-other-platforms"], "status": "reviewed"}
+{"id": "q056", "question": "How do I drive a Galaxy Watch running Wear OS?", "kind": "fact", "gold": ["README.md#platforms"], "status": "reviewed", "found": [315, 316, 317]}
+{"id": "q057", "question": "How do I connect Mobium to BrowserStack's device cloud?", "kind": "fact", "gold": ["docs/ROADMAP.md#under-consideration"], "status": "reviewed"}
+{"id": "q058", "question": "Can Mobium automate a Tizen TV?", "kind": "fact", "gold": ["README.md#drivers-for-other-platforms"], "status": "reviewed"}
+{"id": "q059", "question": "Does Mobium run on KaiOS phones?", "kind": "fact", "gold": ["README.md#drivers-for-other-platforms"], "status": "reviewed"}
+{"id": "q060", "question": "How do I drive a BlackBerry device?", "kind": "fact", "gold": ["README.md#drivers-for-other-platforms"], "status": "reviewed"}
+{"id": "q061", "question": "Can I run Mobium tests on Sauce Labs?", "kind": "fact", "gold": ["docs/ROADMAP.md#under-consideration"], "status": "reviewed"}
+{"id": "q062", "question": "On Android, what happens to the device's rotation when an app refuses a turn?", "kind": "fact", "gold": ["CHALLENGES#308"], "status": "reviewed"}
+{"id": "q063", "question": "What happens to the screen orientation when a Mobium session ends?", "kind": "fact", "gold": ["CHALLENGES#308"], "status": "reviewed"}
+{"id": "q064", "question": "How do I tap the More button in one row of a list when every row has one?", "kind": "multi", "gold": ["CHALLENGES#307", "docs/guides/cli.md#4-locators-and-refs"], "status": "reviewed"}
+{"id": "q065", "question": "How do I make a locator match only the whole text, not part of it?", "kind": "multi", "gold": ["CHALLENGES#306", "docs/guides/cli.md#4-locators-and-refs"], "status": "reviewed"}
+{"id": "q066", "question": "How do I press Allow While Using App on iOS's location permission prompt?", "kind": "fact", "gold": ["CHALLENGES#305"], "status": "reviewed"}
+{"id": "q067", "question": "Does scroll-to work inside a WebView?", "kind": "fact", "gold": ["CHALLENGES#309"], "status": "reviewed"}
+{"id": "q068", "question": "What can happen when scroll-to searches up past the start of a list?", "kind": "fact", "gold": ["CHALLENGES#310"], "status": "reviewed"}
+{"id": "q069", "question": "Can I give Mobium a password without the agent seeing it?", "kind": "fact", "gold": ["docs/ROADMAP.md#under-consideration"], "status": "reviewed"}
+{"id": "q070", "question": "Why does Mobium scroll a row out from under iOS 26's toolbar before tapping it?", "kind": "fact", "gold": ["CHALLENGES#197"], "status": "reviewed"}
+{"id": "q071", "question": "On iOS, does `wait --for visible` pass for an element that is in the screen's tree but scrolled off screen?", "kind": "fact", "gold": ["CHALLENGES#311"], "status": "reviewed"}
+{"id": "q072", "question": "How do I target a button that is inside a frame of a WebView's page?", "kind": "fact", "gold": ["CHALLENGES#312"], "status": "reviewed"}
+{"id": "q073", "question": "Inside a WebView, does `find` answer from the page or from the native screen?", "kind": "fact", "gold": ["CHALLENGES#312"], "status": "reviewed"}
+{"id": "q074", "question": "What locator does `mobium inspect` record for a tap on a web page's link that has no id?", "kind": "fact", "gold": ["CHALLENGES#314"], "status": "reviewed"}
+{"id": "q075", "question": "How do I answer the ✓ and ✕ confirmation dialog on a Wear OS watch?", "kind": "fact", "gold": ["CHALLENGES#317"], "status": "reviewed"}
+{"id": "q076", "question": "Why did map list every switch on a Wear OS settings screen three times?", "kind": "fact", "gold": ["CHALLENGES#316"], "status": "reviewed"}
+{"id": "q077", "question": "Can Mobium turn a Wear OS watch's crown?", "kind": "fact", "gold": ["README.md#platforms"], "status": "reviewed"}
+{"id": "q078", "question": "Can Mobium automate a car's head unit?", "kind": "fact", "gold": ["examples/drivers/README.md#writing-a-mobium-driver"], "status": "reviewed"}

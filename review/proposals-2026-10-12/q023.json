@@ -1,0 +1,22 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "It changes nothing: it answers that the AVD was already running and names its serial (\"mobium-test was already running, as emulator-5554\").",
+  "To restart a running emulator, run `mobium shutdown <serial>` first, then `mobium boot <avd>`."
+ ],
+ "note": "284 alone, checked against the code (agent/boot.go:79) and boot's help and schema (\"One already running is said to be, not started again\"). The guides never say it: cli.md and SETUP.md describe boot without the running case.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "gap",
+   "where": "docs/guides/cli.md:38, docs/SETUP.md:86",
+   "what": "The guides describe `mobium boot` without saying what it does for an emulator already running, or that a restart is shutdown then boot; only CHALLENGES 284 and the command's help say so.",
+   "evidence": "cli.md:38 'boots an Android emulator by its AVD's name … and answers once it has booted'; cmd/mobium/boot.go:11 'One already running is said to be.'"
+  }
+ ]
+}

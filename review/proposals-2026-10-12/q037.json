@@ -1,0 +1,15 @@
+{
+ "decision": "edit",
+ "question": "What does a second connection to webinspectord cost, and how does Mobium avoid it?",
+ "also": [],
+ "drop": [],
+ "facts": [
+  "The first connection to a simulator's webinspectord gets its first byte in 0.17 s; every connection after it waits 10.2 s, consistently to the tenth of a second, which reads as a timeout rather than load.",
+  "Mobium holds one connection for the life of the session, which took the same sequence from 10.4 s to 0.00 s.",
+  "The cause inside webinspectord is not known; three reasoned guesses were wrong, and a trace of every message's arrival settled what was measured."
+ ],
+ "note": "45 alone. Reworded: 'why' has no answer in the docs, as the draft's concern said; the question now asks what it costs and how it is avoided. Checked against webview/rwi_discover.go:341-346 and rwi_session.go:40-45 (held per device session).",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

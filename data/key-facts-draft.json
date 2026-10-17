@@ -1,0 +1,579 @@
+{
+ "q001": {
+  "facts": [
+   "Android puts the typed value of a password field straight into the node's text, so printing it would leak the password into logs and transcripts.",
+   "Reads of the field show bullets and the character count, never the value."
+  ],
+  "concern": ""
+ },
+ "q002": {
+  "facts": [
+   "The error means the screen was changing: accessibility nodes were recycled underneath the read, during an animation or while a system toast was up.",
+   "Mobium retries it, and only failures of this kind.",
+   "UiAutomator2 reads retry these failures for up to 6 seconds, 300ms apart, then report how many attempts were made."
+  ],
+  "concern": ""
+ },
+ "q003": {
+  "facts": [
+   "adb shell runs its argument through a shell on the device, so an unquoted value with a space becomes two arguments.",
+   "Everything after the first word is silently dropped, because cmd notification post accepts extra arguments."
+  ],
+  "concern": ""
+ },
+ "q004": {
+  "facts": [
+   "React Native repeats one component's accessibility identifier across the several native views it renders, so a hand-written testid can match many nodes.",
+   "Mobium refuses an ambiguous hand-written locator rather than tapping the first match.",
+   "The locators map derives are unique, so the ref from map is the durable way in."
+  ],
+  "concern": ""
+ },
+ "q005": {
+  "facts": [
+   "It is not a bug.",
+   "Android keeps the last location a test provider supplied after the provider is removed, and that cache cannot be cleared from outside.",
+   "Whether mocking has stopped shows in the provider label losing [mock], not in the position."
+  ],
+  "concern": ""
+ },
+ "q006": {
+  "facts": [
+   "On iOS, a keystroke sent while focus is still moving between fields lands nowhere, while the type call reports success.",
+   "Mobium reads the value back to catch a dropped character, and retries, typing more slowly each time."
+  ],
+  "concern": ""
+ },
+ "q007": {
+  "facts": [
+   "On a two-button iOS permission prompt, accept presses Allow, granting the permission.",
+   "On the three-button location prompt, accept is refused, naming its buttons.",
+   "alert --button presses one of them by its caption or its position."
+  ],
+  "concern": ""
+ },
+ "q008": {
+  "facts": [
+   "dismiss presses Don't allow.",
+   "Android marks a dialog's buttons positive and negative by resource id, not by position, so dismiss presses the negative one wherever it sits."
+  ],
+  "concern": ""
+ },
+ "q009": {
+  "facts": [
+   "The iOS parser used an element's value as its text, and a switch's value is 0 or 1.",
+   "The switch's name was in its label, which map passed over for the value."
+  ],
+  "concern": ""
+ },
+ "q010": {
+  "facts": [
+   "Mobium treats an element with zero bounds as off screen, the same as not found.",
+   "That not-found answer is what makes scroll-to and the implicit scroll swipe for it."
+  ],
+  "concern": ""
+ },
+ "q011": {
+  "facts": [
+   "The tap is refused as device_not_ready, quoting the dialog, instead of being reported as a success.",
+   "Nothing is tapped or scrolled; the dialog has to be answered first."
+  ],
+  "concern": ""
+ },
+ "q012": {
+  "facts": [
+   "At the 10-second default, every read of a screen in motion waited until the motion stopped.",
+   "At 0, a tap right after launch landed on a row still moving into place.",
+   "At 500 ms, taps after launch landed, and a moving screen could still be read mid-motion."
+  ],
+  "concern": ""
+ },
+ "q013": {
+  "facts": [
+   "Android 13 and later show a clipboard preview after every clipboard write, as its own window that no hierarchy contains.",
+   "The tap landed on the preview's share chip instead of the app."
+  ],
+  "concern": ""
+ },
+ "q014": {
+  "facts": [
+   "A full swipe from a near miss coasted the target past the top of the list on iOS, and the loop then reported the end.",
+   "Once the target is found, the loop swipes only about the distance it is out, with a small margin."
+  ],
+  "concern": ""
+ },
+ "q015": {
+  "facts": [
+   "No: TalkBack stays on through a Mobium session, with either Android driver.",
+   "It used to: Android's test-automation connection silences other accessibility services unless opened not to, and Mobium now opens it that way."
+  ],
+  "concern": ""
+ },
+ "q016": {
+  "facts": [
+   "WebDriverAgent sets the device's orientation even when the app in front does not turn, which left later apps opening sideways.",
+   "Mobium now takes a refused turn back to where the app stayed before reporting the refusal."
+  ],
+  "concern": ""
+ },
+ "q017": {
+  "facts": [
+   "progressbar was not a role, so the locator matched nothing, and a wait for nothing to be hidden was met at once.",
+   "progressbar is a role now: iOS's ActivityIndicator and ProgressIndicator, Android's ProgressBar.",
+   "A role nothing maps to is refused, naming the roles there are."
+  ],
+  "concern": "The passage says progressbar is now a recognized role, so it is unclear whether a progressbar locator is still refused merely because the current screen lacks one; the question's premise may not match the fixed behavior."
+ },
+ "q018": {
+  "facts": [
+   "A busy indicator inside the list means it is still loading, and scroll-to waits for it to go, up to ten seconds.",
+   "Without such an indicator, a swipe that moves nothing is taken as the end of the list."
+  ],
+  "concern": ""
+ },
+ "q019": {
+  "facts": [
+   "The text= locator matches part of a text, so the 'Network & internet' row on the screen being left satisfied text=Internet at once."
+  ],
+  "concern": ""
+ },
+ "q020": {
+  "facts": [
+   "The UiAutomator2 server's notification listener, which records toasts, broke every read while a toast was up."
+  ],
+  "concern": ""
+ },
+ "q021": {
+  "facts": [
+   "Once a session's last screen held 1,000 or more elements, Mobium reads without asking WebDriverAgent for visibility; the first read of such a screen times out and falls back the same way.",
+   "What is shown is worked out from geometry: an element off the screen, or inside one that is, is hidden. map says so, and that an element something covers may still be listed.",
+   "On such a screen a locator matches only what is shown, and an action never scrolls by itself: it is refused, naming app_swipe and app_scroll_to."
+  ],
+  "concern": ""
+ },
+ "q022": {
+  "facts": [
+   "With the system shell in front (SpringBoard on iOS, SystemUI on Android), map asks whether the device is locked and, if so, says this is the lock screen and to run `mobium lock unlock` or unlock by hand.",
+   "A read that fails (map, text or an action's) asks once whether the device is locked and answers device_not_ready if it is.",
+   "Before CHALLENGES 260, a locked iPhone mapped as two bare scroll views, and a sleeping Android screen failed blaming \"the screen was changing\"."
+  ],
+  "concern": ""
+ },
+ "q023": {
+  "facts": [
+   "It changes nothing: it answers that the AVD was already running and names its serial (\"mobium-test was already running, as emulator-5554\").",
+   "To restart a running emulator, run `mobium shutdown <serial>` first, then `mobium boot <avd>`."
+  ],
+  "concern": ""
+ },
+ "q024": {
+  "facts": [
+   "mobium shutdown gives the emulator's console (`adb emu kill`) ten seconds.",
+   "If the emulator is still listed, it ends the process its discovery file names, only once ps names that program qemu or an emulator (by its name, not its path).",
+   "Measured: a frozen emulator shut down in 10.9s, where before it ran six minutes and left it running."
+  ],
+  "concern": ""
+ },
+ "q025": {
+  "facts": [
+   "The MCP server runs the handlers in its own process and did not make relative paths absolute, so it answered the path as given (\"out/mcp.wav\"), though the file itself was saved in the right place, the host's directory.",
+   "Paths are now made absolute where the caller is, by agent.AbsolutePaths, for the CLI, pipe and the MCP server (app_batch steps included), never in the daemon."
+  ],
+  "concern": ""
+ },
+ "q026": {
+  "facts": [
+   "The timeline splits a sound wherever its pitch moves (beyond 2% or 5 Hz between tenths of a second), so sweeps, melodies, vibrato and beeps became short pieces.",
+   "expect dropped every piece of 200ms or less (ignore_ms) as a tap's click, so they passed as silence.",
+   "Now a run of short pieces, across silences of a tenth of a second or less, counts as one sound once together it lasts longer than ignore_ms; it keeps a pitch only if every piece is within 5% of one."
+  ],
+  "concern": ""
+ },
+ "q027": {
+  "facts": [
+   "alert accept (and dismiss) are refused on an Apple TV as unsupported, before any answer is sent.",
+   "A tvOS alert opens with focus on its cancel button and is answered with the remote: move focus with the D-pad, press select; Back (Menu) answers with the cancel button."
+  ],
+  "concern": ""
+ },
+ "q028": {
+  "facts": [
+   "On tvOS WebDriverAgent marks the element with focus focused=\"true\", and Mobium's iOS parser reads it (since CHALLENGES 297).",
+   "After a D-pad press Mobium reads the screen for up to two seconds and compares the focused element with the one before: it reports where focus moved, that it did not move, or that nothing reports focus."
+  ],
+  "concern": ""
+ },
+ "q029": {
+  "facts": [
+   "Yes: app_check works in the WebView's context.",
+   "It reads the page's own state (an input's checked, or aria-checked for a role that has one), taps as app_tap aims there, and reads the page back; asked for the state it is already in, it does nothing.",
+   "From the native context, a page element with no checked state is refused saying it is part of a page and naming the switch to its context."
+  ],
+  "concern": ""
+ },
+ "q030": {
+  "facts": [
+   "From the native context, app_type and app_fill into a node of a WebView's page go in through the page when it can be reached and one page element clearly matches the node's rectangle.",
+   "The page is then asked whether a person could type there, so a read-only field is refused with 'readonly attribute' and keeps its text.",
+   "With no reachable page (an app that has not opened its WebView to debugging) or no clear match, the text goes in natively as before, and a read-only field can still take it."
+  ],
+  "concern": ""
+ },
+ "q031": {
+  "facts": [
+   "An Android seek bar's reading is its progress in its own steps, and no maximum is reported, so Mobium cannot turn it into the app's number (MobiumApp's Volume at 50 reads 5.0).",
+   "map marks it, as 'Volume (slider, 5.0 in its own steps)', so it is not read as the slider's range; an agent read 2.0 as 20 out of 10 before.",
+   "The structured answer carries value_scale beside value, and app_fill's also carries position, the 0-to-1 asked for. An iOS slider's value, the app's own, is left bare."
+  ],
+  "concern": ""
+ },
+ "q032": {
+  "facts": [
+   "mobium devices (app_devices) reports a ready Android device's version as its runtime, such as 'Android 15 (API 35)', the field iOS devices already had.",
+   "It is read from ro.build.version.release and ro.build.version.sdk in one shell call, only for a device in the 'device' state."
+  ],
+  "concern": ""
+ },
+ "q033": {
+  "facts": [
+   "dumpsys's mCurrentRotation reports rotation in degrees, such as ROTATION_90.",
+   "user_rotation and cmd window user-rotation count quarter turns, so 90 degrees is 1; reading one as the other accepts 0 and rejects everything else.",
+   "dumpsys window prints several spellings at once; mCurrentRotation from dumpsys window displays is the one that means what is on screen now."
+  ],
+  "concern": ""
+ },
+ "q034": {
+  "facts": [
+   "No. Mobium's confirmation means only that the device stored the language tag, and it says so: whether the app has that translation is not something Android reports, so check the screen.",
+   "Android accepts a tag like zz-ZZ, reads it back as asked, and the app renders in its default language.",
+   "On iOS the language is a launch argument, and the answer says the same: whether the app has the translation shows only on the screen."
+  ],
+  "concern": ""
+ },
+ "q035": {
+  "facts": [
+   "UiAutomator2 gives a late finger its own down time, where Android's contract is one per gesture; Android 17 rejects the rest of the gesture, the lifts included.",
+   "Both fingers then stay down for every injected touch on the device, adb shell input included, until a two-finger tap's closing events clear it; a UiAutomator2 restart does not.",
+   "So press-tap and press-drag are refused as unsupported above API 35; Android 16 is refused unmeasured, because a wrong guess costs the device's touch input."
+  ],
+  "concern": ""
+ },
+ "q036": {
+  "facts": [
+   "No. Mobium refuses press-tap and press-drag on iOS as unsupported (exit 5), on simulators and iPhones alike.",
+   "XCTest gives any finger that lands after a gesture has begun a zero-length touch at its target at the start, which an app can take as a tap before the press it belongs to.",
+   "Multi-finger taps land every finger together and work (app_tap with fingers)."
+  ],
+  "concern": ""
+ },
+ "q037": {
+  "facts": [
+   "The first connection to a simulator's webinspectord gets its first byte in 0.17 s; every connection after it waits 10.2 s, consistently to the tenth of a second, which reads as a timeout rather than load.",
+   "Mobium holds one connection for the life of the session, which took the same sequence from 10.4 s to 0.00 s.",
+   "The cause inside webinspectord is not known; three reasoned guesses were wrong, and a trace of every message's arrival settled what was measured."
+  ],
+  "concern": "The passage measures the delay but never explains its cause in webinspectord; the facts state what happens and the workaround."
+ },
+ "q038": {
+  "facts": [
+   "Safari's WebView element covers the whole window, chrome included, and the page cannot see its own inset (screenY, visualViewport.offsetTop and pageTop are all 0), so where its content sits could not be known and a tap was refused rather than approximated.",
+   "map and text kept working throughout, with a footnote: refs, labels and roles are right; only the rectangles were unknowable.",
+   "Since CHALLENGES 248 the page is placed from text: WebKit publishes each run of the page's text as a static text with its screen frame, a run that occurs once on both sides anchors the page, and two anchors must agree or the refusal stands. A tap on example.com's Learn more then opened its page, on a simulator and the iPhone 15 Plus."
+  ],
+  "concern": "The question says map refuses the tap; per the passage the frame check refuses actions while map itself still works."
+ },
+ "q039": {
+  "facts": [
+   "platform-tools must be installed into the SDK root by sdkmanager, not only as the Homebrew cask.",
+   "The emulator validates the SDK root by looking for that directory, while adb on PATH works regardless, so the error points the wrong way.",
+   "mobium doctor checks for it: an SDK root with no platform-tools directory is reported, with sdkmanager platform-tools as the remedy."
+  ],
+  "concern": ""
+ },
+ "q040": {
+  "facts": [
+   "Stop the daemon first, then simulators, then emulators, then adb.",
+   "The daemon goes first because it owns the device-side sessions: killing a device under a live session leaves instrumentation running against hardware about to vanish, and an emulator coming back with the same serial meets a dead cached session.",
+   "docs/checks/clean-stop.sh --quit does it in that order, and waits for the daemon to exit before stopping any device."
+  ],
+  "concern": ""
+ },
+ "q041": {
+  "facts": [
+   "No. On Windows Mobium drives Android only; iOS is not possible there.",
+   "Mobium drives iOS through xcrun simctl and WebDriverAgent, and a real iPhone needs WebDriverAgent built and signed by xcodebuild and reached over CoreDevice's tunnel — all of which are macOS-only.",
+   "Nor through another machine: --remote, which drives a Mac's devices over SSH, needs a Unix socket on the caller's side and refuses on Windows."
+  ],
+  "concern": ""
+ },
+ "q042": {
+  "facts": [
+   "On a real iPhone Mobium refuses permissions, appearance, the clipboard, simulated location and routes, and notifications, reading or posting them.",
+   "simctl does these on a simulator and devicectl has no equivalent, so on a phone each is refused with the reason rather than approximated.",
+   "Clearing an app's data is done differently on a phone: given the app's .app or .ipa (--bundle), Mobium uninstalls and reinstalls it, since nothing can delete from its container in place."
+  ],
+  "concern": ""
+ },
+ "q043": {
+  "facts": [
+   "Start the second emulator on its own port, for example with -port 5556, so it is emulator-5556.",
+   "With two devices ready, a call must name one: --device emulator-5556, or a client's device option; with none named, Mobium refuses, listing the ready devices.",
+   "To drive both at once, give each run its own daemon with MOBIUM_SESSION (a client's session option): one daemon holds a call for its whole length, and an emulator's 15 map calls took 22.3s sharing a daemon against 0.3s on its own."
+  ],
+  "concern": ""
+ },
+ "q044": {
+  "facts": [
+   "Yes, with no Flutter driver: Flutter publishes a semantics tree for screen readers, and UiAutomator2 and XCUITest read it as they read any other app's.",
+   "Measured on MobiumApp's flutter/ demo on an Android emulator, an iOS simulator and both real phones, held by docs/checks/flutter.sh.",
+   "What Flutter does not publish, Mobium cannot see: a CustomPaint widget with no Semantics, a game's canvas, an icon with no label (it maps as a bare Button)."
+  ],
+  "concern": ""
+ },
+ "q045": {
+  "facts": [
+   "No: press back is refused on iOS by design, because iOS has no back button and an edge swipe is a different event an app can tell apart.",
+   "The refusal names the alternatives: tap the navigation bar's back button, or ask for the swipe by name with press back --gesture (app_press with gesture true).",
+   "On iOS --gesture swipes in from the left edge starting in the navigation bar, because a list row with swipe actions takes a swipe started on it."
+  ],
+  "concern": ""
+ },
+ "q046": {
+  "facts": [
+   "accept and dismiss mean yes and no, so they answer a dialog of one or two buttons: iOS puts the cancel button first, and Android marks its buttons positive and negative by id (button1/button2, permission_allow/deny).",
+   "With three or more buttons neither verb means yes or no: on iOS accept pressed Cancel on a three-button alert and Don't Allow on the location prompt, and on Android dismiss pressed the middle button, so such a dialog is refused, naming its buttons.",
+   "--button presses one by its caption or its position from 1, and every answer says which button it pressed (pressed)."
+  ],
+  "concern": ""
+ },
+ "q047": {
+  "facts": [
+   "From the native context, a node of a WebView's page with no checked state is no longer called not a checkbox: the refusal says it is part of a page and names switching to its context, where app_check now works.",
+   "A WebView page node that reads as disabled is refused saying a read-only field reads the same as a disabled one there, naming the WebView's context, never a wait.",
+   "Where the native tree reads the read-only field as enabled (Android 17), app_type and app_fill from the native context now go in through the page when it can be reached, so the field is refused with readonly attribute instead of taking the text."
+  ],
+  "concern": ""
+ },
+ "q048": {
+  "facts": [
+   "While the next page loaded, the list stopped at row 20 and map said nothing about a busy indicator, so agents answered 20.",
+   "scroll-to waits out a busy indicator inside the list, up to ten seconds, before calling the end.",
+   "map now notes a list still loading after its last row, using the same check scroll-to waits on, and its notes are in the structured answer as notes as well as in its text."
+  ],
+  "concern": ""
+ },
+ "q049": {
+  "facts": [
+   "On iOS, app_fill moves a slider to a 0-to-1 position through WebDriverAgent, as a finger would: exact from either end, a step past from partway, and the value read back is the app's own.",
+   "On Android, app_fill touches the seek bar's track at the position, inset 16dp from each end and never on its last pixel, which lands exactly; UiAutomator2's set-value was not used because it takes the bar's own units and nothing gives its maximum.",
+   "An Android seek bar's value reads in its own steps, so it is marked value_scale, and app_fill's answer also carries position, the 0-to-1 asked for; an iOS slider's value is left bare."
+  ],
+  "concern": ""
+ },
+ "q050": {
+  "facts": [
+   "XCUITest types through the keyboard, and a keystroke sent while focus is still moving lands nowhere; Mobium now reads the value back and retries once.",
+   "On a real iPhone a password field is typed key by key on the keyboard that is up, so a Russian keyboard dropped every Latin letter while type reported all ten.",
+   "A password is now confirmed by its length (bullets read back, an empty field reads as its placeholder) and, if short, reported as not_confirmed with lengths only, saying how many characters the keyboard lacks and naming a few keys it has, without printing the password."
+  ],
+  "concern": ""
+ },
+ "q051": {
+  "facts": [
+   "A native target under the visible keyboard is refused as device_not_ready rather than tapped, naming how to hide the keyboard, and only where scrolling cannot bring it out.",
+   "On Android the keyboard is another window, so Mobium reads its touchable region from dumpsys window InputMethod, only while something has focus, and refuses a target inside it.",
+   "Over an app's WebView, Android's keyboard shrinks the page's viewport but not the WebView, so the height check written for Safari refused every web action; the frame now asks Android's keyboard regions too and uses the WebView's own frame."
+  ],
+  "concern": ""
+ },
+ "q052": {
+  "facts": [
+   "Stop the daemon first, then simulators, then emulators, then adb; mobium shutdown does the session and then the device in that order for one device.",
+   "For a frozen emulator, mobium shutdown gives its console ten seconds, then ends the emulator process its discovery file names.",
+   "A frozen emulator is reported as not answering adb (device_not_ready), and switching driver cannot help since every Android driver goes through adb."
+  ],
+  "concern": ""
+ },
+ "q053": {
+  "facts": [
+   "tvOS's WebDriverAgent runner answers from the foreground and stays there, so after a daemon restart it was in front and every press went to it; Mobium now presses Home once when the session opens, only while the runner is in front.",
+   "A tvOS alert opens with focus on its cancel button and is answered with the remote: the D-pad moves focus along its buttons, select presses the one with focus, and Back (the remote's Menu) answers with the cancel button.",
+   "app_alert accept and dismiss are refused on an Apple TV before anything is sent: WebDriverAgent's accept left the alert up."
+  ],
+  "concern": ""
+ },
+ "q058": {
+  "facts": [
+   "Mobium does not drive such a platform itself; it is reached through a third-party driver.",
+   "A driver is an executable named mobium-driver-<name> on PATH, in any language, speaking JSON-RPC on stdio, needing snapshot, screenshot and tap."
+  ],
+  "concern": ""
+ },
+ "q061": {
+  "facts": [
+   "Not yet: running Mobium on commercial device clouds and farms is planned but not built.",
+   "Until then Mobium drives only devices you can reach."
+  ],
+  "concern": ""
+ },
+ "q055": {
+  "concern": "",
+  "facts": [
+   "Mobium has no driver for HarmonyOS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+   "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+   "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+  ]
+ },
+ "q056": {
+  "concern": "",
+  "facts": [
+   "Wear OS is Android, and Mobium's Android backends drive it with nothing added: measured on a Wear OS 5.1 emulator through Wear's own Settings.",
+   "Its chips, its toggles and its own dialog work, app_alert answers the dialog, and swiping right is a watch's back.",
+   "Not yet measured on a real watch, and the crown has no command: press has no rotary input."
+  ]
+ },
+ "q057": {
+  "concern": "",
+  "facts": [
+   "Running Mobium on a commercial device cloud or device farm is planned, not built (decided 2026-10-12); until then Mobium drives only devices you can reach.",
+   "The first step written down is MobiumApp on AWS Device Farm's free trial, Android first, with a mobium binary and docs/checks/ as the test package."
+  ]
+ },
+ "q059": {
+  "concern": "",
+  "facts": [
+   "Mobium has no driver for KaiOS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+   "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+   "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+  ]
+ },
+ "q060": {
+  "concern": "",
+  "facts": [
+   "Mobium has no driver for BlackBerry OS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+   "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+   "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+  ]
+ },
+ "q062": {
+  "concern": "",
+  "facts": [
+   "Mobium puts the rotation back as it was before the request, lock and all, before it refuses.",
+   "So the next app does not open turned, and auto-rotate is left as it was."
+  ]
+ },
+ "q063": {
+  "concern": "",
+  "facts": [
+   "The session puts the orientation back as it found it.",
+   "On Android that includes the rotation lock a turn sets."
+  ]
+ },
+ "q064": {
+  "concern": "",
+  "facts": [
+   "Scope it to the row with within, as in label=More within text=Card 8.",
+   "A row without a More finds nothing, never the More of the row beside it."
+  ]
+ },
+ "q065": {
+  "concern": "",
+  "facts": [
+   "Put the value in double quotes, as in text=\"Internet\".",
+   "A quoted value matches the whole text, in any case, so text=\"Internet\" is not met by \"Network & internet\"."
+  ]
+ },
+ "q066": {
+  "concern": "",
+  "facts": [
+   "Use app_alert's button, by its caption or its position from 1.",
+   "accept and dismiss are refused on a dialog of three or more buttons, naming them."
+  ]
+ },
+ "q067": {
+  "concern": "",
+  "facts": [
+   "Yes: inside a WebView the page scrolls the ref into view itself.",
+   "No direction is needed there."
+  ]
+ },
+ "q068": {
+  "concern": "",
+  "facts": [
+   "The search stops at the start of a list instead of swiping again, so it pulls at most once.",
+   "At the start of a list the last swipe is a pull, which an app may answer by refreshing what it shows.",
+   "Mobium says so, in its answer and as may_have_refreshed in the details."
+  ]
+ },
+ "q069": {
+  "concern": "",
+  "facts": [
+   "Not yet: an agent today writes the password into app_type's arguments.",
+   "It is planned as a secret reference, a name Mobium resolves from the environment, so the agent never holds the value."
+  ]
+ },
+ "q070": {
+  "concern": "",
+  "facts": [
+   "A row behind the toolbar counted as in view, so the tap touched the toolbar and did nothing.",
+   "The part of a list in view now excludes bars drawn over its edges, and the scroll that brings a target in measures against that."
+  ]
+ },
+ "q071": {
+  "concern": "",
+  "facts": [
+   "No: visible and hidden count a match only with its center on the screen and inside the part of its list in view.",
+   "A wait for an element that is there but off screen times out saying so, and names app_scroll_to.",
+   "Other conditions — checked, text, enabled — still read a match that is off screen."
+  ]
+ },
+ "q072": {
+  "concern": "",
+  "facts": [
+   "Inside a WebView a locator can be css= with the frame's path in front: css=iframe#sameFrame >> #sameBtn.",
+   "A selector written for the frame's own document names only the page's own elements, so the refusal, and find, give the path that reaches it."
+  ]
+ },
+ "q073": {
+  "concern": "",
+  "facts": [
+   "From the page: in a WebView find matches the page's elements by the rules an action uses, and gives each the ref map gives it.",
+   "It used to answer from the native screen."
+  ]
+ },
+ "q074": {
+  "concern": "",
+  "facts": [
+   "Its whole text, quoted — text=\"Learn more\" — narrowed by role where the text names several.",
+   "A recording keeps each locator quoted, so it matches the whole text and never a part, and is never recorded by ref."
+  ]
+ },
+ "q075": {
+  "concern": "",
+  "facts": [
+   "app_alert sees Wear OS's own dialog, known by its layout's ids.",
+   "accept presses its ✓ (OK) and dismiss its ✕ (Cancel), and the answer says which it pressed."
+  ]
+ },
+ "q076": {
+  "concern": "",
+  "facts": [
+   "A Wear toggle chip is a clickable ToggleButton holding two more — its switch and the switch's container — each checkable, neither clickable, each with the chip's name and state.",
+   "A checkable node that takes no touch of its own, inside a clickable control that is checkable itself, is now that control's switch, not a second target."
+  ]
+ },
+ "q077": {
+  "concern": "",
+  "facts": [
+   "Not yet: press has no rotary input, so the crown has no command.",
+   "Wear OS is otherwise driven by the Android backends, measured on a Wear OS 5.1 emulator; a real watch is not measured yet."
+  ]
+ },
+ "q078": {
+  "concern": "",
+  "facts": [
+   "Not by itself: Mobium drives Android and iOS out of the box.",
+   "Anything else — a car head unit among them — is a driver: a program Mobium starts and talks to over a pipe."
+  ]
+ }
+}

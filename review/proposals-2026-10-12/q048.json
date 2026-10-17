@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "While the next page loaded, the list stopped at row 20 and map said nothing about a busy indicator, so agents answered 20.",
+  "scroll-to waits out a busy indicator inside the list, up to ten seconds, before calling the end.",
+  "map now notes a list still loading after its last row, using the same check scroll-to waits on, and its notes are in the structured answer as notes as well as in its text."
+ ],
+ "note": "223 and 303, both needed: 223 for why scroll-to does not stop, 303 for why map-and-swipe did. Facts checked against internal/agent/handlers.go:626 (busyIn in map's note), scroll.go:70, structured.go:73 (Notes). Fact 2 gains the ten-second bound, fact 3 that the note uses scroll-to's own check. The stored answer inverts the cause (blames agents reading text, while the note did not exist yet); no doc problem behind it.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

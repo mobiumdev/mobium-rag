@@ -1,0 +1,26 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [
+  "docs/BACK.md#in-mobium",
+  "skills/mobile-check/SKILL.md#interruptions-and-hardware-buttons"
+ ],
+ "drop": [],
+ "facts": [
+  "No: press back is refused on iOS by design, because iOS has no back button and an edge swipe is a different event an app can tell apart.",
+  "The refusal names the alternatives: tap the navigation bar's back button, or ask for the swipe by name with press back --gesture (app_press with gesture true).",
+  "On iOS --gesture swipes in from the left edge starting in the navigation bar, because a list row with swipe actions takes a swipe started on it."
+ ],
+ "note": "BACK.md#ios says it is refused but not what to do in Mobium; that is in BACK.md 'In Mobium' (fixed 2026-10-01, back.sh) and the skill, both of which retrieval ranked first and second, so ADD both. Checked against internal/mobiumdriver/buttons.go:233-240 and schema.go:1409-1415. The stored answer, 'use press back --gesture', is right; the draft facts missed the gesture.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "doc-gap",
+   "where": "docs/BACK.md:128-138 (## iOS)",
+   "what": "The iOS section's table says press back is 'refused, with the reason' and never mentions press back --gesture, which since 2026-10-01 is Mobium's swipe back on iOS; a reader of that section alone, or a retriever, gets no way back. One line pointing at --gesture would close it.",
+   "evidence": "docs/BACK.md:193-195 '`press back --gesture` (`app_press` with `gesture`) swipes in from the left edge, mid-height on Android and in the navigation bar on iOS'"
+  }
+ ]
+}

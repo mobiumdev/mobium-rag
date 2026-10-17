@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "XCUITest types through the keyboard, and a keystroke sent while focus is still moving lands nowhere; Mobium now reads the value back and retries once.",
+  "On a real iPhone a password field is typed key by key on the keyboard that is up, so a Russian keyboard dropped every Latin letter while type reported all ten.",
+  "A password is now confirmed by its length (bullets read back, an empty field reads as its placeholder) and, if short, reported as not_confirmed with lengths only, saying how many characters the keyboard lacks and naming a few keys it has, without printing the password."
+ ],
+ "note": "61 and 159, checked against internal/mobiumdriver/wda.go:828 and keyboard.go:394 (placeholderValue compared to read an empty field). Fact 1: the retry is once, not repeated. Fact 3 corrected: the report names a few keys the keyboard HAS ('й, ц, у'), not the missing ones. The stored answer ('fixed by clearing the field before typing') is invented; no doc problem behind it.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

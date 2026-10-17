@@ -1,0 +1,946 @@
+{
+ "q001": {
+  "also": [],
+  "at": "2026-10-12T18:04:17.765Z",
+  "decision": "approve",
+  "facts": [
+   "Android puts the typed value of a password field straight into the node's text, so printing it would leak the password into logs and transcripts.",
+   "Reads of the field show bullets and the character count, never the value."
+  ],
+  "note": "CHALLENGES#43 alone. Not 99: the same rule for app_type's confirmation, not map. Not 206/159/drivers README: other topics.",
+  "question": null
+ },
+ "q002": {
+  "also": [
+   "CHALLENGES#31",
+   "CHALLENGES#110",
+   "CHALLENGES#254"
+  ],
+  "at": "2026-10-12T18:30:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The error means the screen was changing: accessibility nodes were recycled underneath the read, during an animation or while a system toast was up.",
+   "Mobium retries it, and only failures of this kind.",
+   "UiAutomator2 reads retry these failures for up to 6 seconds, 300ms apart, then report how many attempts were made."
+  ],
+  "note": "Also: 31 (first found, made non-fatal in actions), 110 (current 6 s / 300 ms retry), 254 (toast cause, listener off). Not README#refs.",
+  "question": null
+ },
+ "q003": {
+  "also": [],
+  "at": "2026-10-12T18:50:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "adb shell runs its argument through a shell on the device, so an unquoted value with a space becomes two arguments.",
+   "Everything after the first word is silently dropped, because cmd notification post accepts extra arguments."
+  ],
+  "note": "Reworded: the original copied CHALLENGES#52's Found-by line almost word for word. Same key, #52 alone.",
+  "question": "I posted a notification with a two-word body and only the first word showed up. Why?"
+ },
+ "q004": {
+  "also": [
+   "CHALLENGES#findings-that-were-not-defects"
+  ],
+  "at": "2026-10-12T19:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "React Native repeats one component's accessibility identifier across the several native views it renders, so a hand-written testid can match many nodes.",
+   "Mobium refuses an ambiguous hand-written locator rather than tapping the first match.",
+   "The locators map derives are unique, so the ref from map is the durable way in."
+  ],
+  "note": "DROP CHALLENGES#55 from gold: it is the opposite case (map's ref failed, the hand-written testid worked; fixed). Real answer: Findings that were not defects, RN repeats an identifier across a component's views (testid=navigateBtn matched 5), so a hand-written locator is ambiguous and refused; map's ref is unique. Gold = that section only.",
+  "question": null
+ },
+ "q005": {
+  "also": [
+   "CHALLENGES#59"
+  ],
+  "at": "2026-10-12T19:10:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "It is not a bug.",
+   "Android keeps the last location a test provider supplied after the provider is removed, and that cache cannot be cleared from outside.",
+   "Whether mocking has stopped shows in the provider label losing [mock], not in the position."
+  ],
+  "note": "Also 59: the same last-known-fix mechanism seen from the app. Not 48/111/50.",
+  "question": null
+ },
+ "q006": {
+  "also": [],
+  "at": "2026-10-12T19:40:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "On iOS, a keystroke sent while focus is still moving between fields lands nowhere, while the type call reports success.",
+   "Mobium reads the value back to catch a dropped character, and retries, typing more slowly each time."
+  ],
+  "note": "ADD CHALLENGES#108 to gold: retries now 3 attempts, slower each time (61's 'retries once' is superseded). Not 159: a real iPhone's keyboard layout, not why it reads back. Retrieval missed both.",
+  "question": null
+ },
+ "q007": {
+  "also": [],
+  "at": "2026-10-12T21:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "On a two-button iOS permission prompt, accept presses Allow, granting the permission.",
+   "On the three-button location prompt, accept is refused, naming its buttons.",
+   "alert --button presses one of them by its caption or its position."
+  ],
+  "note": "DROP CHALLENGES#63 from gold; ADD CHALLENGES#305 to gold (305 alone; not 106: 63 and 106 now describe the old behavior). Needs the corpus pinned at or after mobiumdev/mobium#195's merge commit, where 305 exists. Answer since #195: two-button prompts, accept = Allow; the three-button location prompt, accept refused, buttons listed; --button presses one.",
+  "question": null
+ },
+ "q008": {
+  "also": [],
+  "at": "2026-10-12T21:30:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "dismiss presses Don't allow.",
+   "Android marks a dialog's buttons positive and negative by resource id, not by position, so dismiss presses the negative one wherever it sits."
+  ],
+  "note": "Reworded: the original's answer (Don't Save, CHALLENGES 106) is superseded by #195, which refuses three buttons, and q007 already tests the refusal. DROP CHALLENGES#106 from gold; ADD CHALLENGES#305 (its table row and the by-id rule). Needs the corpus pinned at or after mobium 38df00f.",
+  "question": "On Android's notification prompt, where Allow is stacked above Don't allow, which button does `alert dismiss` press, and why?"
+ },
+ "q009": {
+  "also": [
+   "CHALLENGES#77"
+  ],
+  "at": "2026-10-12T21:45:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The iOS parser used an element's value as its text, and a switch's value is 0 or 1.",
+   "The switch's name was in its label, which map passed over for the value."
+  ],
+  "note": "Also 77: the same value-over-label rule on a selected button, citing 65. Not 82/76/15.",
+  "question": null
+ },
+ "q010": {
+  "also": [
+   "CHALLENGES#if-you-are-seeing-something-odd-start-here"
+  ],
+  "at": "2026-10-12T22:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Mobium treats an element with zero bounds as off screen, the same as not found.",
+   "That not-found answer is what makes scroll-to and the implicit scroll swipe for it."
+  ],
+  "note": "Also the symptom table: its row names a row off screen with no bounds, 72, fixed. Not 146/FORMFLUX/219/167. Retrieval missed 72; keep the question as is.",
+  "question": null
+ },
+ "q011": {
+  "also": [],
+  "at": "2026-10-12T22:15:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The tap is refused as device_not_ready, quoting the dialog, instead of being reported as a success.",
+   "Nothing is tapped or scrolled; the dialog has to be answered first."
+  ],
+  "note": "105 alone, still current (dialogOver). Not 107/217/graybox/skill.",
+  "question": null
+ },
+ "q012": {
+  "also": [],
+  "at": "2026-10-12T22:40:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "At the 10-second default, every read of a screen in motion waited until the motion stopped.",
+   "At 0, a tap right after launch landed on a row still moving into place.",
+   "At 500 ms, taps after launch landed, and a moving screen could still be read mid-motion."
+  ],
+  "note": "109 alone. Not 110 (a consequence of the cap, not why), 25, 38, 31.",
+  "question": null
+ },
+ "q013": {
+  "also": [],
+  "at": "2026-10-12T22:50:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Android 13 and later show a clipboard preview after every clipboard write, as its own window that no hierarchy contains.",
+   "The tap landed on the preview's share chip instead of the app."
+  ],
+  "note": "113 alone. Not 60/75/233. Dropped the fix fact: the question asks why.",
+  "question": null
+ },
+ "q014": {
+  "also": [],
+  "at": "2026-10-12T23:30:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "A full swipe from a near miss coasted the target past the top of the list on iOS, and the loop then reported the end.",
+   "Once the target is found, the loop swipes only about the distance it is out, with a small margin."
+  ],
+  "note": "114 alone. Not 169 (Android clipped bounds, a different nudge), 258, 21, 241.",
+  "question": null
+ },
+ "q015": {
+  "also": [
+   "docs/SETUP.md#with-a-screen-reader-on"
+  ],
+  "at": "2026-10-12T23:45:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "No: TalkBack stays on through a Mobium session, with either Android driver.",
+   "It used to: Android's test-automation connection silences other accessibility services unless opened not to, and Mobium now opens it that way."
+  ],
+  "note": "Also SETUP's screen-reader section: both drivers leave it running. Not the checks README, the upstream note, or the CLI guide.",
+  "question": null
+ },
+ "q016": {
+  "also": [
+   "CHALLENGES#289"
+  ],
+  "at": "2026-10-13T00:30:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "WebDriverAgent sets the device's orientation even when the app in front does not turn, which left later apps opening sideways.",
+   "Mobium now takes a refused turn back to where the app stayed before reporting the refusal."
+  ],
+  "note": "Also 289: a turn is watched two seconds before it is refused and taken back. Not the checks README, ROADMAP Next, or the skill. Android's take-back is 308, not this iOS question.",
+  "question": null
+ },
+ "q017": {
+  "also": [],
+  "at": "2026-10-13T00:50:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "progressbar was not a role, so the locator matched nothing, and a wait for nothing to be hidden was met at once.",
+   "progressbar is a role now: iOS's ActivityIndicator and ProgressIndicator, Android's ProgressBar.",
+   "A role nothing maps to is refused, naming the roles there are."
+  ],
+  "note": "Reworded: the original's premise was wrong. role=progressbar is a known role and is not refused on a screen without one; only a role nothing maps to (role=nosuchrole) is refused. 222 alone; not 242, the CLI guide, 258, or the skill.",
+  "question": "Why did `mobium wait role=progressbar --for hidden` once finish at once, even with a spinner on screen, and what does Mobium do now?"
+ },
+ "q018": {
+  "also": [
+   "CHALLENGES#303",
+   "CHALLENGES#22"
+  ],
+  "at": "2026-10-13T01:10:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "A busy indicator inside the list means it is still loading, and scroll-to waits for it to go, up to ten seconds.",
+   "Without such an indicator, a swipe that moves nothing is taken as the end of the list."
+  ],
+  "note": "Also 303 (scroll-to waits a list's busy indicator out, 223) and 22 (the end is a swipe that moved nothing, judged by position). Not 23 or 222.",
+  "question": null
+ },
+ "q019": {
+  "also": [],
+  "at": "2026-10-13T02:30:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The text= locator matches part of a text, so the 'Network & internet' row on the screen being left satisfied text=Internet at once."
+  ],
+  "note": "ADD CHALLENGES#306 to gold (restates this case and adds the quoted fix); needs the corpus pinned at or after mobium 46c5394. Not 19, the skill's Waiting section, 122, or the MCP quick start. Fact 2 (the remedy) dropped: the question asks why.",
+  "question": null
+ },
+ "q020": {
+  "also": [],
+  "at": "2026-10-13T02:45:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The UiAutomator2 server's notification listener, which records toasts, broke every read while a toast was up."
+  ],
+  "note": "254 alone. Not 31 (met it first but blamed animation), 51, or 266. Fix fact dropped: the question asks why.",
+  "question": null
+ },
+ "q021": {
+  "also": [],
+  "at": "2026-10-13T03:30:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Once a session's last screen held 1,000 or more elements, Mobium reads without asking WebDriverAgent for visibility; the first read of such a screen times out and falls back the same way.",
+   "What is shown is worked out from geometry: an element off the screen, or inside one that is, is hidden. map says so, and that an element something covers may still be listed.",
+   "On such a screen a locator matches only what is shown, and an action never scrolls by itself: it is refused, naming app_swipe and app_scroll_to."
+  ],
+  "note": "258 alone, checked against the code (wdalight.go hugeRead, uitree.HugeScreen = 1000). Facts sharpened: the threshold rests on the previous read, so the first read times out first; covered elements may be listed. ROADMAP 'Reading an iOS screen without visible' is the light read for ordinary screens, not gold.",
+  "question": null
+ },
+ "q022": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "With the system shell in front (SpringBoard on iOS, SystemUI on Android), map asks whether the device is locked and, if so, says this is the lock screen and to run `mobium lock unlock` or unlock by hand.",
+   "A read that fails (map, text or an action's) asks once whether the device is locked and answers device_not_ready if it is.",
+   "Before CHALLENGES 260, a locked iPhone mapped as two bare scroll views, and a sleeping Android screen failed blaming \"the screen was changing\"."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 260 alone, checked against the code (handlers.go lockedNote/lockedRead). Fact 1 widened: the note is asked with SpringBoard or Android's SystemUI in front, and names `lock unlock`. Stored answer conflated the before and after; 260 is clear. 80 and 95 are about a refused launch, not map.",
+  "question": null
+ },
+ "q023": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "It changes nothing: it answers that the AVD was already running and names its serial (\"mobium-test was already running, as emulator-5554\").",
+   "To restart a running emulator, run `mobium shutdown <serial>` first, then `mobium boot <avd>`."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 284 alone, checked against the code (agent/boot.go:79) and boot's help and schema (\"One already running is said to be, not started again\"). The guides never say it: cli.md and SETUP.md describe boot without the running case.",
+  "question": null
+ },
+ "q024": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "mobium shutdown gives the emulator's console (`adb emu kill`) ten seconds.",
+   "If the emulator is still listed, it ends the process its discovery file names, only once ps names that program qemu or an emulator (by its name, not its path).",
+   "Measured: a frozen emulator shut down in 10.9s, where before it ran six minutes and left it running."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 285 alone, checked against the code (device/boot.go: emuKillWait, killEmulatorProcess). Ending by process is not done on Windows (refused). SHUTDOWN.md still says only that killing qemu directly skips cleanup, and never that mobium shutdown does it for a frozen emulator.",
+  "question": null
+ },
+ "q025": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The MCP server runs the handlers in its own process and did not make relative paths absolute, so it answered the path as given (\"out/mcp.wav\"), though the file itself was saved in the right place, the host's directory.",
+   "Paths are now made absolute where the caller is, by agent.AbsolutePaths, for the CLI, pipe and the MCP server (app_batch steps included), never in the daemon."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 286 alone, checked against the code (schema.go AbsolutePaths; server.go:209; daemon_client.go:90). Fact 1 adds that the file landed right and only the answer was relative. The stored answer cites 100 (the daemon resolving against its own directory), a different defect; 286 itself is clear.",
+  "question": null
+ },
+ "q026": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "The timeline splits a sound wherever its pitch moves (beyond 2% or 5 Hz between tenths of a second), so sweeps, melodies, vibrato and beeps became short pieces.",
+   "expect dropped every piece of 200ms or less (ignore_ms) as a tap's click, so they passed as silence.",
+   "Now a run of short pieces, across silences of a tenth of a second or less, counts as one sound once together it lasts longer than ignore_ms; it keeps a pitch only if every piece is within 5% of one."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 287 alone, checked against the code (audio/expect.go Sounds, DefaultIgnore; audio.go:123 2%-or-5 Hz). Fact 3 adds the 5% pitch rule. The test-runner guide's section 11 says short sounds that run on count, but not why; not gold.",
+  "question": null
+ },
+ "q027": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "alert accept (and dismiss) are refused on an Apple TV as unsupported, before any answer is sent.",
+   "A tvOS alert opens with focus on its cancel button and is answered with the remote: move focus with the D-pad, press select; Back (Menu) answers with the cancel button."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 298 alone, checked against the code (mobiumdriver/alerts.go AnswerAlert, errTVAlert), which still holds after #195. The stored answer (accept presses the cancel button) is wrong; 298 says focus starts on cancel, which it misread. Found: a TV alert of three buttons is refused naming app_alert button, which taps, and a TV refuses every touch.",
+  "question": null
+ },
+ "q028": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "On tvOS WebDriverAgent marks the element with focus focused=\"true\", and Mobium's iOS parser reads it (since CHALLENGES 297).",
+   "After a D-pad press Mobium reads the screen for up to two seconds and compares the focused element with the one before: it reports where focus moved, that it did not move, or that nothing reports focus."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 297 alone, checked against the code (uitree/parse_xcui.go:418; agent/buttons.go awaitFocus). Fact 2 rewritten from the code. Gold ranked fifth, behind 296; the stored answer mixed in 296's restart. A stale comment found: Node.Focused is still called Android's alone.",
+  "question": null
+ },
+ "q029": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Yes: app_check works in the WebView's context.",
+   "It reads the page's own state (an input's checked, or aria-checked for a role that has one), taps as app_tap aims there, and reads the page back; asked for the state it is already in, it does nothing.",
+   "From the native context, a page element with no checked state is refused saying it is part of a page and naming the switch to its context."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 299 alone, checked against the code (agent/check.go via findWeb; webview/actionable.go:311). A radio is refused for uncheck there too. Since #204 its target may also be a web locator, unmeasured for check.",
+  "question": null
+ },
+ "q030": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "From the native context, app_type and app_fill into a node of a WebView's page go in through the page when it can be reached and one page element clearly matches the node's rectangle.",
+   "The page is then asked whether a person could type there, so a read-only field is refused with 'readonly attribute' and keeps its text.",
+   "With no reachable page (an app that has not opened its WebView to debugging) or no clear match, the text goes in natively as before, and a read-only field can still take it."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 301 alone, checked against the code (handlers.go:2118 inWebView -> webview.go typeThroughPage, then webFill). Stored answer describes the defect, not the fix: it read the 'Found by' half of 301. Not a doc problem.",
+  "question": null
+ },
+ "q031": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "An Android seek bar's reading is its progress in its own steps, and no maximum is reported, so Mobium cannot turn it into the app's number (MobiumApp's Volume at 50 reads 5.0).",
+   "map marks it, as 'Volume (slider, 5.0 in its own steps)', so it is not read as the slider's range; an agent read 2.0 as 20 out of 10 before.",
+   "The structured answer carries value_scale beside value, and app_fill's also carries position, the 0-to-1 asked for. An iOS slider's value, the app's own, is left bare."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 302 alone, checked against the code (uitree/parse.go:375 ValueSteps for Android, snapshot.go:77 'in its own steps', structured.go:171/179 value_scale). Third fact added: the structured half is what agents see. 227 found the units; 302 is why map says so.",
+  "question": null
+ },
+ "q032": {
+  "also": [
+   "docs/guides/cli.md#1-which-devices",
+   "skills/mobile-check/SKILL.md#first-check-there-is-a-device"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "mobium devices (app_devices) reports a ready Android device's version as its runtime, such as 'Android 15 (API 35)', the field iOS devices already had.",
+   "It is read from ro.build.version.release and ro.build.version.sdk in one shell call, only for a device in the 'device' state."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 304, plus the two sections whose devices example shows 'Android 15 (API 35)' — both were retrieved and the stored answer still missed it, answering 'check there is a device'. Checked against handlers.go:469-476 and device/osversion.go.",
+  "question": null
+ },
+ "q033": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "dumpsys's mCurrentRotation reports rotation in degrees, such as ROTATION_90.",
+   "user_rotation and cmd window user-rotation count quarter turns, so 90 degrees is 1; reading one as the other accepts 0 and rejects everything else.",
+   "dumpsys window prints several spellings at once; mCurrentRotation from dumpsys window displays is the one that means what is on screen now."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 48 alone, checked against the code (device/adb.go:916-972, rotationRe on mCurrentRotation, user-rotation parsed as quarters). Third fact added from the same section.",
+  "question": null
+ },
+ "q034": {
+  "also": [
+   "skills/mobile-check/SKILL.md#device-state"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "No. Mobium's confirmation means only that the device stored the language tag, and it says so: whether the app has that translation is not something Android reports, so check the screen.",
+   "Android accepts a tag like zz-ZZ, reads it back as asked, and the app renders in its default language.",
+   "On iOS the language is a launch argument, and the answer says the same: whether the app has the translation shows only on the screen."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 49, plus the skill's device-state section ('Setting a language confirms the device stored the tag, not that the app speaks it'), retrieved second. Checked against agent/locale.go:72-84; iOS fact added from the same handler.",
+  "question": null
+ },
+ "q035": {
+  "also": [
+   "docs/GESTURES.md#three-ways-a-second-finger-went-wrong"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "UiAutomator2 gives a late finger its own down time, where Android's contract is one per gesture; Android 17 rejects the rest of the gesture, the lifts included.",
+   "Both fingers then stay down for every injected touch on the device, adb shell input included, until a two-finger tap's closing events clear it; a UiAutomator2 restart does not.",
+   "So press-tap and press-drag are refused as unsupported above API 35; Android 16 is refused unmeasured, because a wrong guess costs the device's touch input."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 86, plus GESTURES' 'Three ways a second finger went wrong', which says the same in four lines. Checked against mobiumdriver/multitouch.go lastLenientAPI = 35. The code's own comment and error disagree with 86 on recovery (finding).",
+  "question": null
+ },
+ "q036": {
+  "also": [
+   "docs/GESTURES.md#three-ways-a-second-finger-went-wrong"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "No. Mobium refuses press-tap and press-drag on iOS as unsupported (exit 5), on simulators and iPhones alike.",
+   "XCTest gives any finger that lands after a gesture has begun a zero-length touch at its target at the start, which an app can take as a tap before the press it belongs to.",
+   "Multi-finger taps land every finger together and work (app_tap with fingers)."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 85 was missed by retrieval (not in the top 5); the stored answer mixed it with 86 ('refused on iOS, starting from Android 16'). Adding GESTURES' section, which states the iOS reason in its own paragraph. Checked against multitouch.go:193-205 errLateFinger.",
+  "question": null
+ },
+ "q037": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "The first connection to a simulator's webinspectord gets its first byte in 0.17 s; every connection after it waits 10.2 s, consistently to the tenth of a second, which reads as a timeout rather than load.",
+   "Mobium holds one connection for the life of the session, which took the same sequence from 10.4 s to 0.00 s.",
+   "The cause inside webinspectord is not known; three reasoned guesses were wrong, and a trace of every message's arrival settled what was measured."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 45 alone. Reworded: 'why' has no answer in the docs, as the draft's concern said; the question now asks what it costs and how it is avoided. Checked against webview/rwi_discover.go:341-346 and rwi_session.go:40-45 (held per device session).",
+  "question": "What does a second connection to webinspectord cost, and how does Mobium avoid it?"
+ },
+ "q038": {
+  "also": [
+   "CHALLENGES#248"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "Safari's WebView element covers the whole window, chrome included, and the page cannot see its own inset (screenY, visualViewport.offsetTop and pageTop are all 0), so where its content sits could not be known and a tap was refused rather than approximated.",
+   "map and text kept working throughout, with a footnote: refs, labels and roles are right; only the rectangles were unknowable.",
+   "Since CHALLENGES 248 the page is placed from text: WebKit publishes each run of the page's text as a static text with its screen frame, a run that occurs once on both sides anchors the page, and two anchors must agree or the refusal stands. A tap on example.com's Learn more then opened its page, on a simulator and the iPhone 15 Plus."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] Premise stale: map never refused (the draft's concern), and the tap refusal of 47 was lifted for Safari by 248 (internal/webview/anchor.go AnchorFrame; SETUP 'WebViews and Safari'). Reworded to ask both, ADD CHALLENGES#248, which retrieval already ranked first. Stored answer only restates 47's cause.",
+  "question": "Why did Mobium refuse a tap inside Safari's page, and how does it place one there now?"
+ },
+ "q039": {
+  "also": [
+   "CHALLENGES#environment-traps"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "platform-tools must be installed into the SDK root by sdkmanager, not only as the Homebrew cask.",
+   "The emulator validates the SDK root by looking for that directory, while adb on PATH works regardless, so the error points the wrong way.",
+   "mobium doctor checks for it: an SDK root with no platform-tools directory is reported, with sdkmanager platform-tools as the remedy."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] SETUP's two traps answers it; CHALLENGES 'Environment traps' carries the same trap in the same words and came back second, so ADD it. Doctor fact checked against internal/agent/doctor.go:103-117.",
+  "question": null
+ },
+ "q040": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Stop the daemon first, then simulators, then emulators, then adb.",
+   "The daemon goes first because it owns the device-side sessions: killing a device under a live session leaves instrumentation running against hardware about to vanish, and an emulator coming back with the same serial meets a dead cached session.",
+   "docs/checks/clean-stop.sh --quit does it in that order, and waits for the daemon to exit before stopping any device."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] SHUTDOWN 'The order' is the one-line answer; its subsections (1. daemon first, 2. simulators then emulators) came back too and are the reasons, not needed as gold. Timeouts checked: client waits 90s (client.go:184), daemon 10s calls + 75s sessions (daemon.go:53,140), clean-stop 100s.",
+  "question": null
+ },
+ "q041": {
+  "also": [
+   "docs/SETUP.md#driving-another-machines-devices"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "No. On Windows Mobium drives Android only; iOS is not possible there.",
+   "Mobium drives iOS through xcrun simctl and WebDriverAgent, and a real iPhone needs WebDriverAgent built and signed by xcodebuild and reached over CoreDevice's tunnel — all of which are macOS-only.",
+   "Nor through another machine: --remote, which drives a Mac's devices over SSH, needs a Unix socket on the caller's side and refuses on Windows."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] WINDOWS.md answers the local case. The remote case is the obvious follow-up and has its own answer: cmd/mobium/remote_windows.go:15-16 refuses (SETUP 'Driving another machine's devices': 'on Windows --remote refuses, and says so'), so ADD that section, which retrieval ranked third. Ask Lana: Is 'iOS from Windows through --remote to a Mac' something you want planned (a named-pipe or TCP forward on Windows), or does 'refuses' stay the answer? The question's gold is right either way today. Answered (Lana, 2026-10-13): \"we cannot run apple devices on windows\" — refuses stays the answer; not planned.",
+  "question": null
+ },
+ "q042": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "On a real iPhone Mobium refuses permissions, appearance, the clipboard, simulated location and routes, and notifications, reading or posting them.",
+   "simctl does these on a simulator and devicectl has no equivalent, so on a phone each is refused with the reason rather than approximated.",
+   "Clearing an app's data is done differently on a phone: given the app's .app or .ipa (--bundle), Mobium uninstalls and reinstalls it, since nothing can delete from its container in place."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] SETUP 'What a phone cannot do' alone, checked against internal/mobiumdriver/wdaphone.go:199-220 (simulatorOnly and phoneRemedies list exactly these, clear-data included). A retrieval miss: none of the top four was it, and the stored answer is about how WebDriverAgent is installed, which is a different difference.",
+  "question": null
+ },
+ "q043": {
+  "also": [
+   "docs/SETUP.md#parallel-runs"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Start the second emulator on its own port, for example with -port 5556, so it is emulator-5556.",
+   "With two devices ready, a call must name one: --device emulator-5556, or a client's device option; with none named, Mobium refuses, listing the ready devices.",
+   "To drive both at once, give each run its own daemon with MOBIUM_SESSION (a client's session option): one daemon holds a call for its whole length, and an emulator's 15 map calls took 22.3s sharing a daemon against 0.3s on its own."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 'Running two at once' answers the start; 'Parallel runs', which retrieval ranked first, answers running them side by side, so ADD it. Fact 2 reworded: SETUP lists MOBIUM_SESSION as an alternative to --device, but the code does not pick a device by session (internal/device/adb.go:424-430 refuses with two ready; agent/backend.go:394 reuses a session only once it is open on one device).",
+  "question": null
+ },
+ "q044": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Yes, with no Flutter driver: Flutter publishes a semantics tree for screen readers, and UiAutomator2 and XCUITest read it as they read any other app's.",
+   "Measured on MobiumApp's flutter/ demo on an Android emulator, an iOS simulator and both real phones, held by docs/checks/flutter.sh.",
+   "What Flutter does not publish, Mobium cannot see: a CustomPaint widget with no Semantics, a game's canvas, an icon with no label (it maps as a bare Button)."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] APP-TYPES 'Cross-platform, or native-once-removed' alone, checked: it records that the old 'Flutter needs a driver' was reasoned and measured wrong on 2026-10-01. The driver guide's 'a Flutter desktop app' is about desktop, not a contradiction. Stored answer right but loose ('only if it publishes').",
+  "question": null
+ },
+ "q045": {
+  "also": [
+   "docs/BACK.md#in-mobium",
+   "skills/mobile-check/SKILL.md#interruptions-and-hardware-buttons"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "No: press back is refused on iOS by design, because iOS has no back button and an edge swipe is a different event an app can tell apart.",
+   "The refusal names the alternatives: tap the navigation bar's back button, or ask for the swipe by name with press back --gesture (app_press with gesture true).",
+   "On iOS --gesture swipes in from the left edge starting in the navigation bar, because a list row with swipe actions takes a swipe started on it."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] BACK.md#ios says it is refused but not what to do in Mobium; that is in BACK.md 'In Mobium' (fixed 2026-10-01, back.sh) and the skill, both of which retrieval ranked first and second, so ADD both. Checked against internal/mobiumdriver/buttons.go:233-240 and schema.go:1409-1415. The stored answer, 'use press back --gesture', is right; the draft facts missed the gesture.",
+  "question": null
+ },
+ "q046": {
+  "also": [
+   "CHALLENGES#305"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "accept and dismiss mean yes and no, so they answer a dialog of one or two buttons: iOS puts the cancel button first, and Android marks its buttons positive and negative by id (button1/button2, permission_allow/deny).",
+   "With three or more buttons neither verb means yes or no: on iOS accept pressed Cancel on a three-button alert and Don't Allow on the location prompt, and on Android dismiss pressed the middle button, so such a dialog is refused, naming its buttons.",
+   "--button presses one by its caption or its position from 1, and every answer says which button it pressed (pressed)."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] Stale since #195: the drafted facts ('they answer a dialog and choose nothing') are the pre-305 rule. Same move as q007: DROP 63 (its fact, accept on the location prompt, is in 305's table), ADD 305, keep 106 for why not positional. Checked against internal/agent/alert.go (len(buttons) > 2 refused as unsupported, pressedBy, view.Pressed). Needs the corpus pinned at or after 38df00f. DROP CHALLENGES#63 from gold.",
+  "question": "What do alert accept and dismiss press on Android and on iOS, and why is a dialog of three or more buttons refused?"
+ },
+ "q047": {
+  "also": [
+   "CHALLENGES#301"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "From the native context, a node of a WebView's page with no checked state is no longer called not a checkbox: the refusal says it is part of a page and names switching to its context, where app_check now works.",
+   "A WebView page node that reads as disabled is refused saying a read-only field reads the same as a disabled one there, naming the WebView's context, never a wait.",
+   "Where the native tree reads the read-only field as enabled (Android 17), app_type and app_fill from the native context now go in through the page when it can be reached, so the field is refused with readonly attribute instead of taking the text."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 299 and 300 as drafted, both facts checked (internal/agent/check.go:63, handlers.go:1294 notEnabledInPage). ADD 301: the same read-only field on Android 17 read as enabled and took text from the native context — the second half of what changed for that field. The stored answer ('named by its label', 'readonly attribute') is the WebView-context behavior, not the native one; no doc problem behind it.",
+  "question": null
+ },
+ "q048": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "While the next page loaded, the list stopped at row 20 and map said nothing about a busy indicator, so agents answered 20.",
+   "scroll-to waits out a busy indicator inside the list, up to ten seconds, before calling the end.",
+   "map now notes a list still loading after its last row, using the same check scroll-to waits on, and its notes are in the structured answer as notes as well as in its text."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 223 and 303, both needed: 223 for why scroll-to does not stop, 303 for why map-and-swipe did. Facts checked against internal/agent/handlers.go:626 (busyIn in map's note), scroll.go:70, structured.go:73 (Notes). Fact 2 gains the ten-second bound, fact 3 that the note uses scroll-to's own check. The stored answer inverts the cause (blames agents reading text, while the note did not exist yet); no doc problem behind it.",
+  "question": null
+ },
+ "q049": {
+  "also": [
+   "CHALLENGES#302"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "On iOS, app_fill moves a slider to a 0-to-1 position through WebDriverAgent, as a finger would: exact from either end, a step past from partway, and the value read back is the app's own.",
+   "On Android, app_fill touches the seek bar's track at the position, inset 16dp from each end and never on its last pixel, which lands exactly; UiAutomator2's set-value was not used because it takes the bar's own units and nothing gives its maximum.",
+   "An Android seek bar's value reads in its own steps, so it is marked value_scale, and app_fill's answer also carries position, the 0-to-1 asked for; an iOS slider's value is left bare."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 219 and 227 as drafted, checked against internal/mobiumdriver/uia2.go:391 (SetSliderPosition, sliderTouch: 16dp inset, last pixel avoided) and driver.go:383 (WDA adjust). ADD 302: what a fill answers differs by platform too (value_scale, position), and retrieval ranked it second — the stored answer was built from it alone. Fact 3 added for it.",
+  "question": null
+ },
+ "q050": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "XCUITest types through the keyboard, and a keystroke sent while focus is still moving lands nowhere; Mobium now reads the value back and retries once.",
+   "On a real iPhone a password field is typed key by key on the keyboard that is up, so a Russian keyboard dropped every Latin letter while type reported all ten.",
+   "A password is now confirmed by its length (bullets read back, an empty field reads as its placeholder) and, if short, reported as not_confirmed with lengths only, saying how many characters the keyboard lacks and naming a few keys it has, without printing the password."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 61 and 159, checked against internal/mobiumdriver/wda.go:828 and keyboard.go:394 (placeholderValue compared to read an empty field). Fact 1: the retry is once, not repeated. Fact 3 corrected: the report names a few keys the keyboard HAS ('й, ц, у'), not the missing ones. The stored answer ('fixed by clearing the field before typing') is invented; no doc problem behind it.",
+  "question": null
+ },
+ "q051": {
+  "also": [],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "A native target under the visible keyboard is refused as device_not_ready rather than tapped, naming how to hide the keyboard, and only where scrolling cannot bring it out.",
+   "On Android the keyboard is another window, so Mobium reads its touchable region from dumpsys window InputMethod, only while something has focus, and refuses a target inside it.",
+   "Over an app's WebView, Android's keyboard shrinks the page's viewport but not the WebView, so the height check written for Safari refused every web action; the frame now asks Android's keyboard regions too and uses the WebView's own frame."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 107 and 294. Reworded: 294 is not about a web target under the keyboard but about every web action being refused while the keyboard was up, which the old question's second half did not ask. Facts checked against internal/agent/webview.go:290-299 (NewFrameUnderKeyboard for iOS's keyboard node and for keyboardOverWebView via KeyboardRegions, webview.go:838) and CHALLENGES 107's refusal 'only where scrolling cannot help'. The iOS half of the WebView case is 230; left out since the question names Android. The stored answer (about page hit-testing and aiming around a cover) answers a different question; it came from retrieval missing 107 entirely (gold rank: 294 fifth, 107 absent).",
+  "question": "What happens when a native target is under the keyboard, and why did Android's keyboard over an app's WebView refuse every tap?"
+ },
+ "q052": {
+  "also": [
+   "docs/SHUTDOWN.md#2-simulators-then-emulators"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "approve",
+  "facts": [
+   "Stop the daemon first, then simulators, then emulators, then adb; mobium shutdown does the session and then the device in that order for one device.",
+   "For a frozen emulator, mobium shutdown gives its console ten seconds, then ends the emulator process its discovery file names.",
+   "A frozen emulator is reported as not answering adb (device_not_ready), and switching driver cannot help since every Android driver goes through adb."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] The order and 285, checked against internal/device/boot.go:33 (emuKillWait 10s) and :251-268. ADD SHUTDOWN#2-simulators-then-emulators: 'the-order' as chunked is one line ('Daemon → simulators → emulators → adb. Not arbitrary.'), and section 2 is where mobium shutdown and other sessions' daemons are; retrieval ranked it fifth and the stored answer was built from it. Fact 1 gains mobium shutdown.",
+  "question": null
+ },
+ "q053": {
+  "also": [
+   "docs/SETUP.md#an-apple-tv-simulator"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "tvOS's WebDriverAgent runner answers from the foreground and stays there, so after a daemon restart it was in front and every press went to it; Mobium now presses Home once when the session opens, only while the runner is in front.",
+   "A tvOS alert opens with focus on its cancel button and is answered with the remote: the D-pad moves focus along its buttons, select presses the one with focus, and Back (the remote's Menu) answers with the cancel button.",
+   "app_alert accept and dismiss are refused on an Apple TV before anything is sent: WebDriverAgent's accept left the alert up."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] 296 and 298 as gold, checked against the code (mobiumdriver/alerts.go AnswerAlert refuses on w.tv() before sending; errTVAlert names the D-pad). Added SETUP 'An Apple TV simulator', which says accept and dismiss are refused and how an alert is answered. Since #195, app_alert's button is refused on a TV too (it taps, and noTouch refuses every tap), but that is past the corpus pin. Stored answer muddles the two halves; 298 itself is clear.",
+  "question": null
+ },
+ "q054": {
+  "also": [],
+  "at": "2026-10-13T05:00:00.000Z",
+  "decision": "approve",
+  "facts": [],
+  "note": "Kept unanswerable (Lana, 2026-10-12): a paid offering is planned, so 'no enterprise license' would go stale; the docs name no license tier or price, and the right answer says so. README 'License' (Apache-2.0) is related, not gold. Revisit once the offering is written down.",
+  "question": null
+ },
+ "q055": {
+  "also": [
+   "README.md#drivers-for-other-platforms"
+  ],
+  "at": "2026-10-13T19:17:30.700026Z",
+  "decision": "edit",
+  "facts": [
+   "Mobium has no driver for HarmonyOS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+   "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+   "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+  ],
+  "note": "Tizen ruling (Lana, 2026-10-13): no plans to implement a HarmonyOS driver at the moment; anyone can write one (README, Drivers for other platforms). Kind fact, gold README.md#drivers-for-other-platforms.",
+  "question": null
+ },
+ "q056": {
+  "also": [
+   "README.md#platforms"
+  ],
+  "at": "2026-10-13T19:50:10.058869Z",
+  "decision": "edit",
+  "facts": [
+   "Wear OS is Android, and Mobium's Android backends drive it with nothing added: measured on a Wear OS 5.1 emulator through Wear's own Settings.",
+   "Its chips, its toggles and its own dialog work, app_alert answers the dialog, and swiping right is a watch's back.",
+   "Not yet measured on a real watch, and the crown has no command: press has no rotary input."
+  ],
+  "note": "Measured (Lana, 2026-10-13): Wear OS 5.1 emulator, three defects fixed in mobiumdev/mobium#208 (CHALLENGES 315–317), README 'Platforms' now says so. Kind fact, gold README.md#platforms. Needs the corpus pinned at or after #208's merge.",
+  "question": null
+ },
+ "q057": {
+  "also": [
+   "docs/ROADMAP.md#under-consideration"
+  ],
+  "at": "2026-10-13T04:00:00.000Z",
+  "decision": "edit",
+  "facts": [
+   "Running Mobium on a commercial device cloud or device farm is planned, not built (decided 2026-10-12); until then Mobium drives only devices you can reach.",
+   "The first step written down is MobiumApp on AWS Device Farm's free trial, Android first, with a mobium binary and docs/checks/ as the test package."
+  ],
+  "note": "[Decided by Claude while Lana was away, 2026-10-12; skim before applying] Your q061 ruling covers it ('Sauce Labs or any device cloud/farm: not yet, but planned') — kind fact, gold docs/ROADMAP.md#under-consideration, checked against ROADMAP 'Device clouds and device farms: planned'. Retrieval missed that entry and the stored answer invented a connection through MOBIUM_PLATFORM; a retrieval miss, not a doc fault.",
+  "question": null
+ },
+ "q058": {
+  "also": [],
+  "at": "2026-10-12T17:11:34.722Z",
+  "decision": "approve",
+  "note": "not yet — no Tizen driver from mobiumdev, but anyone can write one (README, Drivers for other platforms). Now answerable: kind fact, gold README.md#drivers-for-other-platforms",
+  "question": null
+ },
+ "q059": {
+  "also": [
+   "README.md#drivers-for-other-platforms"
+  ],
+  "at": "2026-10-13T19:17:30.700026Z",
+  "decision": "edit",
+  "facts": [
+   "Mobium has no driver for KaiOS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+   "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+   "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+  ],
+  "note": "Tizen ruling (Lana, 2026-10-13): no plans to implement a KaiOS driver at the moment; anyone can write one (README, Drivers for other platforms). Kind fact, gold README.md#drivers-for-other-platforms.",
+  "question": null
+ },
+ "q060": {
+  "also": [
+   "README.md#drivers-for-other-platforms"
+  ],
+  "at": "2026-10-13T19:17:30.700026Z",
+  "decision": "edit",
+  "facts": [
+   "Mobium has no driver for BlackBerry OS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+   "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+   "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+  ],
+  "note": "Tizen ruling (Lana, 2026-10-13): no plans to implement a BlackBerry driver at the moment; anyone can write one (README, Drivers for other platforms). Kind fact, gold README.md#drivers-for-other-platforms.",
+  "question": null
+ },
+ "q061": {
+  "also": [],
+  "at": "2026-10-12T17:11:45.011Z",
+  "decision": "approve",
+  "note": "not yet — Sauce Labs or any device cloud/farm: not yet, but planned as soon as resources allow. ROADMAP fixed in mobiumdev/mobium#194 (663b4c8); corpus re-pinned there; now answerable: kind fact, gold docs/ROADMAP.md#under-consideration",
+  "question": null
+ },
+ "q062": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Mobium puts the rotation back as it was before the request, lock and all, before it refuses.",
+   "So the next app does not open turned, and auto-rotate is left as it was."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: CHALLENGES 308's fix: a refused turn on Android puts the request back as it was, lock and all, and refuses in iOS's words, naming the orientation the app stayed in. The facts are right. Distinct from q016, which is iOS (218). Proposed: approve.",
+  "question": null
+ },
+ "q063": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "The session puts the orientation back as it found it.",
+   "On Android that includes the rotation lock a turn sets."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: 308: a session's first change keeps the orientation as it found it — lock and all on Android — and the session's end puts it back, on both platforms (orientation.sh). The facts are right. Proposed: approve.",
+  "question": null
+ },
+ "q064": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Scope it to the row with within, as in label=More within text=Card 8.",
+   "A row without a More finds nothing, never the More of the row beside it."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: 307 and the CLI guide's 'Locators and refs' both give this very example, label=More within text=Card 8; 307 adds that a row without the target finds nothing, never its neighbor's. Two sections, so multi is right. Proposed: approve.",
+  "question": null
+ },
+ "q065": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Put the value in double quotes, as in text=\"Internet\".",
+   "A quoted value matches the whole text, in any case, so text=\"Internet\" is not met by \"Network & internet\"."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: 306's fix and the CLI guide: a quoted value is matched whole, in any case and with straight or curly quotes. The facts are right. It answers how; q019 asks why the unquoted wait was met. Proposed: approve.",
+  "question": null
+ },
+ "q066": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Use app_alert's button, by its caption or its position from 1.",
+   "accept and dismiss are refused on a dialog of three or more buttons, naming them."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: 305: app_alert's button presses one by its caption, any case, straight or curly quotes, or by its position from 1; accept and dismiss are refused on a dialog of three or more, naming its buttons. The facts are right. Proposed: approve.",
+  "question": null
+ },
+ "q067": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Yes: inside a WebView the page scrolls the ref into view itself.",
+   "No direction is needed there."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: 309: inside a WebView scroll-to works now — the page scrolls the ref into view itself — and no direction is needed there. The facts are right. Proposed: approve.",
+  "question": null
+ },
+ "q068": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "edit",
+  "facts": [
+   "The search stops at the start of a list instead of swiping again, so it pulls at most once.",
+   "At the start of a list the last swipe is a pull, which an app may answer by refreshing what it shows.",
+   "Mobium says so, in its answer and as may_have_refreshed in the details."
+  ],
+  "note": "Lana, 2026-10-14: edit — the facts gain that the search now stops at the start, so it pulls at most once (CHALLENGES 310's fix). Claude's check: 310: the search now stops at the start instead of swiping again, so it pulls at most once, and says the last swipe there may make the app refresh, in its text and as may_have_refreshed. The drafted facts left out the stop, so it is added, as the first fact. Proposed: edit the facts as shown.",
+  "question": null
+ },
+ "q069": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Not yet: an agent today writes the password into app_type's arguments.",
+   "It is planned as a secret reference, a name Mobium resolves from the environment, so the agent never holds the value."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: ROADMAP, 'A password the agent never sees': not yet — an agent writes the password into app_type's arguments — and planned as a secret reference, secret:NAME, resolved from the caller's environment and never in the daemon. The facts are right. (mobium-evals measured where a password goes; that is not in the corpus.) Proposed: approve.",
+  "question": null
+ },
+ "q070": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "A row behind the toolbar counted as in view, so the tap touched the toolbar and did nothing.",
+   "The part of a list in view now excludes bars drawn over its edges, and the scroll that brings a target in measures against that."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: 197: a row behind iOS 26's toolbar counted as in view, so the tap touched the toolbar; the part of a list in view now leaves out bars over its edges, and the nudge (114) measures against it. The facts are right; a harder follow-up to q014. Proposed: approve.",
+  "question": null
+ },
+ "q071": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "No: visible and hidden count a match only with its center on the screen and inside the part of its list in view.",
+   "A wait for an element that is there but off screen times out saying so, and names app_scroll_to.",
+   "Other conditions — checked, text, enabled — still read a match that is off screen."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: Drafted by Claude from CHALLENGES 311's fix, each fact from its words: visible and hidden ask the screen and the part of the list in view; an off-screen wait times out naming app_scroll_to; other conditions still read off screen. Proposed: approve.",
+  "question": null
+ },
+ "q072": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Inside a WebView a locator can be css= with the frame's path in front: css=iframe#sameFrame >> #sameBtn.",
+   "A selector written for the frame's own document names only the page's own elements, so the refusal, and find, give the path that reaches it."
+  ],
+  "note": "Lana, 2026-10-14: approved; kept beside q073, the other half of CHALLENGES 312. Claude's check: Drafted from 312: css= with a frame's path, and a refusal or find that gives the path for a selector written for the frame's own document. Shares its gold with q073, which asks the other half of 312. Proposed: approve.",
+  "question": null
+ },
+ "q073": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "From the page: in a WebView find matches the page's elements by the rules an action uses, and gives each the ref map gives it.",
+   "It used to answer from the native screen."
+  ],
+  "note": "Lana, 2026-10-14: approved; kept beside q072, the other half of CHALLENGES 312. Claude's check: Drafted from 312's fix: in a WebView find answers from the page, by the rules an action uses, with map's refs. Shares its gold with q072. Proposed: approve, or merge with q072 if one question per entry is the rule.",
+  "question": null
+ },
+ "q074": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Its whole text, quoted — text=\"Learn more\" — narrowed by role where the text names several.",
+   "A recording keeps each locator quoted, so it matches the whole text and never a part, and is never recorded by ref."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: Drafted from 314's fix: the recorder keeps Exact, so a recording is quoted, and a page element with no id gets its whole text, narrowed by role. Proposed: approve.",
+  "question": null
+ },
+ "q075": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "app_alert sees Wear OS's own dialog, known by its layout's ids.",
+   "accept presses its ✓ (OK) and dismiss its ✕ (Cancel), and the answer says which it pressed."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: Drafted from 317's fix: Wear's dialog known by its layout's ids, accept and dismiss pressing its marked ✓ and ✕ and saying which. Overlaps q056 (Wear OS in general), which this asks one part of. Proposed: approve.",
+  "question": null
+ },
+ "q076": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "A Wear toggle chip is a clickable ToggleButton holding two more — its switch and the switch's container — each checkable, neither clickable, each with the chip's name and state.",
+   "A checkable node that takes no touch of its own, inside a clickable control that is checkable itself, is now that control's switch, not a second target."
+  ],
+  "note": "Lana, 2026-10-14: approved as drafted. Claude's check: Drafted from 316: a toggle chip holds its switch and the switch's container, and a checkable part of a clickable checkable control is now that control's switch. Proposed: approve.",
+  "question": null
+ },
+ "q077": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Not yet: press has no rotary input, so the crown has no command.",
+   "Wear OS is otherwise driven by the Android backends, measured on a Wear OS 5.1 emulator; a real watch is not measured yet."
+  ],
+  "note": "Lana, 2026-10-14: approved, gold README 'Platforms' only. Claude's check: Drafted from README 'Platforms' as of #208: 'Not yet a real watch, and not the crown: press has no rotary input.' SETUP's Wear OS section says the same ('The crown has no command yet') and could be added as gold. Proposed: approve.",
+  "question": null
+ },
+ "q078": {
+  "also": [],
+  "at": "2026-10-14T01:28:20.357629Z",
+  "decision": "approve",
+  "facts": [
+   "Not by itself: Mobium drives Android and iOS out of the box.",
+   "Anything else — a car head unit among them — is a driver: a program Mobium starts and talks to over a pipe."
+  ],
+  "note": "Lana, 2026-10-14: approved — the Tizen ruling: not built in, anyone can write a driver (examples/drivers/README.md). Claude's check: Drafted from the driver guide's opening, which names 'a car head unit' among what a driver reaches. The same ruling as Tizen (q058): not built in, anyone can write a driver. Proposed: approve, if that ruling applies to cars too.",
+  "question": null
+ }
+}

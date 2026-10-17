@@ -1,0 +1,14 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "The MCP server runs the handlers in its own process and did not make relative paths absolute, so it answered the path as given (\"out/mcp.wav\"), though the file itself was saved in the right place, the host's directory.",
+  "Paths are now made absolute where the caller is, by agent.AbsolutePaths, for the CLI, pipe and the MCP server (app_batch steps included), never in the daemon."
+ ],
+ "note": "286 alone, checked against the code (schema.go AbsolutePaths; server.go:209; daemon_client.go:90). Fact 1 adds that the file landed right and only the answer was relative. The stored answer cites 100 (the daemon resolving against its own directory), a different defect; 286 itself is clear.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

@@ -1,0 +1,30 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "Yes, with no Flutter driver: Flutter publishes a semantics tree for screen readers, and UiAutomator2 and XCUITest read it as they read any other app's.",
+  "Measured on MobiumApp's flutter/ demo on an Android emulator, an iOS simulator and both real phones, held by docs/checks/flutter.sh.",
+  "What Flutter does not publish, Mobium cannot see: a CustomPaint widget with no Semantics, a game's canvas, an icon with no label (it maps as a bare Button)."
+ ],
+ "note": "APP-TYPES 'Cross-platform, or native-once-removed' alone, checked: it records that the old 'Flutter needs a driver' was reasoned and measured wrong on 2026-10-01. The driver guide's 'a Flutter desktop app' is about desktop, not a contradiction. Stored answer right but loose ('only if it publishes').",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "stale",
+   "where": "docs/APP-TYPES.md:32 ('What has been driven', Native row) and README.md:214 (App types, Native row)",
+   "what": "The native apps driven on iOS stop at Settings, Wikipedia and NetNewsWire; Ice Cubes (SwiftUI, the first), Kiwix and Pocket Casts each have a checked-in check. The README names SwiftUI as a native framework yet lists no SwiftUI app as driven.",
+   "evidence": "docs/checks/icecubes-ios.sh, kiwix-ios.sh, pocketcasts-ios.sh exist; CHALLENGES 213-217 (Ice Cubes, SwiftUI), 256 (Kiwix), 257-258 (Pocket Casts)"
+  },
+  {
+   "repo": "mobium",
+   "kind": "stale",
+   "where": "README.md:216 (App types, Mobile web and PWAs row)",
+   "what": "'the browser's page as a context; on iOS, taps through the native tree' \u2014 since CHALLENGES 248 a tap in Safari's page is placed from the web context, and since 290 a home-screen web app's too.",
+   "evidence": "docs/SETUP.md:624-628; docs/APP-TYPES.md:107"
+  }
+ ]
+}

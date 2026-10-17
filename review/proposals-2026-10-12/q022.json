@@ -1,0 +1,23 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "With the system shell in front (SpringBoard on iOS, SystemUI on Android), map asks whether the device is locked and, if so, says this is the lock screen and to run `mobium lock unlock` or unlock by hand.",
+  "A read that fails (map, text or an action's) asks once whether the device is locked and answers device_not_ready if it is.",
+  "Before CHALLENGES 260, a locked iPhone mapped as two bare scroll views, and a sleeping Android screen failed blaming \"the screen was changing\"."
+ ],
+ "note": "260 alone, checked against the code (handlers.go lockedNote/lockedRead). Fact 1 widened: the note is asked with SpringBoard or Android's SystemUI in front, and names `lock unlock`. Stored answer conflated the before and after; 260 is clear. 80 and 95 are about a refused launch, not map.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "doc narrower than code",
+   "where": "docs/CHALLENGES.md 260; CLAUDE.md lock rule",
+   "what": "Both say map asks about the lock 'with SpringBoard in front'; the code also asks when Android's SystemUI (keyguard) is in front.",
+   "evidence": "internal/agent/handlers.go:640 `pkg != springboardBundleID && pkg != \"com.android.systemui\"`"
+  }
+ ]
+}

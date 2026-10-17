@@ -1,0 +1,17 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": ["docs/SHUTDOWN.md#2-simulators-then-emulators"],
+ "drop": [],
+ "facts": [
+  "Stop the daemon first, then simulators, then emulators, then adb; mobium shutdown does the session and then the device in that order for one device.",
+  "For a frozen emulator, mobium shutdown gives its console ten seconds, then ends the emulator process its discovery file names.",
+  "A frozen emulator is reported as not answering adb (device_not_ready), and switching driver cannot help since every Android driver goes through adb."
+ ],
+ "note": "The order and 285, checked against internal/device/boot.go:33 (emuKillWait 10s) and :251-268. ADD SHUTDOWN#2-simulators-then-emulators: 'the-order' as chunked is one line ('Daemon → simulators → emulators → adb. Not arbitrary.'), and section 2 is where mobium shutdown and other sessions' daemons are; retrieval ranked it fifth and the stored answer was built from it. Fact 1 gains mobium shutdown.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {"repo": "mobium", "kind": "gap", "where": "docs/SHUTDOWN.md:66-87 (### 2. Simulators, then emulators)", "what": "The shutdown guide never mentions a frozen emulator: that adb emu kill waits on a console a frozen emulator ignores, and that mobium shutdown now gives it ten seconds and then ends the process (CHALLENGES 285). It still says only that killing qemu directly 'skips the emulator's own cleanup', which is now what mobium shutdown does on purpose for a frozen one.", "evidence": "grep -i 'frozen|not answering|285' docs/SHUTDOWN.md: no match; SHUTDOWN.md:84 'Killing the qemu process directly works but skips the emulator's own cleanup'; internal/device/boot.go:251 'A frozen emulator does not answer its console'"}
+ ]
+}

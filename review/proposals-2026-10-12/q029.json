@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "Yes: app_check works in the WebView's context.",
+  "It reads the page's own state (an input's checked, or aria-checked for a role that has one), taps as app_tap aims there, and reads the page back; asked for the state it is already in, it does nothing.",
+  "From the native context, a page element with no checked state is refused saying it is part of a page and naming the switch to its context."
+ ],
+ "note": "299 alone, checked against the code (agent/check.go via findWeb; webview/actionable.go:311). A radio is refused for uncheck there too. Since #204 its target may also be a web locator, unmeasured for check.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

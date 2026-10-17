@@ -1,0 +1,15 @@
+{
+ "decision": "edit",
+ "question": "What happens when a native target is under the keyboard, and why did Android's keyboard over an app's WebView refuse every tap?",
+ "also": [],
+ "drop": [],
+ "facts": [
+  "A native target under the visible keyboard is refused as device_not_ready rather than tapped, naming how to hide the keyboard, and only where scrolling cannot bring it out.",
+  "On Android the keyboard is another window, so Mobium reads its touchable region from dumpsys window InputMethod, only while something has focus, and refuses a target inside it.",
+  "Over an app's WebView, Android's keyboard shrinks the page's viewport but not the WebView, so the height check written for Safari refused every web action; the frame now asks Android's keyboard regions too and uses the WebView's own frame."
+ ],
+ "note": "107 and 294. Reworded: 294 is not about a web target under the keyboard but about every web action being refused while the keyboard was up, which the old question's second half did not ask. Facts checked against internal/agent/webview.go:290-299 (NewFrameUnderKeyboard for iOS's keyboard node and for keyboardOverWebView via KeyboardRegions, webview.go:838) and CHALLENGES 107's refusal 'only where scrolling cannot help'. The iOS half of the WebView case is 230; left out since the question names Android. The stored answer (about page hit-testing and aiming around a cover) answers a different question; it came from retrieval missing 107 entirely (gold rank: 294 fifth, 107 absent).",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

@@ -1,0 +1,57 @@
+# The judge, measured
+
+60 answered questions the docs cover, from phase 5's answers; each scored once by each judge, and the first 20 a second time. Faithfulness weighs the answer against at most 15 facts drawn from its passages. The golden set is all reviewed by a person; a person labeled 20 of these answers — those in review/labels.json with Claude's claim-by-claim reading of each shown beside it (review/readings.json), those in review/labels-blind.json with none — and each set is compared on its own below.
+
+## Controls
+
+| Judge | Passed | Failed |
+|---|---|---|
+| qwen2.5:14b | 15 of 15 | none |
+| mistral-small:24b | 14 of 15 | relevancy, the answer to another question: 1.00 |
+| claude-cli:claude-haiku-5-5 | 15 of 15 | none |
+| claude-cli:claude-haiku-5-5 ×3 | 15 of 15 | none |
+
+## Scores, and how much they move
+
+| Judge | Metric | Mean | Same answer scored again: mean change | Pass/fail flips | Replies unreadable |
+|---|---|---|---|---|---|
+| qwen2.5:14b | faithfulness | 0.406 | 0.000 | 0 of 20 | 0 |
+| qwen2.5:14b | relevancy | 0.645 | 0.000 | 0 of 20 | 0 |
+| mistral-small:24b | faithfulness | 0.324 | 0.000 | 0 of 20 | 0 |
+| mistral-small:24b | relevancy (failed a control: not trusted) | 0.905 | 0.000 | 0 of 20 | 0 |
+| claude-cli:claude-haiku-5-5 | faithfulness | 0.540 | 0.264 | 8 of 20 | 0 |
+| claude-cli:claude-haiku-5-5 | relevancy | 0.896 | 0.078 | 1 of 20 | 0 |
+| claude-cli:claude-haiku-5-5 ×3 | faithfulness | 0.527 | 0.106 | 4 of 20 | 0 |
+| claude-cli:claude-haiku-5-5 ×3 | relevancy | 0.938 | 0.000 | 0 of 20 | 0 |
+
+## The judges against each other
+
+| Judges | Metric | Agree on pass/fail | Cohen's kappa | Mean difference (second − first) |
+|---|---|---|---|---|
+| qwen2.5:14b, mistral-small:24b | faithfulness | 46 of 60 | 0.54 | -0.082 |
+| qwen2.5:14b, mistral-small:24b | relevancy | 50 of 60 | 0.24 | +0.259 |
+| qwen2.5:14b, claude-cli:claude-haiku-5-5 | faithfulness | 39 of 60 | 0.29 | +0.134 |
+| qwen2.5:14b, claude-cli:claude-haiku-5-5 | relevancy | 48 of 60 | 0.17 | +0.251 |
+| qwen2.5:14b, claude-cli:claude-haiku-5-5 ×3 | faithfulness | 38 of 60 | 0.26 | +0.122 |
+| qwen2.5:14b, claude-cli:claude-haiku-5-5 ×3 | relevancy | 47 of 60 | -0.03 | +0.293 |
+| mistral-small:24b, claude-cli:claude-haiku-5-5 | faithfulness | 39 of 60 | 0.33 | +0.216 |
+| mistral-small:24b, claude-cli:claude-haiku-5-5 | relevancy | 56 of 60 | 0.30 | -0.009 |
+| mistral-small:24b, claude-cli:claude-haiku-5-5 ×3 | faithfulness | 36 of 60 | 0.24 | +0.203 |
+| mistral-small:24b, claude-cli:claude-haiku-5-5 ×3 | relevancy | 57 of 60 | -0.02 | +0.033 |
+| claude-cli:claude-haiku-5-5, claude-cli:claude-haiku-5-5 ×3 | faithfulness | 51 of 60 | 0.67 | -0.013 |
+| claude-cli:claude-haiku-5-5, claude-cli:claude-haiku-5-5 ×3 | relevancy | 57 of 60 | 0.38 | +0.042 |
+
+llama3.1:8b wrote the answers; no judge here did.
+
+## Each judge against a person
+
+| Labels | Judge | Metric | Agrees with the person | Cohen's kappa | Judge passes what the person failed |
+|---|---|---|---|---|---|
+| every label | qwen2.5:14b | faithfulness | 13 of 20 | 0.30 | 2 of 7 |
+| every label | qwen2.5:14b | relevancy | 15 of 20 | 0.17 | 1 of 2 |
+| every label | mistral-small:24b | faithfulness | 11 of 20 | 0.10 | 3 of 7 |
+| every label | mistral-small:24b | relevancy | 18 of 20 | 0.00 | 2 of 2 |
+| every label | claude-cli:claude-haiku-5-5 | faithfulness | 16 of 20 | 0.56 | 2 of 7 |
+| every label | claude-cli:claude-haiku-5-5 | relevancy | 17 of 20 | -0.07 | 2 of 2 |
+| every label | claude-cli:claude-haiku-5-5 ×3 | faithfulness | 15 of 20 | 0.43 | 3 of 7 |
+| every label | claude-cli:claude-haiku-5-5 ×3 | relevancy | 18 of 20 | 0.00 | 2 of 2 |

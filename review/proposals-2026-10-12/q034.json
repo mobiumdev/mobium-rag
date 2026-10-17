@@ -1,0 +1,17 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "skills/mobile-check/SKILL.md#device-state"
+ ],
+ "drop": [],
+ "facts": [
+  "No. Mobium's confirmation means only that the device stored the language tag, and it says so: whether the app has that translation is not something Android reports, so check the screen.",
+  "Android accepts a tag like zz-ZZ, reads it back as asked, and the app renders in its default language.",
+  "On iOS the language is a launch argument, and the answer says the same: whether the app has the translation shows only on the screen."
+ ],
+ "note": "49, plus the skill's device-state section ('Setting a language confirms the device stored the tag, not that the app speaks it'), retrieved second. Checked against agent/locale.go:72-84; iOS fact added from the same handler.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

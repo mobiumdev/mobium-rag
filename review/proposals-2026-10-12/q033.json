@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "dumpsys's mCurrentRotation reports rotation in degrees, such as ROTATION_90.",
+  "user_rotation and cmd window user-rotation count quarter turns, so 90 degrees is 1; reading one as the other accepts 0 and rejects everything else.",
+  "dumpsys window prints several spellings at once; mCurrentRotation from dumpsys window displays is the one that means what is on screen now."
+ ],
+ "note": "48 alone, checked against the code (device/adb.go:916-972, rotationRe on mCurrentRotation, user-rotation parsed as quarters). Third fact added from the same section.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

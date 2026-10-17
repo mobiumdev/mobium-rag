@@ -1,0 +1,39 @@
+{
+ "decision": "edit",
+ "question": "Why did Mobium refuse a tap inside Safari's page, and how does it place one there now?",
+ "also": [
+  "CHALLENGES#248"
+ ],
+ "drop": [],
+ "facts": [
+  "Safari's WebView element covers the whole window, chrome included, and the page cannot see its own inset (screenY, visualViewport.offsetTop and pageTop are all 0), so where its content sits could not be known and a tap was refused rather than approximated.",
+  "map and text kept working throughout, with a footnote: refs, labels and roles are right; only the rectangles were unknowable.",
+  "Since CHALLENGES 248 the page is placed from text: WebKit publishes each run of the page's text as a static text with its screen frame, a run that occurs once on both sides anchors the page, and two anchors must agree or the refusal stands. A tap on example.com's Learn more then opened its page, on a simulator and the iPhone 15 Plus."
+ ],
+ "note": "Premise stale: map never refused (the draft's concern), and the tap refusal of 47 was lifted for Safari by 248 (internal/webview/anchor.go AnchorFrame; SETUP 'WebViews and Safari'). Reworded to ask both, ADD CHALLENGES#248, which retrieval already ranked first. Stored answer only restates 47's cause.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "stale",
+   "where": "skills/mobile-check/SKILL.md:24",
+   "what": "The agent skill tells agents 'On iOS act from NATIVE_APP \u2014 taps in Safari's or a home-screen web app's page are refused.' Since CHALLENGES 248 (Safari) and 290 (a home-screen web app) those taps land.",
+   "evidence": "SETUP.md:624-628 'Since CHALLENGES 248 ... places a tap exactly'; APP-TYPES.md:107 'lands, since 2026-10-07 (CHALLENGES 290)'"
+  },
+  {
+   "repo": "mobium",
+   "kind": "contradiction",
+   "where": "docs/checks/README.md:68",
+   "what": "pwa.sh's row says 'iOS: a tap in the web context refused with the reason'; the check itself now asserts the tap lands.",
+   "evidence": "docs/checks/pwa.sh:33-36 'iOS: the same tap lands ... this check asserted the refusal until the tap began to land (290)'"
+  },
+  {
+   "repo": "mobium (private ~/mobium)",
+   "kind": "stale",
+   "where": "~/mobium/CLAUDE.md:572-577",
+   "what": "The rule 'A WebView's host element is not always its content ... NewFrame ... refuses rather than approximating' omits that since 248 a taller WebView is anchored from text and Safari's taps land.",
+   "evidence": "internal/webview/anchor.go:14-28"
+  }
+ ]
+}

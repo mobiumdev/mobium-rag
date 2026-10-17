@@ -1,0 +1,23 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "mobium shutdown gives the emulator's console (`adb emu kill`) ten seconds.",
+  "If the emulator is still listed, it ends the process its discovery file names, only once ps names that program qemu or an emulator (by its name, not its path).",
+  "Measured: a frozen emulator shut down in 10.9s, where before it ran six minutes and left it running."
+ ],
+ "note": "285 alone, checked against the code (device/boot.go: emuKillWait, killEmulatorProcess). Ending by process is not done on Windows (refused). SHUTDOWN.md still says only that killing qemu directly skips cleanup, and never that mobium shutdown does it for a frozen emulator.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "stale text / gap",
+   "where": "docs/SHUTDOWN.md:73-86 (2. Simulators, then emulators)",
+   "what": "Describes `mobium shutdown` as `adb emu kill` in order and warns that killing qemu directly skips cleanup, but never says that since CHALLENGES 285 mobium shutdown itself ends a frozen emulator's process after ten seconds, nor that this is refused on Windows.",
+   "evidence": "internal/device/boot.go:251-271 and :411 ('ending an emulator by its process is not done on Windows')"
+  }
+ ]
+}

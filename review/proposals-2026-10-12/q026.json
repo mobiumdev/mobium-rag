@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "The timeline splits a sound wherever its pitch moves (beyond 2% or 5 Hz between tenths of a second), so sweeps, melodies, vibrato and beeps became short pieces.",
+  "expect dropped every piece of 200ms or less (ignore_ms) as a tap's click, so they passed as silence.",
+  "Now a run of short pieces, across silences of a tenth of a second or less, counts as one sound once together it lasts longer than ignore_ms; it keeps a pitch only if every piece is within 5% of one."
+ ],
+ "note": "287 alone, checked against the code (audio/expect.go Sounds, DefaultIgnore; audio.go:123 2%-or-5 Hz). Fact 3 adds the 5% pitch rule. The test-runner guide's section 11 says short sounds that run on count, but not why; not gold.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

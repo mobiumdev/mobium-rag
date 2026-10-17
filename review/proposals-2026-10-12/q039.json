@@ -1,0 +1,17 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [
+  "CHALLENGES#environment-traps"
+ ],
+ "drop": [],
+ "facts": [
+  "platform-tools must be installed into the SDK root by sdkmanager, not only as the Homebrew cask.",
+  "The emulator validates the SDK root by looking for that directory, while adb on PATH works regardless, so the error points the wrong way.",
+  "mobium doctor checks for it: an SDK root with no platform-tools directory is reported, with sdkmanager platform-tools as the remedy."
+ ],
+ "note": "SETUP's two traps answers it; CHALLENGES 'Environment traps' carries the same trap in the same words and came back second, so ADD it. Doctor fact checked against internal/agent/doctor.go:103-117.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

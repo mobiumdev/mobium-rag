@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+/chroma/
+.deepeval/
+# data/: the golden set is a test suite and is committed; the corpus, the
+# index and the reports are rebuilt from the pin.
+/data/corpus.jsonl
+/data/index/
+/data/*-report.md
+/data/answers.jsonl

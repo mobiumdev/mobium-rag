@@ -1,0 +1,25 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [
+  "docs/SETUP.md#parallel-runs"
+ ],
+ "drop": [],
+ "facts": [
+  "Start the second emulator on its own port, for example with -port 5556, so it is emulator-5556.",
+  "With two devices ready, a call must name one: --device emulator-5556, or a client's device option; with none named, Mobium refuses, listing the ready devices.",
+  "To drive both at once, give each run its own daemon with MOBIUM_SESSION (a client's session option): one daemon holds a call for its whole length, and an emulator's 15 map calls took 22.3s sharing a daemon against 0.3s on its own."
+ ],
+ "note": "'Running two at once' answers the start; 'Parallel runs', which retrieval ranked first, answers running them side by side, so ADD it. Fact 2 reworded: SETUP lists MOBIUM_SESSION as an alternative to --device, but the code does not pick a device by session (internal/device/adb.go:424-430 refuses with two ready; agent/backend.go:394 reuses a session only once it is open on one device).",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "doc-inaccuracy",
+   "where": "docs/SETUP.md:257-258",
+   "what": "'Then pass --device emulator-5556 to every command, or run each one under its own MOBIUM_SESSION, or give a client the device option' offers MOBIUM_SESSION as a way to pick the emulator. It names a daemon, not a device: a fresh session's first call with two emulators ready and no --device is refused; only after a session is open on one device do its later calls follow it. Read from code, not run.",
+   "evidence": "internal/device/adb.go:424-430 '%d devices are ready (%s) \u2014 pick one with --device <serial>'; internal/agent/backend.go:385-399 openSessionFor reuses the single open session when no serial is given"
+  }
+ ]
+}

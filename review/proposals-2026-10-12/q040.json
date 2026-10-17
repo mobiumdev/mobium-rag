@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "Stop the daemon first, then simulators, then emulators, then adb.",
+  "The daemon goes first because it owns the device-side sessions: killing a device under a live session leaves instrumentation running against hardware about to vanish, and an emulator coming back with the same serial meets a dead cached session.",
+  "docs/checks/clean-stop.sh --quit does it in that order, and waits for the daemon to exit before stopping any device."
+ ],
+ "note": "SHUTDOWN 'The order' is the one-line answer; its subsections (1. daemon first, 2. simulators then emulators) came back too and are the reasons, not needed as gold. Timeouts checked: client waits 90s (client.go:184), daemon 10s calls + 75s sessions (daemon.go:53,140), clean-stop 100s.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

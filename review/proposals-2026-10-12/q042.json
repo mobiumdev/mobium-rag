@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "On a real iPhone Mobium refuses permissions, appearance, the clipboard, simulated location and routes, and notifications, reading or posting them.",
+  "simctl does these on a simulator and devicectl has no equivalent, so on a phone each is refused with the reason rather than approximated.",
+  "Clearing an app's data is done differently on a phone: given the app's .app or .ipa (--bundle), Mobium uninstalls and reinstalls it, since nothing can delete from its container in place."
+ ],
+ "note": "SETUP 'What a phone cannot do' alone, checked against internal/mobiumdriver/wdaphone.go:199-220 (simulatorOnly and phoneRemedies list exactly these, clear-data included). A retrieval miss: none of the top four was it, and the stored answer is about how WebDriverAgent is installed, which is a different difference.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

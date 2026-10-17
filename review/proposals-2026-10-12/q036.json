@@ -1,0 +1,25 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "docs/GESTURES.md#three-ways-a-second-finger-went-wrong"
+ ],
+ "drop": [],
+ "facts": [
+  "No. Mobium refuses press-tap and press-drag on iOS as unsupported (exit 5), on simulators and iPhones alike.",
+  "XCTest gives any finger that lands after a gesture has begun a zero-length touch at its target at the start, which an app can take as a tap before the press it belongs to.",
+  "Multi-finger taps land every finger together and work (app_tap with fingers)."
+ ],
+ "note": "85 was missed by retrieval (not in the top 5); the stored answer mixed it with 86 ('refused on iOS, starting from Android 16'). Adding GESTURES' section, which states the iOS reason in its own paragraph. Checked against multitouch.go:193-205 errLateFinger.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "code bug (remedy that may not work)",
+   "where": "internal/mobiumdriver/multitouch.go:196-197",
+   "what": "The iOS refusal says 'press and tap and press and drag work on Android' and its remedy says 'run press and tap or press and drag on an Android device', but Android 16 and later refuse both (lastLenientAPI = 35). The remedy holds only for Android 15 or earlier. CLAUDE.md: a remedy must be one that can work.",
+   "evidence": "errLateFinger: 'press and tap and press and drag work on Android' / WithRemedy('run press and tap or press and drag on an Android device; ...') vs lateFingerAllowed refusing api > 35."
+  }
+ ]
+}

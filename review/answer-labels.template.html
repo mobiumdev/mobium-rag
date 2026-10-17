@@ -1,0 +1,211 @@
+<title>Answer Labels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the review page's marking sheet, one answer per entry: the answer read against the passages it was given, two yes-or-no marks under it. */
+:root{
+  --paper:#f7f8fa; --sheet:#ffffff; --ink:#1c2230; --muted:#5d6678; --rule:#dfe3ea; --wash:#eef1f6;
+  --accent:#2453a8; --accent-wash:#e6edfa;
+  --ok:#1f7a4d; --ok-wash:#e3f3ea; --no:#b3261e; --no-wash:#fbe7e5; --mark:#fff1a8;
+  --f-read:"Literata", Georgia, "Times New Roman", serif;
+  --f-ui:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12151c; --sheet:#181c25; --ink:#e4e8f1; --muted:#9aa3b5; --rule:#2b3140; --wash:#1f2430;
+  --accent:#8fb0f0; --accent-wash:#1d2840; --ok:#6fcf9b; --ok-wash:#163024; --no:#f08a82; --no-wash:#3a1b19;
+  --mark:#4a4214; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12151c; --sheet:#181c25; --ink:#e4e8f1; --muted:#9aa3b5; --rule:#2b3140; --wash:#1f2430;
+  --accent:#8fb0f0; --accent-wash:#1d2840; --ok:#6fcf9b; --ok-wash:#163024; --no:#f08a82; --no-wash:#3a1b19;
+  --mark:#4a4214; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--f-ui);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:980px;margin:0 auto}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--rule);padding-block:14px 12px;margin-bottom:8px}
+.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;justify-content:space-between}
+h1{font:600 22px/1.2 var(--f-read);margin:0;text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin:4px 0 0;max-width:72ch}
+.tally{display:flex;gap:14px;font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted);flex-wrap:wrap}
+.tally b{color:var(--ink);font-weight:600}
+.bar{height:4px;background:var(--wash);border-radius:2px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font:500 12px/1 var(--f-ui);letter-spacing:.02em;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 10px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.notice{border:1px solid var(--no);background:var(--no-wash);padding:10px 12px;border-radius:6px;font-size:13px;margin:12px 0}
+ol.qs{list-style:none;margin:0;padding:0}
+li.q{background:var(--sheet);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:6px;padding:16px 18px;margin-top:12px}
+li.q[data-done="true"]{border-left-color:var(--ok)}
+.qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font:500 11px/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.id{font:500 12px/1 var(--f-mono);letter-spacing:0;text-transform:none;color:var(--ink)}
+.state{margin-left:auto;text-transform:none;letter-spacing:0;font-size:12px}
+.question{font:600 17px/1.45 var(--f-read);margin:10px 0 10px;max-width:68ch;text-wrap:pretty}
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+h3{font:600 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.answer{font:15px/1.6 var(--f-read);white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+.cite{font:500 11.5px/1 var(--f-mono);background:var(--accent-wash);color:var(--accent);border:0;border-radius:3px;padding:2px 4px;cursor:pointer}
+.psg{border-top:1px solid var(--rule);padding:6px 0}
+.psg:first-of-type{border-top:0;padding-top:0}
+.psg summary{cursor:pointer;font-size:13px;list-style:none;display:flex;gap:8px;align-items:baseline}
+.psg summary::-webkit-details-marker{display:none}
+.psg summary .pl{font:500 11.5px/1 var(--f-mono);color:var(--accent);flex:none}
+.psg summary .ph{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.psg .pid{font:11.5px/1.3 var(--f-mono);color:var(--muted);overflow-wrap:anywhere;margin:4px 0 0}
+.psg p{font:13.5px/1.55 var(--f-read);margin:6px 0 4px;white-space:pre-wrap;overflow-wrap:anywhere}
+.psg.flash{background:var(--mark);transition:background 1s}
+.marks{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px;border-top:1px solid var(--rule);padding-top:12px}
+.ask{font-size:13.5px;font-weight:600;margin:0 0 6px}
+.ask small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.seg button{font:600 13px/1 var(--f-ui);background:var(--sheet);color:var(--ink);border:0;padding:8px 16px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--rule)}
+.seg button[aria-pressed="true"][data-v="yes"]{background:var(--ok-wash);color:var(--ok)}
+.seg button[aria-pressed="true"][data-v="no"]{background:var(--no-wash);color:var(--no)}
+.seg button:disabled{cursor:not-allowed;opacity:.6}
+textarea{width:100%;min-height:52px;margin-top:12px;font:13.5px/1.45 var(--f-ui);color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:8px 10px;resize:vertical}
+.empty{color:var(--muted);padding:24px 0}
+.reading{margin-top:12px;border:1px dashed var(--rule);border-radius:6px;padding:8px 12px;background:var(--paper)}
+.reading summary{cursor:pointer;font:600 12px/1.4 var(--f-ui);color:var(--muted);letter-spacing:.02em}
+.reading ul{margin:8px 0 4px;padding:0;list-style:none;display:grid;gap:6px}
+.reading li{font-size:13.5px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:baseline}
+.reading .v{font:600 10.5px/1 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;border-radius:3px;padding:3px 5px;white-space:nowrap}
+.reading .v.supported{background:var(--ok-wash);color:var(--ok)}
+.reading .v.contra{background:var(--no-wash);color:var(--no)}
+.reading .v.none{background:var(--wash);color:var(--muted)}
+.reading .w{color:var(--muted);font-size:12.5px}
+.reading p{font-size:13px;margin:6px 0 2px;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="top">
+    <div>
+      <h1>Answer Labels</h1>
+      <p class="sub" id="sub">Twenty of the generator's answers to the reviewed golden set. For each, read the answer against the passages it was given and mark two things: whether every claim in it is in those passages, and whether it answers the question. These are the judge's two scores; your marks are what it is compared with. Under each answer, collapsed, is Claude's claim-by-claim reading of it, for checking against; the marks are yours.</p>
+    </div>
+    <div class="tally" aria-live="polite"><span><b id="done">0</b> of <b id="total">0</b> labeled</span><span id="save"></span></div>
+  </div>
+  <div class="bar"><i id="fill"></i></div>
+  <div class="filters" role="group" aria-label="Show">
+    <button class="chip" data-f="all" aria-pressed="true">All</button>
+    <button class="chip" data-f="todo" aria-pressed="false">To label</button>
+    <button class="chip" data-f="done" aria-pressed="false">Labeled</button>
+  </div>
+</header>
+<div id="notice" class="notice" hidden>Your marks can't be saved from this view: the page's database isn't available here. Open the page from claude.ai while signed in to label.</div>
+<ol class="qs" id="qs"></ol>
+<p class="empty" id="empty" hidden>Nothing here under this filter.</p>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const items = (DATA && DATA.items) || [];
+const labels = {};
+let db = null, filter = "all";
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function isDone(id){ const l = labels[id]; return !!l && typeof l.faithful === "boolean" && typeof l.relevant === "boolean"; }
+
+function answerHTML(it){
+  return esc(it.answer).replace(/\[(P\d+)\]/g, (m, p) => `<button class="cite" data-q="${it.id}" data-p="${p}" title="Show ${p}">${p}</button>`);
+}
+
+function render(){
+  // A note being typed is kept as typed, with its caret, across a redraw.
+  const f = document.activeElement && document.activeElement.matches("textarea[data-q]") ? document.activeElement : null;
+  const keep = f && {id: f.id, v: f.value, a: f.selectionStart, b: f.selectionEnd};
+  const list = $("#qs"); list.innerHTML = "";
+  let shown = 0;
+  for (const it of items){
+    const done = isDone(it.id);
+    if (filter === "todo" && done || filter === "done" && !done) continue;
+    shown++;
+    const l = labels[it.id] || {};
+    const li = document.createElement("li");
+    li.className = "q"; li.id = it.id; li.dataset.done = done;
+    li.innerHTML = `
+      <div class="qhead"><span class="id">${it.id}</span><span>${it.passages.length} passages given</span><span class="state">${done ? "Labeled" : "To label"}</span></div>
+      <p class="question">${esc(it.question)}</p>
+      <div class="cols">
+        <div><h3>The answer</h3><p class="answer">${answerHTML(it)}</p></div>
+        <div><h3>The passages it was given</h3>${it.passages.map(p => `
+          <details class="psg" id="${it.id}-${p.label}">
+            <summary><span class="pl">${p.label}</span><span class="ph">${esc(p.heading)}</span></summary>
+            <div class="pid">${esc(p.id)}</div><p>${esc(p.text)}</p>
+          </details>`).join("")}</div>
+      </div>
+      ${readingHTML(it)}
+      <div class="marks">
+        ${seg(it.id, "faithful", "Is every claim in the passages?", "No for anything the passages don't say, even if it's true of Mobium.", l.faithful)}
+        ${seg(it.id, "relevant", "Does it answer the question?", "Yes if it addresses what was asked, right or wrong.", l.relevant)}
+      </div>
+      <label class="ask" for="note-${it.id}" style="display:block;margin-top:12px">Note <small>Optional: what was wrong, or why it was close.</small></label>
+      <textarea id="note-${it.id}" data-q="${it.id}" ${db ? "" : "disabled"}>${esc(l.note || "")}</textarea>`;
+    list.appendChild(li);
+  }
+  if (keep){ const t = document.getElementById(keep.id); if (t){ t.value = keep.v; t.focus(); t.setSelectionRange(keep.a, keep.b); } }
+  $("#empty").hidden = shown > 0;
+  const n = items.filter(it => isDone(it.id)).length;
+  $("#done").textContent = n; $("#total").textContent = items.length;
+  $("#fill").style.width = items.length ? (100 * n / items.length) + "%" : "0";
+}
+
+function readingHTML(it){
+  const r = it.reading; if (!r) return "";
+  const cls = {supported: "supported", contradicted: "contra", "not supported": "none"};
+  const yn = b => b ? "Yes" : "No";
+  return `<details class="reading"><summary>Claude's reading — claim by claim, and which way it leans (faithful ${yn(r.lean[0])}, answers it ${yn(r.lean[1])}). The marks are yours.</summary>
+    <ul>${r.claims.map(([c, v, w]) => `<li><span class="v ${cls[v] || "none"}">${esc(v)}</span><span>${esc(c)} <span class="w">— ${esc(w)}</span></span></li>`).join("")}</ul>
+    ${r.close ? `<p>${esc(r.close)}</p>` : ""}</details>`;
+}
+
+function seg(id, key, ask, hint, v){
+  const b = (val, text) => `<button data-q="${id}" data-k="${key}" data-v="${val}" aria-pressed="${v === (val === "yes")}" ${db ? "" : "disabled"}>${text}</button>`;
+  return `<div><p class="ask">${ask}<small>${hint}</small></p><div class="seg" role="group" aria-label="${esc(ask)}">${b("yes", "Yes")}${b("no", "No")}</div></div>`;
+}
+
+const chains = {};
+function save(id, patch){
+  const body = Object.assign({faithful: null, relevant: null, note: ""}, labels[id], patch, {at: new Date().toISOString()});
+  labels[id] = body;
+  render();
+  if (!db) return;
+  $("#save").textContent = "Saving…";
+  chains[id] = (chains[id] || Promise.resolve()).then(() => db.collection("labels").doc(id).set(body)).then(
+    () => { $("#save").textContent = "Saved"; },
+    () => { $("#save").textContent = "Not saved: try again"; });
+}
+
+document.addEventListener("click", e => {
+  const c = e.target.closest(".chip");
+  if (c){ filter = c.dataset.f; document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c)); render(); return; }
+  const cite = e.target.closest(".cite");
+  if (cite){
+    const d = document.getElementById(cite.dataset.q + "-" + cite.dataset.p);
+    if (d){ d.open = true; d.scrollIntoView({block: "nearest", behavior: "smooth"}); d.classList.add("flash"); setTimeout(() => d.classList.remove("flash"), 900); }
+    return;
+  }
+  const b = e.target.closest(".seg button");
+  if (b && db){ save(b.dataset.q, {[b.dataset.k]: b.dataset.v === "yes"}); }
+});
+document.addEventListener("change", e => {
+  const t = e.target.closest("textarea[data-q]");
+  if (t && db) save(t.dataset.q, {note: t.value});
+});
+
+render();
+(async () => {
+  try { db = window.claude ? await window.claude.use("db") : null; } catch { db = null; }
+  if (!db){ $("#notice").hidden = false; return; }
+  render();
+  db.collection("labels").onSnapshot(snap => {
+    snap.docs.forEach(d => { if (d.exists) labels[d.id] = Object.assign({}, d.data()); });
+    render();
+  }, () => { $("#save").textContent = "Lost the connection: reload to keep labeling"; });
+})();
+</script>

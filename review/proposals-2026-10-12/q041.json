@@ -1,0 +1,17 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [
+  "docs/SETUP.md#driving-another-machines-devices"
+ ],
+ "drop": [],
+ "facts": [
+  "No. On Windows Mobium drives Android only; iOS is not possible there.",
+  "Mobium drives iOS through xcrun simctl and WebDriverAgent, and a real iPhone needs WebDriverAgent built and signed by xcodebuild and reached over CoreDevice's tunnel \u2014 all of which are macOS-only.",
+  "Nor through another machine: --remote, which drives a Mac's devices over SSH, needs a Unix socket on the caller's side and refuses on Windows."
+ ],
+ "note": "WINDOWS.md answers the local case. The remote case is the obvious follow-up and has its own answer: cmd/mobium/remote_windows.go:15-16 refuses (SETUP 'Driving another machine's devices': 'on Windows --remote refuses, and says so'), so ADD that section, which retrieval ranked third.",
+ "needs_lana": true,
+ "ask": "Is 'iOS from Windows through --remote to a Mac' something you want planned (a named-pipe or TCP forward on Windows), or does 'refuses' stay the answer? The question's gold is right either way today.",
+ "findings": []
+}

@@ -1,0 +1,25 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "docs/GESTURES.md#three-ways-a-second-finger-went-wrong"
+ ],
+ "drop": [],
+ "facts": [
+  "UiAutomator2 gives a late finger its own down time, where Android's contract is one per gesture; Android 17 rejects the rest of the gesture, the lifts included.",
+  "Both fingers then stay down for every injected touch on the device, adb shell input included, until a two-finger tap's closing events clear it; a UiAutomator2 restart does not.",
+  "So press-tap and press-drag are refused as unsupported above API 35; Android 16 is refused unmeasured, because a wrong guess costs the device's touch input."
+ ],
+ "note": "86, plus GESTURES' 'Three ways a second finger went wrong', which says the same in four lines. Checked against mobiumdriver/multitouch.go lastLenientAPI = 35. The code's own comment and error disagree with 86 on recovery (finding).",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "doc contradicts code/doc",
+   "where": "internal/mobiumdriver/multitouch.go:144-146 and the error at :158-161",
+   "what": "The comment says every gesture fails 'until the UiAutomator2 server restarts' and the refusal says 'until the session restarts'. CHALLENGES 86 measured that a UiAutomator2 restart did NOT clear it, nor Home, nor a single-pointer CANCEL; the recovery is a two-finger tap (GESTURES.md:110-114 agrees). The refusal's text states a recovery that does not work.",
+   "evidence": "multitouch.go: 'every gesture after it fails until the UiAutomator2 server restarts' / 'every later gesture would fail until the session restarts'; CHALLENGES 86: 'a UiAutomator2 restart did not clear it ... The recovery is a two-finger tap.'"
+  }
+ ]
+}

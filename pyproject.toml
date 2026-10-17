@@ -1,0 +1,24 @@
+[project]
+name = "mobium-rag"
+version = "0.1.0"
+description = "RAG over Mobium's docs, and an evaluation that tests its own metrics"
+license = "Apache-2.0"
+authors = [
+    { name = "Lana Begunova", email = "70295997+lana-20@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.5.9",
+    "deepeval>=4.2.6",
+    "ollama>=0.6.3",
+    "sentence-transformers>=6.1.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": ["CHALLENGES#301"],
+ "drop": [],
+ "facts": [
+  "From the native context, a node of a WebView's page with no checked state is no longer called not a checkbox: the refusal says it is part of a page and names switching to its context, where app_check now works.",
+  "A WebView page node that reads as disabled is refused saying a read-only field reads the same as a disabled one there, naming the WebView's context, never a wait.",
+  "Where the native tree reads the read-only field as enabled (Android 17), app_type and app_fill from the native context now go in through the page when it can be reached, so the field is refused with readonly attribute instead of taking the text."
+ ],
+ "note": "299 and 300 as drafted, both facts checked (internal/agent/check.go:63, handlers.go:1294 notEnabledInPage). ADD 301: the same read-only field on Android 17 read as enabled and took text from the native context — the second half of what changed for that field. The stored answer ('named by its label', 'readonly attribute') is the WebView-context behavior, not the native one; no doc problem behind it.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

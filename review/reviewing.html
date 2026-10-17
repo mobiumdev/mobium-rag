@@ -1,0 +1,118 @@
+<title>Reviewer's Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the review pages' marking-sheet look, as a guide: a contents rail beside one readable column. */
+:root{
+  --paper:#f7f8fa; --sheet:#ffffff; --ink:#1c2230; --muted:#5d6678; --rule:#dfe3ea; --wash:#eef1f6;
+  --accent:#2453a8; --accent-wash:#e6edfa; --mark:#fff1a8;
+  --f-read:"Literata", Georgia, "Times New Roman", serif;
+  --f-ui:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12151c; --sheet:#181c25; --ink:#e4e8f1; --muted:#9aa3b5; --rule:#2b3140; --wash:#1f2430;
+  --accent:#8fb0f0; --accent-wash:#1d2840; --mark:#4a4214; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12151c; --sheet:#181c25; --ink:#e4e8f1; --muted:#9aa3b5; --rule:#2b3140; --wash:#1f2430;
+  --accent:#8fb0f0; --accent-wash:#1d2840; --mark:#4a4214; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--f-read);padding-inline:16px;padding-block:24px 72px}
+.wrap{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:40px}
+@media (max-width:820px){.wrap{grid-template-columns:1fr;gap:16px}}
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;font:13px/1.45 var(--f-ui)}
+@media (max-width:820px){nav{position:static}}
+nav .eyebrow{font:600 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+nav ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+nav a{color:var(--ink);text-decoration:none}
+nav a:hover{color:var(--accent)}
+nav li.l3{padding-left:12px;color:var(--muted)}
+nav li.l3 a{color:var(--muted)}
+main{min-width:0;max-width:72ch}
+h1{font:600 34px/1.15 var(--f-read);margin:0 0 6px;text-wrap:balance}
+.sub{font:14px/1.5 var(--f-ui);color:var(--muted);margin:0 0 28px}
+h2{font:600 24px/1.25 var(--f-read);margin:44px 0 12px;padding-top:12px;border-top:1px solid var(--rule);text-wrap:balance}
+h3{font:600 13px/1.3 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:28px 0 8px}
+p,li{text-wrap:pretty}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+a{color:var(--accent)}
+code{font:13.5px/1.4 var(--f-mono);background:var(--wash);border-radius:3px;padding:1px 5px}
+strong{font-weight:600}
+.table{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;font:14px/1.45 var(--f-ui);min-width:100%}
+th{font:600 11px/1.3 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;border-bottom:2px solid var(--rule);padding:8px 10px}
+td{border-bottom:1px solid var(--rule);padding:8px 10px;vertical-align:top}
+.diagram{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:14px;margin:16px 0}
+pre.mermaid{margin:0;background:transparent}
+pre.code{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:12px 14px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+<div class="wrap">
+<nav aria-label="Contents"><p class="eyebrow">Contents</p><ol><li class="l2"><a href="#where-you-step-in">Where you step in</a></li><li class="l2"><a href="#1-reviewing-the-golden-set">1. Reviewing the golden set</a></li><li class="l3"><a href="#what-a-golden-question-is">What a golden question is</a></li><li class="l3"><a href="#reading-a-question-card">Reading a question card</a></li><li class="l3"><a href="#how-to-decide">How to decide</a></li><li class="l3"><a href="#when-a-question-finds-a-defect-in-mobium">When a question finds a defect in Mobium</a></li><li class="l2"><a href="#2-rulings-the-docs-cannot-settle">2. Rulings the docs cannot settle</a></li><li class="l2"><a href="#3-labeling-answers">3. Labeling answers</a></li><li class="l3"><a href="#the-two-marks">The two marks</a></li><li class="l3"><a href="#two-labeling-pages-and-why-the-second-is-blind">Two labeling pages, and why the second is blind</a></li><li class="l2"><a href="#4-choosing-the-judge">4. Choosing the judge</a></li><li class="l2"><a href="#what-the-maintainer-does-with-your-work">What the maintainer does with your work</a></li><li class="l2"><a href="#the-rules-in-short">The rules, in short</a></li></ol></nav>
+<main>
+<h1>Reviewing: where a person steps in</h1>
+<p class="sub">mobium-rag · for the person in the loop · built from REVIEWING.md</p>
+<p>The evaluation in this repository is measurement, and its numbers mean something only where a person has checked what they rest on. A model wrote the first golden questions, a model answers them, and models judge the answers. A person decides what counts as a right question, a right answer and a good judge. This guide is for that person: where you step in, what you are looked to for, and how to do it.</p>
+<p>This guide is also a page, built from this file by <code>review/build_guide.py</code>.</p>
+<p>You need no code and no terminal. Everything you do happens on three private pages, and each choice saves as you make it. The maintainer runs the commands that bring your choices into the repository.</p>
+<h2 id="where-you-step-in">Where you step in</h2>
+<div class="diagram"><pre class="mermaid">flowchart LR
+    draft[&quot;Questions drafted&lt;br/&gt;by a model, from the docs&quot;] --&gt; R1
+    subgraph R1[&quot;1 · Review the golden set&quot;]
+        q[&quot;on the review page:&lt;br/&gt;approve · edit · reject&lt;br/&gt;each question, its gold&lt;br/&gt;sections and key facts&quot;]
+    end
+    R1 --&gt; rule
+    subgraph rule[&quot;2 · Rulings&quot;]
+        r[&quot;in a question&#x27;s note:&lt;br/&gt;answerable or not, when&lt;br/&gt;it is a product decision&quot;]
+    end
+    rule --&gt; apply[&quot;apply.py&lt;br/&gt;golden.jsonl&quot;] --&gt; gen[&quot;A model answers&lt;br/&gt;every question&quot;]
+    gen --&gt; R3
+    subgraph R3[&quot;3 · Label answers&quot;]
+        l[&quot;on the labeling pages:&lt;br/&gt;faithful? · relevant?&lt;br/&gt;first with Claude&#x27;s reading,&lt;br/&gt;then blind&quot;]
+    end
+    R3 --&gt; report[&quot;The judges compared&lt;br/&gt;with your marks&quot;] --&gt; pick[&quot;4 · Choose the judge&lt;br/&gt;(from the report)&quot;]
+    R1 -.-&gt;|&quot;a question exposes&lt;br/&gt;a defect in Mobium&quot;| fix[&quot;fixed in Mobium,&lt;br/&gt;the question records it&quot;]</pre></div>
+<div class="table"><table><thead><tr><th>Step</th><th>Where</th><th>What you decide</th><th>Then</th></tr></thead><tbody><tr><td>1. Review the golden set</td><td>The golden review page</td><td>Each question: approve, edit or reject; which sections answer it; what a right answer must say</td><td><code>review/apply.py</code> writes your decisions into <code>data/golden.jsonl</code></td></tr><tr><td>2. Rule on what the docs cannot settle</td><td>A note on the question</td><td>Whether a question has an answer at all, when that turns on a product decision rather than on the docs</td><td>The question becomes a fact question or stays unanswerable</td></tr><tr><td>3. Label answers</td><td>The labeling pages, first and blind</td><td>For each answer: is every claim in its passages, and does it answer the question</td><td><code>python -m mobium_rag.metajudge report</code> compares every judge with your marks</td></tr><tr><td>4. Choose the judge</td><td>The report</td><td>Which judge's scores to trust, from its controls and its agreement with you</td><td>PLAN.md records the choice and why</td></tr></tbody></table></div>
+<p>Nothing a model wrote counts until a person has reviewed it. A question left undecided stays out of the set; a judge that disagrees with you is not trusted however well it scores.</p>
+<h2 id="1-reviewing-the-golden-set">1. Reviewing the golden set</h2>
+<h3 id="what-a-golden-question-is">What a golden question is</h3>
+<p>A golden question is a test: a question a user could ask, the sections of Mobium's docs that answer it, and the facts a right answer must state. Retrieval is scored by whether it finds the gold sections; an answer is checked against the key facts.</p>
+<ul><li><strong>The corpus is Mobium's public docs at one pinned commit</strong> (<code>corpus.pin</code>). A question is answered from that version of the docs, not from what you know of Mobium today.</li><li><strong>A section is a heading and what is under it.</strong> A gold label names one, as <code>CHALLENGES#305</code> (an entry in the defect log) or <code>docs/SETUP.md#parallel-runs</code>.</li><li><strong>Three kinds:</strong></li><li><strong>Single fact</strong> (<code>fact</code>): one section answers it.</li><li><strong>Two sections</strong> (<code>multi</code>): it needs two; neither answers it alone.</li><li><strong>Not in the docs</strong> (<code>unanswerable</code>): the docs do not answer it, and the right answer says so and refuses.</li></ul>
+<h3 id="reading-a-question-card">Reading a question card</h3>
+<p>Each question on the review page is one card:</p>
+<ul><li><strong>The header</strong>: its id; its kind; <strong>Missed by retrieval</strong> when none of the top five is a gold section; <strong>New · retrieved at …</strong> for a question added later, with the pin its retrieval was run at; and its state, Undecided, Approved, Edited or Rejected.</li><li><strong>The question</strong>, as a user would ask it.</li><li><strong>The answer key</strong> (left): the gold sections, each with its heading and an excerpt under <strong>Read the passage</strong>.</li><li><strong>Retrieved, reranked top 5</strong> (right): what the retriever found for this question, best first, with the gold ones marked <strong>Answer key</strong>. Under any other one, <strong>Also answers it</strong> adds it to the gold.</li><li><strong>Key facts a correct answer must state</strong>: drafted first, then yours. Edit freely, one fact per line; <strong>Facts look right</strong> keeps them as shown.</li><li><strong>Drafting flagged</strong> (orange): a doubt raised when the question was drafted.</li><li><strong>Claude checked it</strong> (blue): Claude's reading of the question against the docs and the code, ending in a proposal. It is a proposal, never a decision: the buttons below are the decision, and they are yours.</li><li><strong>Approve, Edit, Reject</strong>, then a <strong>Note</strong>.</li></ul>
+<h3 id="how-to-decide">How to decide</h3>
+<p>Ask, in this order:</p>
+<ol><li><strong>Would a real user ask it, in these words?</strong> A question should not copy a doc's wording, or retrieval is tested on matching words, not meaning. One drafted question repeated a defect's "Found by" line almost word for word; it was reworded.</li><li><strong>Do the gold sections answer it?</strong> Open each passage. If a gold section does not answer it, say so in the note. If a retrieved one does, tick <strong>Also answers it</strong>.</li><li><strong>Is it right at this pin?</strong> A question whose answer a later change replaced is wrong, not hard: "which button does accept press" had one answer before CHALLENGES 305 and another after. Edit it to ask what is true now, or reject it.</li><li><strong>Are the key facts what a right answer must say, and all true?</strong> Keep them few, short and checkable: two or three. Each should be stated in a gold section.</li><li><strong>Is the kind right?</strong> Two sections needed is <code>multi</code>; the docs silent is <code>unanswerable</code>.</li></ol>
+<p>Then:</p>
+<ul><li><strong>Approve</strong> when the question, its gold and its facts are right as shown.</li><li><strong>Edit</strong> when the question's wording or facts need a change: edit the question in the box that opens, and the facts in theirs.</li><li><strong>Reject</strong> when it cannot be fixed: a duplicate, a premise that is false, a question nobody would ask. A rejected question leaves the set.</li><li><strong>Note</strong> anything the buttons cannot say: a gold section to drop, a kind to change, a ruling (below). Start such a line with what to do — "DROP CHALLENGES#55 from gold", "kind fact" — so it is carried out exactly; the maintainer copies each into <code>review/apply.py</code>'s tables.</li></ul>
+<p><strong>A question missed by retrieval is not a bad question.</strong> It is what the golden set is for. Approve it if it is right; the miss is retrieval's.</p>
+<h3 id="when-a-question-finds-a-defect-in-mobium">When a question finds a defect in Mobium</h3>
+<p>Reviewing a question sometimes shows the docs or Mobium wrong: a passage that says one thing while the code does another, a refusal whose remedy cannot work. Say so in the note. It is fixed in Mobium, the corpus is pinned past the fix, and the question records the defect it found in <code>found</code> (as q007 → CHALLENGES 305). That is the inner loop of mobium-evals' README, "The improvement loop": every wrong answer becomes an eval, and the evals check every fix.</p>
+<h2 id="2-rulings-the-docs-cannot-settle">2. Rulings the docs cannot settle</h2>
+<p>Some questions turn on a product decision the docs do not record:</p>
+<ul><li>"Can Mobium automate a Tizen TV?" The docs have no Tizen driver, but say anyone can write one. <strong>Ruling (2026-10-12): answerable</strong>, a fact question whose gold is the driver guide. HarmonyOS, KaiOS, BlackBerry and a car's head unit took the same ruling.</li><li>"Is there an enterprise license?" A paid offering is planned and not written down. <strong>Ruling: kept unanswerable</strong>, so the right answer is that the docs name none, until the docs say otherwise.</li></ul>
+<p>Write a ruling in the question's note, with the date and a line of why. A ruling that a doc should say something becomes a change to Mobium's docs, and the question waits for the corpus to be pinned past it.</p>
+<h2 id="3-labeling-answers">3. Labeling answers</h2>
+<p>The judges score each answer for <strong>faithfulness</strong> and <strong>relevance</strong>. Your labels are what a judge is measured against: a judge that disagrees with you is not trusted.</p>
+<h3 id="the-two-marks">The two marks</h3>
+<p><strong>Is every claim in the passages?</strong> Could every statement in the answer be backed up by pointing at the passages beside it? This is whether the answer sticks to its sources, not whether it is right.</p>
+<ol><li>Split the answer into its claims, each separate statement of fact.</li><li>Look for each claim in the passages. It counts if a passage says it, or plainly means it in other words.</li><li><strong>Yes</strong> only if every claim is found. <strong>No</strong> if even one is not.</li></ol>
+<p><strong>The rule that trips people up:</strong> No for anything the passages do not say, even if it is true of Mobium. The test is whether the answer kept to what it was given. An answer that brings in outside facts is guessing, even when it guesses right.</p>
+<div class="table"><table><thead><tr><th>Situation</th><th>Mark</th><th>Why</th></tr></thead><tbody><tr><td>A claim is in a passage that is out of date, and a newer passage says otherwise</td><td><strong>Yes</strong></td><td>It is supported; being wrong today is not a faithfulness failure</td></tr><tr><td>A claim contradicts its passage</td><td><strong>No</strong></td><td></td></tr><tr><td>The answer stretches a passage past what it says</td><td><strong>No</strong></td><td>"MobiumApp's demo is no slider on iOS" is not "iOS sliders are not sliders"</td></tr><tr><td>Two true halves joined into a cause the passage does not give</td><td><strong>No</strong></td><td>Giving the fix as the reason the bug happened</td></tr><tr><td>Thin, but everything it says is in a passage</td><td><strong>Yes</strong></td><td>Incomplete is not unfaithful</td></tr><tr><td>"The docs do not say"</td><td><strong>Yes</strong></td><td>It claims nothing the passages lack</td></tr><tr><td>Off-topic but accurate to the passages</td><td><strong>Yes</strong></td><td>The second mark catches it</td></tr></tbody></table></div>
+<p><strong>Does it answer the question?</strong> Yes if it addresses what was asked, right or wrong. The two marks are separate: an answer can be faithful and miss the question, or answer it unfaithfully.</p>
+<p>The passages are numbered P1 to P5 beside each answer; a <code>[P2]</code> in the answer opens that passage. A note is optional: what was wrong, or why it was close.</p>
+<h3 id="two-labeling-pages-and-why-the-second-is-blind">Two labeling pages, and why the second is blind</h3>
+<ul><li><strong>The first page</strong> shows, under each answer, Claude's claim-by-claim reading of it, collapsed. It saves time, and it couples your marks to Claude's reading: a Claude judge that agrees with you may be agreeing with Claude.</li><li><strong>The blind page</strong> shows no reading of Claude's anywhere. Its twenty answers are others, chosen with another seed. The report compares each judge with every label, with the first set and with the blind set on its own, so the coupling is measured rather than guessed at.</li></ul>
+<p>On the blind page: <strong>mark each answer before asking anyone, Claude included, about it.</strong> Afterwards, ask whatever you like.</p>
+<h2 id="4-choosing-the-judge">4. Choosing the judge</h2>
+<p><code>python -m mobium_rag.metajudge report</code> writes <code>data/judge-report.md</code>. A judge is trusted for a metric only if:</p>
+<ol><li><strong>It passes every control.</strong> A made-up answer, and a real answer weighed against random passages, must fail faithfulness; another question's answer must fail relevance. A judge that fails one is reported as untrusted for that metric, whatever it scores.</li><li><strong>It is repeatable.</strong> The same answers scored again should not flip between pass and fail.</li><li><strong>It agrees with you</strong>, most of all on the blind labels.</li></ol>
+<p>The choice and its reasons go in PLAN.md, phase 6.</p>
+<h2 id="what-the-maintainer-does-with-your-work">What the maintainer does with your work</h2>
+<div class="table"><table><thead><tr><th>After</th><th>The maintainer runs</th><th>Which</th></tr></thead><tbody><tr><td>Reviewing questions</td><td>the page's database exported to <code>review/decisions.json</code>, then <code>uv run python review/apply.py</code></td><td>moves approved and edited questions in, removes rejected ones, keeps undecided ones proposed</td></tr><tr><td>A batch of new questions</td><td><code>uv run python review/build_review.py &lt;questions.jsonl&gt; &lt;checks.json&gt;</code></td><td>puts them on the review page, with retrieval and a check of each</td></tr><tr><td>Labeling</td><td>each page's <code>labels</code> exported to <code>review/labels.json</code> and <code>review/labels-blind.json</code>, then <code>uv run python -m mobium_rag.metajudge report</code></td><td>compares every judge with your marks, nothing scored again</td></tr><tr><td>Any of these</td><td><code>make ci</code></td><td>the tests and the retrieval gate on the golden set as it now stands</td></tr></tbody></table></div>
+<h2 id="the-rules-in-short">The rules, in short</h2>
+<ul><li>Nothing a model wrote counts until a person has reviewed it.</li><li>A question is answered from the docs at the pinned commit, not from memory of Mobium.</li><li>Claude's checks are proposals. Your buttons are the decisions.</li><li>Faithful means supported by the passages shown, not true.</li><li>On the blind page, mark first, discuss after.</li><li>A question that finds a defect is a good question: note it.</li></ul>
+</main>
+</div>

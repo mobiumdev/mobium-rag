@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "From the native context, app_type and app_fill into a node of a WebView's page go in through the page when it can be reached and one page element clearly matches the node's rectangle.",
+  "The page is then asked whether a person could type there, so a read-only field is refused with 'readonly attribute' and keeps its text.",
+  "With no reachable page (an app that has not opened its WebView to debugging) or no clear match, the text goes in natively as before, and a read-only field can still take it."
+ ],
+ "note": "301 alone, checked against the code (handlers.go:2118 inWebView -> webview.go typeThroughPage, then webFill). Stored answer describes the defect, not the fix: it read the 'Found by' half of 301. Not a doc problem.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

@@ -1,0 +1,18 @@
+{
+ "decision": "edit",
+ "question": "What do alert accept and dismiss press on Android and on iOS, and why is a dialog of three or more buttons refused?",
+ "also": ["CHALLENGES#305"],
+ "drop": ["CHALLENGES#63"],
+ "facts": [
+  "accept and dismiss mean yes and no, so they answer a dialog of one or two buttons: iOS puts the cancel button first, and Android marks its buttons positive and negative by id (button1/button2, permission_allow/deny).",
+  "With three or more buttons neither verb means yes or no: on iOS accept pressed Cancel on a three-button alert and Don't Allow on the location prompt, and on Android dismiss pressed the middle button, so such a dialog is refused, naming its buttons.",
+  "--button presses one by its caption or its position from 1, and every answer says which button it pressed (pressed)."
+ ],
+ "note": "Stale since #195: the drafted facts ('they answer a dialog and choose nothing') are the pre-305 rule. Same move as q007: DROP 63 (its fact, accept on the location prompt, is in 305's table), ADD 305, keep 106 for why not positional. Checked against internal/agent/alert.go (len(buttons) > 2 refused as unsupported, pressedBy, view.Pressed). Needs the corpus pinned at or after 38df00f.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {"repo": "mobium", "kind": "stale text", "where": "docs/checks/README.md:82 (the dialogs.sh row)", "what": "Says accept and dismiss 'are held to what they were measured to press on each platform (CHALLENGES 106)'; since #195 dialogs.sh holds them to yes and no on one or two buttons and asserts the refusal of three or more, as its own header says.", "evidence": "docs/checks/dialogs.sh:9-16 'accept and dismiss are yes and no, so they answer a dialog of one or two buttons … a dialog of three or more … is refused, naming its buttons'"},
+  {"repo": "mobium", "kind": "stale text", "where": "docs/checks/README.md:211-214", "what": "Present tense 'on Apple's permission prompt they invert. Which button each presses is not positional' — the three-button location prompt is now refused, and on every two-button permission prompt accept grants (CHALLENGES 305 table).", "evidence": "README.md:212 'on Apple's permission prompt they invert'; CHALLENGES 305: 'iOS notification, camera prompts | Don’t Allow, Allow | Allow | Don’t Allow'"}
+ ]
+}

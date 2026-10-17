@@ -1,0 +1,122 @@
+{
+ "q003": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q007": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading. faithful to P5 (63), superseded by 305: wrong today",
+  "relevant": true
+ },
+ "q009": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q014": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q017": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. contradicts 222: no bar was hidden; the role matched nothing",
+  "relevant": true
+ },
+ "q019": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. contradicts 233/306: text= matches a part",
+  "relevant": true
+ },
+ "q020": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q023": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q025": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q026": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. gives the fix as the cause",
+  "relevant": true
+ },
+ "q027": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. accept is refused on an Apple TV, not pressed",
+  "relevant": true
+ },
+ "q031": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading. thin: no why",
+  "relevant": true
+ },
+ "q032": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading. never says the version is in mobium devices' line",
+  "relevant": false
+ },
+ "q033": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q038": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading. answers WebView tap checks, not Safari's placement",
+  "relevant": false
+ },
+ "q044": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "relevant": true
+ },
+ "q049": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. the iOS half generalizes one demo",
+  "relevant": true
+ },
+ "q053": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. no cancel button on the remote; restates without the why",
+  "relevant": true
+ },
+ "q056": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-14, after Claude's reading. leaves out that a real watch is unmeasured",
+  "relevant": true
+ },
+ "q058": {
+  "at": "2026-10-14T01:34:16.445023Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-14, after Claude's reading. Tizen is in no passage",
+  "relevant": true
+ }
+}

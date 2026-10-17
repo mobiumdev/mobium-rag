@@ -1,0 +1,22 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "alert accept (and dismiss) are refused on an Apple TV as unsupported, before any answer is sent.",
+  "A tvOS alert opens with focus on its cancel button and is answered with the remote: move focus with the D-pad, press select; Back (Menu) answers with the cancel button."
+ ],
+ "note": "298 alone, checked against the code (mobiumdriver/alerts.go AnswerAlert, errTVAlert), which still holds after #195. The stored answer (accept presses the cancel button) is wrong; 298 says focus starts on cancel, which it misread. Found: a TV alert of three buttons is refused naming app_alert button, which taps, and a TV refuses every touch.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "code bug (unmeasured)",
+   "where": "internal/agent/alert.go:172-178 and :248",
+   "what": "On an Apple TV an alert of three or more buttons is refused with the remedy 'app_alert with button set to one of them'; `button` presses by tapping the node, and a TV refuses every touch (errTVNoTouch), so the remedy cannot work there. A two-button TV alert with --button is refused as 'no touch screen' rather than pointing at the D-pad answer for alerts. Read from the code, not run on the Apple TV simulator.",
+   "evidence": "alert.go:177 WithRemedy(\"app_alert with button set to one of them…\"); alert.go:248 s.driver.Tap; mobiumdriver/wda.go:101 noTouch = errTVNoTouch"
+  }
+ ]
+}

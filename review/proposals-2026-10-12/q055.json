@@ -1,0 +1,25 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "README.md#drivers-for-other-platforms"
+ ],
+ "drop": [],
+ "facts": [
+  "Mobium has no driver for HarmonyOS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+  "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+  "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+ ],
+ "note": "Following q058 (Tizen): no HarmonyOS driver from mobiumdev, and anyone can write one — kind fact, gold README.md#drivers-for-other-platforms. Nuance the docs cannot support: HarmonyOS 2–4 run Android apps over adb and might work with the Android backends, unmeasured; HarmonyOS NEXT is not Android. The stored answer, a flat 'No', cites nothing that says so.",
+ "needs_lana": true,
+ "ask": "Same ruling as Tizen (no driver, anyone can write one)? And should the docs say whether Android-based platforms — HarmonyOS 2–4, Wear OS, Android BlackBerry phones — are untested rather than unsupported?",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "gap",
+   "where": "README.md 'Platforms'; docs/SETUP.md 'Android real device'",
+   "what": "The docs list the devices verified but never say what happens on an Android-derived platform (Wear OS, HarmonyOS 2–4, an Android BlackBerry phone): whether adb and UiAutomator2 are expected to work, untested, or refused. A RAG answered HarmonyOS 'No' and Wear OS with nonsense because nothing speaks to it.",
+   "evidence": "git grep for Harmony, Wear OS, KaiOS, BlackBerry finds nothing in any .md; README Platforms lists only Pixel 7 AVD, Pixel 8 Pro, iPhone 17 Pro simulator, iPhone 15 Plus and TVs."
+  }
+ ]
+}

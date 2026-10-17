@@ -1,0 +1,22 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "On tvOS WebDriverAgent marks the element with focus focused=\"true\", and Mobium's iOS parser reads it (since CHALLENGES 297).",
+  "After a D-pad press Mobium reads the screen for up to two seconds and compares the focused element with the one before: it reports where focus moved, that it did not move, or that nothing reports focus."
+ ],
+ "note": "297 alone, checked against the code (uitree/parse_xcui.go:418; agent/buttons.go awaitFocus). Fact 2 rewritten from the code. Gold ranked fifth, behind 296; the stored answer mixed in 296's restart. A stale comment found: Node.Focused is still called Android's alone.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "stale text",
+   "where": "internal/uitree/parse.go:101",
+   "what": "Node.Focused's comment says it is 'Android's `focused`'; the iOS parser fills it too since CHALLENGES 297.",
+   "evidence": "internal/uitree/parse_xcui.go:418 `Focused: attr(e, \"focused\") == \"true\"`"
+  }
+ ]
+}

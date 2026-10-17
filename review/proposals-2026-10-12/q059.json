@@ -1,0 +1,17 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "README.md#drivers-for-other-platforms"
+ ],
+ "drop": [],
+ "facts": [
+  "Mobium has no driver for KaiOS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+  "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+  "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+ ],
+ "note": "KaiOS is not Android (Gecko-based), so the Android backends cannot reach it; by q058's pattern, kind fact, gold README.md#drivers-for-other-platforms. Stored answer ('runs on Android phones, docs do not mention KaiOS') is fair.",
+ "needs_lana": true,
+ "ask": "Apply the Tizen ruling to KaiOS (no driver from mobiumdev, anyone can write one), or keep it unanswerable?",
+ "findings": []
+}

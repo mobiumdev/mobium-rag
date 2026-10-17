@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Tests and the retrieval gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      # The corpus: Mobium's public docs, at the commit corpus.pin names.
+      - uses: actions/checkout@v4
+        with:
+          repository: mobiumdev/mobium
+          path: mobium-public
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.6"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ hashFiles('src/mobium_rag/retrieve.py') }}
+      - run: make ci
+        env:
+          MOBIUM_PUBLIC: ${{ github.workspace }}/mobium-public

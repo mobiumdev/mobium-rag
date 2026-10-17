@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": ["CHALLENGES#302"],
+ "drop": [],
+ "facts": [
+  "On iOS, app_fill moves a slider to a 0-to-1 position through WebDriverAgent, as a finger would: exact from either end, a step past from partway, and the value read back is the app's own.",
+  "On Android, app_fill touches the seek bar's track at the position, inset 16dp from each end and never on its last pixel, which lands exactly; UiAutomator2's set-value was not used because it takes the bar's own units and nothing gives its maximum.",
+  "An Android seek bar's value reads in its own steps, so it is marked value_scale, and app_fill's answer also carries position, the 0-to-1 asked for; an iOS slider's value is left bare."
+ ],
+ "note": "219 and 227 as drafted, checked against internal/mobiumdriver/uia2.go:391 (SetSliderPosition, sliderTouch: 16dp inset, last pixel avoided) and driver.go:383 (WDA adjust). ADD 302: what a fill answers differs by platform too (value_scale, position), and retrieval ranked it second — the stored answer was built from it alone. Fact 3 added for it.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

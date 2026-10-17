@@ -1,0 +1,25 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "docs/guides/cli.md#1-which-devices",
+  "skills/mobile-check/SKILL.md#first-check-there-is-a-device"
+ ],
+ "drop": [],
+ "facts": [
+  "mobium devices (app_devices) reports a ready Android device's version as its runtime, such as 'Android 15 (API 35)', the field iOS devices already had.",
+  "It is read from ro.build.version.release and ro.build.version.sdk in one shell call, only for a device in the 'device' state."
+ ],
+ "note": "304, plus the two sections whose devices example shows 'Android 15 (API 35)' \u2014 both were retrieved and the stored answer still missed it, answering 'check there is a device'. Checked against handlers.go:469-476 and device/osversion.go.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "stale text",
+   "where": "skills/mobile-check/SKILL.md:59-61",
+   "what": "The agent skill says that with no device 'you cannot do it for them from mobium. Say so rather than retrying.' But mobium boot / app_boot starts an emulator or simulator by name (since #90, 2026-10-01; docs/guides/cli.md section 1 says so). An agent following the skill gives up where one call would do.",
+   "evidence": "SKILL.md: 'If nothing is listed, the user needs to start an emulator or simulator, or plug in a phone ... \u2014 you cannot do it for them from mobium.' vs `mobium boot --help`: 'Starts an Android emulator by its AVD's name, or an iOS simulator by its name or UDID'; docs/API.md:46 app_boot."
+  }
+ ]
+}

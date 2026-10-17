@@ -1,0 +1,16 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "docs/ROADMAP.md#under-consideration"
+ ],
+ "drop": [],
+ "facts": [
+  "Running Mobium on a commercial device cloud or device farm is planned, not built (decided 2026-10-12); until then Mobium drives only devices you can reach.",
+  "The first step written down is MobiumApp on AWS Device Farm's free trial, Android first, with a mobium binary and docs/checks/ as the test package."
+ ],
+ "note": "Your q061 ruling covers it ('Sauce Labs or any device cloud/farm: not yet, but planned') — kind fact, gold docs/ROADMAP.md#under-consideration, checked against ROADMAP 'Device clouds and device farms: planned'. Retrieval missed that entry and the stored answer invented a connection through MOBIUM_PLATFORM; a retrieval miss, not a doc fault.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

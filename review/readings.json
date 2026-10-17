@@ -1,0 +1,340 @@
+{
+ "q003": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "adb shell runs its argument through a shell on the device; an unquoted value with a space becomes two arguments and everything after the first is dropped",
+    "supported",
+    "P1, nearly word for word"
+   ]
+  ]
+ },
+ "q007": {
+  "lean": [
+   true,
+   true
+  ],
+  "close": "Faithful to P5 (CHALLENGES 63), which is the old behavior; P1–P3 (305) say a two-button permission prompt's accept presses Allow, and the three-button location prompt is now refused. Supported by a passage and wrong today: faithfulness asks only the first.",
+  "claims": [
+   [
+    "accept presses the last button",
+    "supported",
+    "P5 (63): accept presses the last button — superseded by P2 (305)"
+   ],
+   [
+    "which is Don't Allow",
+    "supported",
+    "P5's location prompt row; P1's table: notification and camera prompts accept → Allow"
+   ]
+  ]
+ },
+ "q009": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "every iOS switch has mapped as 0 or 1 since the backend was written",
+    "supported",
+    "P1"
+   ],
+   [
+    "the label was the state; the parser assigned Text: value, and a value is not always text",
+    "supported",
+    "P1"
+   ]
+  ]
+ },
+ "q014": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "once found, the loop swipes only the distance it is out, plus an eighth of the list, from whichever side it is on",
+    "supported",
+    "P1, word for word"
+   ],
+   [
+    "so as not to swipe past it",
+    "supported",
+    "P1: a full swipe coasted the button past the top"
+   ]
+  ]
+ },
+ "q017": {
+  "lean": [
+   false,
+   true
+  ],
+  "claims": [
+   [
+    "it waited for nothing because the progress bar was already hidden",
+    "contradicted",
+    "P1: role=progressbar matched nothing, because no table named the role — not because a bar was hidden"
+   ],
+   [
+    "Mobium now waits for it to be hidden and returns immediately",
+    "contradicted",
+    "P1: progressbar is a role now, and a role nothing has is refused"
+   ],
+   [
+    "a progress bar is hidden after a short time",
+    "not supported",
+    "in no passage"
+   ]
+  ]
+ },
+ "q019": {
+  "lean": [
+   false,
+   true
+  ],
+  "claims": [
+   [
+    "the wait was met by the screen being left, which had 'Network & internet'",
+    "supported",
+    "P1"
+   ],
+   [
+    "because the wait was looking for the whole text, not a part",
+    "contradicted",
+    "P1 and P2: text= matches part of a text; a quoted value is the whole"
+   ]
+  ]
+ },
+ "q020": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "the server's notification listener, which records toasts for a client that asserts on them, broke the read",
+    "supported",
+    "P1"
+   ],
+   [
+    "Mobium never uses it, so turning it off fixed it",
+    "supported",
+    "P1: with it off the read took 0.6 s"
+   ]
+  ]
+ },
+ "q023": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "boot does nothing and answers 'mobium-test was already running, as emulator-5554'",
+    "supported",
+    "P1, word for word"
+   ]
+  ]
+ },
+ "q025": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "the MCP server runs the handlers in its own process and did not resolve relative paths as the CLI and pipe do",
+    "supported",
+    "P1"
+   ]
+  ]
+ },
+ "q026": {
+  "lean": [
+   false,
+   true
+  ],
+  "close": "Each half is in P1, but joined backwards: the passage says it passed because expect dropped every piece of 200 ms or less, and counting runs as one sound is the fix.",
+  "claims": [
+   [
+    "expect now counts a run of short pieces as one sound when they last longer than 200 ms",
+    "supported",
+    "P1 — this is the fix"
+   ],
+   [
+    "silence passed because of that",
+    "contradicted",
+    "P1: it passed because each piece of 200 ms or less was dropped as a click"
+   ]
+  ]
+ },
+ "q027": {
+  "lean": [
+   false,
+   true
+  ],
+  "claims": [
+   [
+    "accept presses the cancel button",
+    "contradicted",
+    "P1: accept and dismiss are refused on an Apple TV before anything is sent; focus starts on the cancel button, and Back answers with it"
+   ]
+  ]
+ },
+ "q031": {
+  "lean": [
+   true,
+   true
+  ],
+  "close": "Thin: it leaves out why the note is there (UiAutomator2 reports no maximum, and models read 2.0 as the range), but nothing it says is wrong.",
+  "claims": [
+   [
+    "a seek bar's value is its progress in its own units",
+    "supported",
+    "P1: progress in its own steps"
+   ]
+  ]
+ },
+ "q032": {
+  "lean": [
+   true,
+   false
+  ],
+  "claims": [
+   [
+    "check for a device with mobium devices",
+    "supported",
+    "P2"
+   ],
+   [
+    "if none, start one with mobium boot",
+    "supported",
+    "P2"
+   ]
+  ],
+  "close": "Never says the version is in mobium devices' line — Android 15 (API 35), P1 and P2 — so it does not answer the question."
+ },
+ "q033": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "dumpsys reports degrees, user-rotation quarters",
+    "supported",
+    "P1's heading, word for word"
+   ]
+  ]
+ },
+ "q038": {
+  "lean": [
+   true,
+   false
+  ],
+  "claims": [
+   [
+    "a tap inside a WebView was never checked and went wherever the page put it",
+    "supported",
+    "P4 (118)"
+   ],
+   [
+    "now every web tap goes through Vibium's checks in the page and is refused if one fails",
+    "supported",
+    "P4 (118)"
+   ]
+  ],
+  "close": "True of WebViews (118), but the question is Safari's refusal and how a tap is placed now — anchoring the page on text both sides report, which P1 names and the answer does not use."
+ },
+ "q044": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "yes; Flutter does not produce native views but publishes a semantics tree that Mobium reads",
+    "supported",
+    "P3"
+   ]
+  ]
+ },
+ "q049": {
+  "lean": [
+   false,
+   true
+  ],
+  "close": "Relevant but half wrong: the Android half is right; the iOS half turns MobiumApp's one demo into all iOS sliders and leaves out how iOS fills one (WebDriverAgent sets a position, P5). Measured 2026-10-13 on the simulator: the demo's sliders are indeed plain views to the tree (map calls them buttons), and a finger's drag moves them — so the claim is true of the demo, not of iOS sliders (CHALLENGES 318).",
+  "claims": [
+   [
+    "on Android a seek bar is filled by touching its track at the position, which lands exactly",
+    "supported",
+    "P1, P2"
+   ],
+   [
+    "on iOS a slider is not a slider at all",
+    "not supported",
+    "P2 says that of MobiumApp's Slider Demo on iOS (its library reports a plain view), not of iOS sliders"
+   ],
+   [
+    "its value is left bare",
+    "supported",
+    "P3: an iOS slider's value, the app's own, is left bare"
+   ]
+  ]
+ },
+ "q053": {
+  "lean": [
+   false,
+   true
+  ],
+  "close": "It restates the first half without the why (the runner answers from the foreground and stays there, P1), and garbles the second: there is no cancel button on the remote.",
+  "claims": [
+   [
+    "every press went to the runner",
+    "supported",
+    "P1's heading"
+   ],
+   [
+    "an alert is answered with the remote's cancel button",
+    "not supported",
+    "P2: focus starts on the alert's cancel button, the D-pad moves it, select presses; Back answers with cancel"
+   ]
+  ]
+ },
+ "q056": {
+  "lean": [
+   true,
+   true
+  ],
+  "claims": [
+   [
+    "a Wear OS watch is driven as any Android device, by the same backends",
+    "supported",
+    "P1, word for word"
+   ],
+   [
+    "swipe right to go back, or press back",
+    "supported",
+    "P1"
+   ]
+  ],
+  "close": "It leaves out that a real watch is not measured yet (P2), which matters for a Galaxy Watch; nothing it says is wrong."
+ },
+ "q058": {
+  "lean": [
+   false,
+   true
+  ],
+  "claims": [
+   [
+    "Mobium can automate a Tizen TV, with some issues",
+    "not supported",
+    "No passage mentions Tizen; the gold section (drivers for other platforms) was not retrieved"
+   ]
+  ]
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [
+  "An Android seek bar's reading is its progress in its own steps, and no maximum is reported, so Mobium cannot turn it into the app's number (MobiumApp's Volume at 50 reads 5.0).",
+  "map marks it, as 'Volume (slider, 5.0 in its own steps)', so it is not read as the slider's range; an agent read 2.0 as 20 out of 10 before.",
+  "The structured answer carries value_scale beside value, and app_fill's also carries position, the 0-to-1 asked for. An iOS slider's value, the app's own, is left bare."
+ ],
+ "note": "302 alone, checked against the code (uitree/parse.go:375 ValueSteps for Android, snapshot.go:77 'in its own steps', structured.go:171/179 value_scale). Third fact added: the structured half is what agents see. 227 found the units; 302 is why map says so.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": []
+}

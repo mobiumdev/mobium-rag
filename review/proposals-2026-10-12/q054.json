@@ -1,0 +1,11 @@
+{
+ "decision": "approve",
+ "question": null,
+ "also": [],
+ "drop": [],
+ "facts": [],
+ "note": "Unanswerable as asked: nothing in the docs names an enterprise license or a price. README 'License' says Apache-2.0, so the best answer corrects the premise — no enterprise license is mentioned; Mobium is Apache-2.0 (MIT before 2026-10-08). Stored answer is empty, which counts as a refusal.",
+ "needs_lana": true,
+ "ask": "Is any paid or enterprise offering planned (support, hosting) that the docs should say? If none, keep q054 unanswerable; if you want the premise corrected, make it kind fact with gold README.md#license.",
+ "findings": []
+}

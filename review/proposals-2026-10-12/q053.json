@@ -1,0 +1,32 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "docs/SETUP.md#an-apple-tv-simulator"
+ ],
+ "drop": [],
+ "facts": [
+  "tvOS's WebDriverAgent runner answers from the foreground and stays there, so after a daemon restart it was in front and every press went to it; Mobium now presses Home once when the session opens, only while the runner is in front.",
+  "A tvOS alert opens with focus on its cancel button and is answered with the remote: the D-pad moves focus along its buttons, select presses the one with focus, and Back (the remote's Menu) answers with the cancel button.",
+  "app_alert accept and dismiss are refused on an Apple TV before anything is sent: WebDriverAgent's accept left the alert up."
+ ],
+ "note": "296 and 298 as gold, checked against the code (mobiumdriver/alerts.go AnswerAlert refuses on w.tv() before sending; errTVAlert names the D-pad). Added SETUP 'An Apple TV simulator', which says accept and dismiss are refused and how an alert is answered. Since #195, app_alert's button is refused on a TV too (it taps, and noTouch refuses every tap), but that is past the corpus pin. Stored answer muddles the two halves; 298 itself is clear.",
+ "needs_lana": false,
+ "ask": "",
+ "findings": [
+  {
+   "repo": "mobium",
+   "kind": "code bug",
+   "where": "internal/agent/alert.go:181-184",
+   "what": "On an Apple TV, a dialog of three or more buttons is refused with the remedy 'app_alert with button set to one of them' — and button taps the node, which a TV refuses (no touch screen). A remedy that cannot work (CLAUDE.md rule). Unmeasured: MobiumTV's alert has two buttons.",
+   "evidence": "alert.go:184 WithRemedy(\"app_alert with button set to one of them, by its caption or its position from 1\"); pressAlertButton → s.driver.Tap (alert.go:248) → w3c.pointerSequence returns noTouch on tvOS (w3c.go:161, wda.go:101)."
+  },
+  {
+   "repo": "mobium",
+   "kind": "stale text",
+   "where": "internal/agent/schema.go:1289-1290; cmd/mobium/alert.go:28",
+   "what": "app_alert's description says button presses one 'on any dialog', and the CLI example says 'any dialog'; on an Apple TV every button press is refused, and the description never mentions a TV.",
+   "evidence": "schema.go:1290 \"its caption or its position from 1**, on any dialog, an app's own included\"; SETUP.md:516 says only accept and dismiss are refused on an Apple TV."
+  }
+ ]
+}

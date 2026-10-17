@@ -1,0 +1,17 @@
+{
+ "decision": "edit",
+ "question": null,
+ "also": [
+  "README.md#drivers-for-other-platforms"
+ ],
+ "drop": [],
+ "facts": [
+  "Mobium has no driver for Wear OS of its own: the built-in backends are UiAutomator2 and uiautomator for Android, and WebDriverAgent for iOS simulators, iPhones and the Apple TV simulator.",
+  "A platform Mobium does not drive itself is reached through a driver: an executable named mobium-driver-<name> on the PATH, in any language, speaking JSON-RPC on stdio.",
+  "A driver needs snapshot, screenshot and tap to be useful, and inherits locators, refs, waiting, scrolling, the CLI, MCP and all five clients; examples/drivers/ has the guide and a reference driver in Python."
+ ],
+ "note": "Following q058's pattern, kind fact, gold README.md#drivers-for-other-platforms — but Wear OS is Android: adb and UiAutomator2 run there, so the Android backend may simply work, unmeasured, and the honest answer may be 'untested' rather than 'write a driver'. Nothing in the docs says either. The stored answer (MobiumTV's UIKit screens) is a hallucination from an unrelated ROADMAP passage.",
+ "needs_lana": true,
+ "ask": "Wear OS: answer 'untested — it is Android, the Android backend may work' (needs a doc line first), or the Tizen ruling (no driver, anyone can write one)? Worth measuring on a Wear OS emulator?",
+ "findings": []
+}
