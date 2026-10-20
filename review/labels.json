@@ -1,122 +1,142 @@
 {
  "q003": {
+  "answer": "The problem is that the shell command is truncated to one word when it contains a space. This is because `adb shell` runs its argument through a shell on the device, and an unquoted value with a space becomes two arguments and everything after the first is dropped.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading.",
   "relevant": true
  },
  "q007": {
+  "answer": "On an iOS permission prompt, `alert accept` presses the last button, which is 'Don't Allow'.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading. faithful to P5 (63), superseded by 305: wrong today",
   "relevant": true
  },
  "q009": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "Every iOS switch has mapped as `0` or `1` since the backend was written, and the right label was sitting in `label=` both times.",
+  "at": "2026-10-20T20:30:00.000Z",
   "faithful": true,
-  "note": "Lana, 2026-10-14, after Claude's reading.",
-  "relevant": true
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful: both claims in P1 (CHALLENGES 65). Not relevant: says what, not why; the cause (the parser used `value`, a switch's value is 0 or 1) is dropped.",
+  "relevant": false
  },
  "q014": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "Once the target has been found, the loop swipes only the distance it is out, plus an eighth of the list, from whichever side it is on. This is to prevent the target from being swiped past its container.",
+  "at": "2026-10-20T20:40:00.000Z",
   "faithful": true,
-  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful: the swipe distance is P1 (CHALLENGES 114) word for word; 'swiped past its container' is a close paraphrase of the button coasting above the list's top. Relevant: gives the reason (a full swipe overshoots); leaves out that a swipe coasts on iOS.",
   "relevant": true
  },
  "q017": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "The `mobium wait role=progressbar --for hidden` command waited for nothing because it was waiting for a progress bar to be hidden, but it was already hidden. Mobium does not wait for a progress bar to be hidden by default, and the `--for hidden` option is not necessary. The command returns immediately because it is waiting for nothing to be hidden.",
+  "at": "2026-10-20T20:50:00.000Z",
   "faithful": false,
-  "note": "Lana, 2026-10-14, after Claude's reading. contradicts 222: no bar was hidden; the role matched nothing",
-  "relevant": true
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Not faithful: contradicts P1 (CHALLENGES 222): no bar was hidden, the role matched nothing; and P2/P4: visible is the default, --for hidden is how to wait for a spinner to go. Not relevant: the 'what does Mobium do now' half is unanswered (progressbar is a role now; an unknown role is refused).",
+  "relevant": false
  },
  "q019": {
+  "answer": "The wait for `text=Internet` was satisfied by the screen being left, which had the text 'Network & internet', because the wait was looking for the whole text, not just a part of it.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": false,
   "note": "Lana, 2026-10-14, after Claude's reading. contradicts 233/306: text= matches a part",
   "relevant": true
  },
  "q020": {
+  "answer": "Every screen read failed while a system toast was up because the server's notification listener, which records toasts for a client that asserts on them, was interfering with the read. Mobium never uses this listener, so turning it off fixed the issue.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading.",
   "relevant": true
  },
  "q023": {
+  "answer": "If the emulator is already running, `mobium boot` does nothing and answers that `mobium-test was already running, as emulator-5554`.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading.",
   "relevant": true
  },
  "q025": {
+  "answer": "The MCP server answered a saved file's path as a relative path because it runs the handlers in its own process and does not resolve relative paths like the CLI and pipe do.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading.",
   "relevant": true
  },
  "q026": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "The `expect silence` pass on a melody and on a beeping alarm because `expect` now counts a run of short pieces as one sound when they last longer than 200ms, and the pieces are all within 5% of one pitch.",
+  "at": "2026-10-20T21:00:00.000Z",
   "faithful": false,
-  "note": "Lana, 2026-10-14, after Claude's reading. gives the fix as the cause",
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Not faithful: gives the fix as the cause (P1, CHALLENGES 287: pieces of 200ms or less were dropped as clicks); and 'all within 5% of one pitch' is false for a melody, a sound with no one pitch. Relevant: addresses why, wrongly.",
   "relevant": true
  },
  "q027": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "On an Apple TV, `alert accept` presses the last button, which is the cancel button, and `alert dismiss` presses the first button, which is the affirmative button.",
+  "at": "2026-10-20T21:10:00.000Z",
   "faithful": false,
-  "note": "Lana, 2026-10-14, after Claude's reading. accept is refused on an Apple TV, not pressed",
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Not faithful: accept is refused on an Apple TV, not pressed (P1, CHALLENGES 298); 'last button / first button' is iOS's (P3, CHALLENGES 63) carried to tvOS; cancel is where focus opens, not last; dismiss pressing the affirmative is in no passage. Relevant: answers what accept does, wrongly.",
   "relevant": true
  },
  "q031": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "An Android slider's value is marked as its own steps in Mobium's map, and its position is reported as a 0-to-1 value in its structured answer and in app_fill's answer.",
+  "at": "2026-10-20T21:20:00.000Z",
   "faithful": true,
-  "note": "Lana, 2026-10-14, after Claude's reading. thin: no why",
-  "relevant": true
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful, borderline: 'its own steps' in map is P1 (CHALLENGES 302); 'position in its structured answer' is loose, since only app_fill's answer carries position. Not relevant: says what, not why (progress in the bar's own units; no maximum from UiAutomator2; agents misread 2.0 as the range).",
+  "relevant": false
  },
  "q032": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "Check if there is a device with `mobium devices`, and if not, start an emulator or simulator with `mobium boot <avd-or-simulator-name>` or plug in a phone.",
+  "at": "2026-10-20T21:30:00.000Z",
   "faithful": true,
-  "note": "Lana, 2026-10-14, after Claude's reading. never says the version is in mobium devices' line",
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful: every claim is P3, 'plug in a phone' included. Not relevant: never says the version is in mobium devices' line (P1, CHALLENGES 304: Android 15 (API 35) as runtime).",
   "relevant": false
  },
  "q033": {
+  "answer": "dumpsys reports rotation in degrees and user-rotation in quarters",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading.",
   "relevant": true
  },
  "q038": {
-  "at": "2026-10-14T01:34:16.445023Z",
-  "faithful": true,
-  "note": "Lana, 2026-10-14, after Claude's reading. answers WebView tap checks, not Safari's placement",
-  "relevant": false
+  "answer": "Mobium refused a tap inside Safari's page because the WebView's height was compared to the page's viewport, which changed when the keyboard was up. Now, Mobium places a tap inside Safari's page by anchoring the page on text both sides of the WebView, making the page tappable on a simulator and on the iPhone.",
+  "at": "2026-10-20T21:40:00.000Z",
+  "faithful": false,
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Not faithful: the keyboard cause is P1's (CHALLENGES 230), an app's WebView; P1 says in Safari the comparison stands, keyboard or not; 'text both sides of the WebView' garbles P2's 'text both sides report'. Relevant: answers both halves. Gold (CHALLENGES 47, 248) not retrieved.",
+  "relevant": true
  },
  "q044": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "Yes, Mobium can drive a Flutter app.",
+  "at": "2026-10-20T21:50:00.000Z",
   "faithful": true,
-  "note": "Lana, 2026-10-14, after Claude's reading.",
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful: the one claim is in P1, P3, P4 and P5. Relevant: a yes/no question answered yes; thin, no how (the semantics tree).",
   "relevant": true
  },
  "q049": {
-  "at": "2026-10-14T01:34:16.445023Z",
-  "faithful": false,
-  "note": "Lana, 2026-10-14, after Claude's reading. the iOS half generalizes one demo",
-  "relevant": true
+  "answer": "On Android, a seek bar's value is marked as its own steps in `map`, `value_scale` beside `value` in its structured answer, and in `app_fill`'s answer, which also carries `position`, the 0-to-1 the caller asked for. An iOS slider's value, the app's own, is left bare.",
+  "at": "2026-10-20T22:00:00.000Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful: P1's fix paragraph (CHALLENGES 302) nearly verbatim. Not relevant: answers how the value is reported, not how a slider is filled; no Android track touch (P3, 227), nothing on iOS's fill, no comparison. Gold CHALLENGES 219 not retrieved.",
+  "relevant": false
  },
  "q053": {
-  "at": "2026-10-14T01:34:16.445023Z",
-  "faithful": false,
-  "note": "Lana, 2026-10-14, after Claude's reading. no cancel button on the remote; restates without the why",
-  "relevant": true
+  "answer": "Every press went to the runner on an Apple TV, and an alert is answered with the remote by moving the D-pad to its button and then selecting it. The remote's Back button answers the alert with the cancel button.",
+  "at": "2026-10-20T22:10:00.000Z",
+  "faithful": true,
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Faithful: the alert half is P2 (CHALLENGES 298); the runner clause restates P1. Not relevant: the why half is unanswered (the tvOS runner answers from the foreground and stays there after a restart, P1, CHALLENGES 296).",
+  "relevant": false
  },
  "q056": {
+  "answer": "A Wear OS watch is driven as any Android device, by the same backends. Swipe right to go back, or press the back button.",
   "at": "2026-10-14T01:34:16.445023Z",
   "faithful": true,
   "note": "Lana, 2026-10-14, after Claude's reading. leaves out that a real watch is unmeasured",
   "relevant": true
  },
  "q058": {
-  "at": "2026-10-14T01:34:16.445023Z",
+  "answer": "Mobium can automate a Tizen TV, but it is not explicitly supported. It can automate an Apple TV simulator, and it can also automate a Fire TV.",
+  "at": "2026-10-20T22:20:00.000Z",
   "faithful": false,
-  "note": "Lana, 2026-10-14, after Claude's reading. Tizen is in no passage",
+  "note": "Lana, 2026-10-20, after Claude's reading: Claude's marks, accepted by Lana in chat. Not faithful: Tizen is in no passage, and P4 (README drivers, the gold) says a TV Mobium does not drive itself takes a driver; the Apple TV and Fire TV sentence is true but beside the point. Relevant: answers the yes/no, wrongly.",
   "relevant": true
  }
 }

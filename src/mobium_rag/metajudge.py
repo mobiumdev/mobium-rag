@@ -182,15 +182,23 @@ def report() -> str:
     compared without scoring again."""
     saved = json.loads(SCORES.read_text())
     judges, ids, scores, ctl = saved["judges"], saved["ids"], saved["scores"], saved["controls"]
+    # A label is of the answer it was made on: once that answer is written
+    # again, differently, the label says nothing about the one scored here.
+    now = {a["id"]: a["answer"] for a in map(json.loads, ANSWERS.read_text().splitlines())}
     marks = labels()
+    stale = sorted(q for q, m in marks.items() if "answer" in m and m["answer"] != now.get(q))
+    marks = {q: m for q, m in marks.items() if q not in stale}
     labeled = sum(1 for i in ids if i in marks)
     L = ["# The judge, measured\n",
          f"{len(ids)} answered questions the docs cover, from phase 5's answers; each scored once by each judge, "
          f"and the first {REPEAT} a second time. Faithfulness weighs the answer against at most 15 facts drawn "
          "from its passages. "
-         f"The golden set is {reviewed(golden())}; a person labeled {labeled} of these answers — those in "
-         "review/labels.json with Claude's claim-by-claim reading of each shown beside it (review/readings.json), "
-         "those in review/labels-blind.json with none — and each set is compared on its own below.\n",
+         f"The golden set is {reviewed(golden())}; a person labeled {labeled} of these answers — some with Claude's "
+         "claim-by-claim reading of each shown beside it (review/readings.json), some blind, with none — and "
+         "each set is compared on its own below."
+         + (f" Left out: {len(stale)} labels of an answer since written again ({', '.join(stale)}); "
+            "`python review/build_labels.py --relabel` makes the page to label them again." if stale else "")
+         + "\n",
          "## Controls\n", "| Judge | Passed | Failed |", "|---|---|---|"]
     for m in judges:
         bad = [c for c in ctl[m] if not c["ok"]]
