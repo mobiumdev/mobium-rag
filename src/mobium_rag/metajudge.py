@@ -184,9 +184,11 @@ def report() -> str:
     judges, ids, scores, ctl = saved["judges"], saved["ids"], saved["scores"], saved["controls"]
     # A label is of the answer it was made on: once that answer is written
     # again, differently, the label says nothing about the one scored here.
-    now = {a["id"]: a["answer"] for a in map(json.loads, ANSWERS.read_text().splitlines())}
+    # The answers are not committed, so a clone without them cannot tell.
+    now = ({a["id"]: a["answer"] for a in map(json.loads, ANSWERS.read_text().splitlines())}
+           if ANSWERS.exists() else None)
     marks = labels()
-    stale = sorted(q for q, m in marks.items() if "answer" in m and m["answer"] != now.get(q))
+    stale = sorted(q for q, m in marks.items() if now is not None and "answer" in m and m["answer"] != now.get(q))
     marks = {q: m for q, m in marks.items() if q not in stale}
     labeled = sum(1 for i in ids if i in marks)
     L = ["# The judge, measured\n",

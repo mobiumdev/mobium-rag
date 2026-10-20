@@ -40,6 +40,24 @@ def test_a_blind_set_is_compared_on_its_own(tmp_path, monkeypatch):
     assert "| labeled blind | a | faithfulness | 1 of 2 |" in out
 
 
+def test_a_label_of_an_answer_since_rewritten_is_left_out(tmp_path, monkeypatch):
+    saved = {"judges": ["a"], "ids": ["q1", "q2"], "controls": {"a": []},
+             "scores": {"a": {"faithfulness": [[0.9, 0.9], [0.9, 0.9]], "relevancy": [[0.9] * 2, [0.9] * 2]}}}
+    (tmp_path / "s.json").write_text(json.dumps(saved))
+    (tmp_path / "l.json").write_text(json.dumps({"q1": {"faithful": True, "relevant": True, "answer": "same"},
+                                                 "q2": {"faithful": False, "relevant": True, "answer": "old"}}))
+    (tmp_path / "a.jsonl").write_text('{"id": "q1", "answer": "same"}\n{"id": "q2", "answer": "new"}\n')
+    for name, f in (("SCORES", "s.json"), ("LABELS", "l.json"), ("BLIND", "missing-blind.json"),
+                    ("REPORT", "r.md"), ("ANSWERS", "a.jsonl")):
+        monkeypatch.setattr(metajudge, name, tmp_path / f)
+    out = metajudge.report()
+    assert "a person labeled 1 of these answers" in out
+    assert "Left out: 1 labels of an answer since written again (q2)" in out
+    assert "| every label | a | faithfulness | 1 of 1 |" in out
+    monkeypatch.setattr(metajudge, "ANSWERS", tmp_path / "missing.jsonl")  # a clone: no answers to tell by
+    assert "a person labeled 2 of these answers" in metajudge.report()
+
+
 def test_report_without_labels_says_how_to_add_them(tmp_path, monkeypatch):
     saved = {"judges": ["a", "b"], "ids": ["q1"], "controls": {"a": [], "b": []},
              "scores": {m: {"faithfulness": [[0.9], [0.9]], "relevancy": [[0.9], [0.9]]} for m in ("a", "b")}}
