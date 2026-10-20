@@ -1,0 +1,365 @@
+<title>Mobium Citation Graph</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Every section of Mobium's docs that cites another, and what it cites: the defect log, decisions, checks, guides and roadmap as one graph.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a header strip of figures, then the graph beside a reading panel; the panel drops below it on a phone. */
+:root {
+  --bg: #f3f5f8; --surface: #ffffff; --fg: #18202b; --muted: #5a6474; --line: #d5dbe3; --edge: #8b97a8; --focus: #1f5fbf;
+  --defects: #c8384f; --roadmap: #23806d; --checks: #b87a0c; --decisions: #6b4fbf; --guides: #2a6cc0; --reference: #6d7888; --project: #a2508f;
+  --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e131a; --surface: #161d27; --fg: #e3e8ef; --muted: #96a1b1; --line: #2a3442; --edge: #5d6b7e; --focus: #7fb0ff;
+  --defects: #f07a8a; --roadmap: #5cc4ab; --checks: #e3ab45; --decisions: #a991f0; --guides: #6fa6ec; --reference: #9aa5b5; --project: #d98cc6;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e131a; --surface: #161d27; --fg: #e3e8ef; --muted: #96a1b1; --line: #2a3442; --edge: #5d6b7e; --focus: #7fb0ff;
+  --defects: #f07a8a; --roadmap: #5cc4ab; --checks: #e3ab45; --decisions: #a991f0; --guides: #6fa6ec; --reference: #9aa5b5; --project: #d98cc6;
+  color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 20px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 700 clamp(28px, 4vw, 40px)/1.1 var(--display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.lede { margin: 0; max-width: 68ch; color: var(--muted); }
+.figures { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 4px 0 0; padding: 0; list-style: none; font-variant-numeric: tabular-nums; }
+.figures b { font: 700 20px/1 var(--display); color: var(--fg); margin-right: 6px; }
+.figures li { color: var(--muted); }
+.figures code { font: 13px var(--mono); }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; }
+@media (max-width: 860px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; height: min(74vh, 760px); min-height: 420px; }
+.stage canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.stage canvas:active { cursor: grabbing; }
+.hint { position: absolute; left: 12px; bottom: 10px; font: 12px var(--mono); color: var(--muted); pointer-events: none; }
+.controls { position: absolute; right: 10px; top: 10px; display: flex; gap: 6px; }
+button, input { font: inherit; color: inherit; }
+button { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+aside { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.panel h2 { font: 700 13px/1.2 var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0; }
+#q { width: 100%; box-sizing: border-box; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+.legend { display: grid; gap: 4px; }
+.legend label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.legend .sw { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.legend .n { margin-left: auto; color: var(--muted); font: 12px var(--mono); }
+.detail .id { font: 12px var(--mono); color: var(--muted); word-break: break-all; }
+.detail h3 { font: 700 17px/1.3 var(--display); margin: 0; text-wrap: balance; }
+.detail a { color: var(--focus); }
+.nb { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; max-height: 260px; overflow-y: auto; }
+.nb button { all: unset; cursor: pointer; display: flex; gap: 8px; align-items: baseline; padding: 3px 4px; border-radius: 4px; width: 100%; box-sizing: border-box; }
+.nb button:hover, .nb button:focus-visible { background: var(--bg); outline: none; }
+.nb .sw { width: 8px; height: 8px; border-radius: 50%; flex: none; transform: translateY(-1px); }
+.nb span.t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.empty { color: var(--muted); margin: 0; }
+.finding { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; }
+.finding h2 { font: 700 20px/1.2 var(--display); margin: 0; }
+.finding p { margin: 0; max-width: 72ch; }
+.finding table { border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+.finding th, .finding td { text-align: right; padding: 4px 14px 4px 0; border-bottom: 1px solid var(--line); }
+.finding th:first-child, .finding td:first-child { text-align: left; }
+.tbl { overflow-x: auto; }
+footer { color: var(--muted); font-size: 13px; }
+footer a { color: inherit; }
+.tip { position: absolute; max-width: 240px; padding: 5px 8px; border-radius: 6px; background: var(--fg); color: var(--surface); font-size: 12px; pointer-events: none; }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">mobium-rag · the docs' own citations, in 3D</span>
+    <h1>Mobium Citation Graph</h1>
+    <p class="lede">Each dot is a section of Mobium's documentation. A line means one section cites the other, by a defect number like “CHALLENGES 305” or by a link. Nothing here was inferred by a model: every line is a citation a person wrote.</p>
+    <ul class="figures" id="figures"></ul>
+  </header>
+
+  <div class="main">
+    <div class="stage">
+      <canvas id="graph" tabindex="0" role="img" aria-label="Citation graph of Mobium's documentation in 3D. Drag or use the arrow keys to turn it; the search and the list beside it reach every section."></canvas>
+      <div class="tip" id="tip" hidden></div>
+      <div class="controls"><button id="spin" type="button">Pause</button><button id="reset" type="button">Reset</button></div>
+      <span class="hint">Drag to turn · scroll or pinch to zoom · select a dot</span>
+    </div>
+    <aside>
+      <div class="panel">
+        <h2>Find a section</h2>
+        <input id="q" type="search" placeholder="CHALLENGES#305, slider, Safari…" autocomplete="off" list="ids">
+        <datalist id="ids"></datalist>
+      </div>
+      <div class="panel detail" id="detail" aria-live="polite">
+        <h2>Selected</h2>
+        <p class="empty">Select a dot to see what it cites and what cites it.</p>
+      </div>
+      <div class="panel">
+        <h2>Kinds of section</h2>
+        <div class="legend" id="legend"></div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="finding" id="finding" hidden></section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const FAMILIES = [
+  ["defects", "Defect log (CHALLENGES)"], ["decisions", "Decision records"], ["checks", "End-to-end checks"],
+  ["guides", "Guides and quick starts"], ["reference", "Reference docs"], ["roadmap", "Roadmap"], ["project", "Project files"]];
+const color = f => `var(--${f})`;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const nodes = DATA.nodes.map(d => ({ ...d }));
+const byId = new Map(nodes.map(d => [d.id, d]));
+const links = DATA.links.map(l => ({ source: byId.get(l.source), target: byId.get(l.target) }));
+const adj = new Map(nodes.map(d => [d.id, new Set()]));
+links.forEach(l => { adj.get(l.source.id).add(l.target); adj.get(l.target.id).add(l.source); });
+nodes.forEach(d => { d.deg = adj.get(d.id).size; d.r = 3 + Math.sqrt(d.deg) * 1.7; });
+const shown = new Set(FAMILIES.map(f => f[0]));
+
+document.getElementById("figures").innerHTML =
+  `<li><b>${nodes.length}</b>sections cite or are cited</li>` +
+  `<li><b>${links.length}</b>citations</li>` +
+  `<li><b>${DATA.sections}</b>sections in all</li>` +
+  `<li>docs at <code>${DATA.pin.slice(0, 7)}</code></li>`;
+document.getElementById("ids").innerHTML = nodes.map(d => `<option value="${d.id}">`).join("");
+
+// A 3D layout, computed once with a fixed seed so every visit sees the same
+// shape: links pull, every pair pushes apart, a weak pull to the center.
+const rand = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(42);
+nodes.forEach(d => { d.x = (rand() - .5) * 300; d.y = (rand() - .5) * 300; d.z = (rand() - .5) * 300; });
+for (let it = 0, n = nodes.length; it < 300; it++) {
+  const a = 1 - it / 300;
+  for (let i = 0; i < n; i++) {
+    const p = nodes[i];
+    for (let j = i + 1; j < n; j++) {
+      const q = nodes[j];
+      let dx = p.x - q.x, dy = p.y - q.y, dz = p.z - q.z, d2 = dx * dx + dy * dy + dz * dz + .01;
+      if (d2 > 90000) continue;
+      const f = 60 * a / d2;
+      p.x += dx * f; p.y += dy * f; p.z += dz * f; q.x -= dx * f; q.y -= dy * f; q.z -= dz * f;
+    }
+  }
+  for (const l of links) {
+    const s = l.source, t = l.target, dx = t.x - s.x, dy = t.y - s.y, dz = t.z - s.z;
+    const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1, f = (d - 30) / d * .08 * a;
+    s.x += dx * f; s.y += dy * f; s.z += dz * f; t.x -= dx * f; t.y -= dy * f; t.z -= dz * f;
+  }
+  for (const p of nodes) { p.x *= 1 - .01 * a; p.y *= 1 - .01 * a; p.z *= 1 - .01 * a; }
+}
+const radius = Math.max(...nodes.map(d => Math.hypot(d.x, d.y, d.z)));
+
+const canvas = document.getElementById("graph"), ctx = canvas.getContext("2d");
+const tip = document.getElementById("tip");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+let W = 0, H = 0, dpr = 1, palette = {};
+let view = { yaw: .6, pitch: -.35, zoom: 1, cx: 0, cy: 0, cz: 0 }, goal = null;
+let spinning = !reduce.matches, selected = null, hover = null, proj = [];
+
+function readPalette() {
+  const s = getComputedStyle(document.documentElement);
+  palette = Object.fromEntries(["surface", "fg", "muted", "edge", ...FAMILIES.map(f => f[0])].map(k => [k, s.getPropertyValue("--" + k).trim()]));
+  palette.font = s.getPropertyValue("--body").trim();
+}
+function resize() {
+  const r = canvas.getBoundingClientRect();
+  dpr = window.devicePixelRatio || 1; W = r.width; H = r.height;
+  canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+}
+function project(p) {
+  let x = p.x - view.cx, y = p.y - view.cy, z = p.z - view.cz;
+  const cy = Math.cos(view.yaw), sy = Math.sin(view.yaw), cp = Math.cos(view.pitch), sp = Math.sin(view.pitch);
+  [x, z] = [x * cy - z * sy, x * sy + z * cy];
+  [y, z] = [y * cp - z * sp, y * sp + z * cp];
+  const cam = radius * 2.6, s = Math.min(W, H) * .5 / radius * 1.9 * view.zoom * cam / (cam + z);
+  return { x: W / 2 + x * s, y: H / 2 + y * s, z, s };
+}
+
+function draw() {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  proj = nodes.map(d => ({ d, ...project(d) }));
+  const at = new Map(proj.map(p => [p.d, p]));
+  const near = selected ? adj.get(selected.id) : null;
+  const on = d => shown.has(d.family) && (!near || d === selected || near.has(d));
+  const zs = proj.map(p => p.z), z0 = Math.min(...zs), z1 = Math.max(...zs);
+  const depth = z => 1 - .65 * (z - z0) / (z1 - z0 || 1);   // near 1, far .35
+
+  ctx.lineCap = "round";
+  for (const l of links) {
+    const a = at.get(l.source), b = at.get(l.target);
+    const vis = shown.has(l.source.family) && shown.has(l.target.family);
+    const mine = selected && (l.source === selected || l.target === selected);
+    ctx.globalAlpha = !vis ? .02 : mine ? .95 : selected ? .04 : .28 * depth((a.z + b.z) / 2);
+    ctx.strokeStyle = mine ? palette.fg : palette.edge;
+    ctx.lineWidth = mine ? 1.4 : .8;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  proj.sort((a, b) => b.z - a.z);          // far first, so near dots cover far ones
+  for (const p of proj) {
+    const d = p.d, r = Math.max(1.5, d.r * p.s / (Math.min(W, H) * .5 / radius * 1.9));
+    ctx.globalAlpha = !shown.has(d.family) ? .05 : on(d) ? depth(p.z) * .85 + .15 : .1;
+    ctx.fillStyle = palette[d.family];
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill();
+    if (d === selected || d === hover) { ctx.globalAlpha = 1; ctx.strokeStyle = palette.fg; ctx.lineWidth = 2; ctx.stroke(); }
+    p.r = r;
+  }
+  // Labels: the most cited sections, more as you zoom in, and a selection's neighbors.
+  const cut = view.zoom > 3 ? 0 : view.zoom > 1.8 ? 6 : 14;
+  ctx.font = `12px ${palette.font}`; ctx.lineJoin = "round";
+  for (const p of proj) {
+    const d = p.d;
+    if (!(near ? on(d) : shown.has(d.family) && d.deg >= cut && p.z < (z0 + z1) / 2 + (z1 - z0) * .2)) continue;
+    ctx.globalAlpha = near ? 1 : depth(p.z);
+    ctx.strokeStyle = palette.surface; ctx.lineWidth = 3; ctx.strokeText(short(d), p.x + p.r + 4, p.y + 4);
+    ctx.fillStyle = palette.fg; ctx.fillText(short(d), p.x + p.r + 4, p.y + 4);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function short(d) {
+  const t = d.family === "defects" ? d.id.replace("CHALLENGES#", "") + " " + d.title.replace(/^\d+\.\s*/, "") : d.title;
+  return t.length > 38 ? t.slice(0, 36) + "…" : t;
+}
+
+function frame() {
+  if (spinning && !drag) view.yaw += .0025;
+  if (goal) {
+    const t = reduce.matches ? 1 : .12;
+    for (const k of ["cx", "cy", "cz", "zoom"]) view[k] += (goal[k] - view[k]) * t;
+    if (Math.abs(goal.zoom - view.zoom) < .002 && Math.abs(goal.cx - view.cx) < .05) goal = null;
+  }
+  draw();
+  requestAnimationFrame(frame);
+}
+
+// Rotate by dragging, zoom by wheel or pinch; a click that did not drag selects.
+let drag = null; const pointers = new Map();
+canvas.addEventListener("pointerdown", e => {
+  canvas.setPointerCapture(e.pointerId); pointers.set(e.pointerId, e);
+  drag = { x: e.clientX, y: e.clientY, moved: 0, pinch: null }; spinning = false; goal = null;
+});
+canvas.addEventListener("pointermove", e => {
+  if (!drag) { hoverAt(e); return; }
+  if (pointers.size === 2) {
+    pointers.set(e.pointerId, e);
+    const [a, b] = [...pointers.values()], dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    if (drag.pinch) view.zoom = Math.min(8, Math.max(.4, view.zoom * dist / drag.pinch));
+    drag.pinch = dist; drag.moved += 10; return;
+  }
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  view.yaw += dx * .008; view.pitch = Math.max(-1.5, Math.min(1.5, view.pitch - dy * .008));
+  drag.x = e.clientX; drag.y = e.clientY; drag.moved += Math.abs(dx) + Math.abs(dy);
+});
+const up = e => {
+  pointers.delete(e.pointerId);
+  if (drag && drag.moved < 5 && e.type === "pointerup") { const p = pick(e); select(p ? p.d : null); }
+  if (!pointers.size) drag = null;
+};
+canvas.addEventListener("pointerup", up); canvas.addEventListener("pointercancel", up);
+canvas.addEventListener("pointerleave", () => { hover = null; tip.hidden = true; });
+canvas.addEventListener("wheel", e => {
+  e.preventDefault(); goal = null; spinning = false;
+  view.zoom = Math.min(8, Math.max(.4, view.zoom * Math.exp(-e.deltaY * .0015)));
+}, { passive: false });
+canvas.addEventListener("keydown", e => {
+  const k = { ArrowLeft: [-.15, 0], ArrowRight: [.15, 0], ArrowUp: [0, .15], ArrowDown: [0, -.15] }[e.key];
+  if (k) { e.preventDefault(); spinning = false; view.yaw += k[0]; view.pitch = Math.max(-1.5, Math.min(1.5, view.pitch + k[1])); }
+  if (e.key === "+" || e.key === "=") view.zoom = Math.min(8, view.zoom * 1.2);
+  if (e.key === "-") view.zoom = Math.max(.4, view.zoom / 1.2);
+});
+
+function pick(e) {
+  const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  let best = null, bd = Infinity;
+  for (const p of proj) {   // nearest to the viewer wins among dots under the pointer
+    if (!shown.has(p.d.family)) continue;
+    const d = Math.hypot(p.x - x, p.y - y);
+    if (d <= Math.max(p.r, 6) && (best === null || p.z < best.z || d < bd && p.z === best.z)) { best = p; bd = d; }
+  }
+  return best;
+}
+function hoverAt(e) {
+  const p = pick(e);
+  hover = p ? p.d : null;
+  canvas.style.cursor = p ? "pointer" : "grab";
+  if (!p) { tip.hidden = true; return; }
+  tip.textContent = `${p.d.title} · ${p.d.deg} citation${p.d.deg === 1 ? "" : "s"}`;
+  const r = canvas.getBoundingClientRect();
+  tip.style.left = Math.min(e.clientX - r.left + 12, W - 240) + "px"; tip.style.top = (e.clientY - r.top + 12) + "px";
+  tip.hidden = false;
+}
+
+function fit(d) {
+  goal = d ? { cx: d.x, cy: d.y, cz: d.z, zoom: 2.4 } : { cx: 0, cy: 0, cz: 0, zoom: 1 };
+}
+document.getElementById("reset").onclick = () => { selected = null; select(null); fit(null); };
+document.getElementById("spin").onclick = e => { spinning = !spinning; e.target.textContent = spinning ? "Pause" : "Spin"; };
+document.getElementById("spin").textContent = spinning ? "Pause" : "Spin";
+
+function select(d) {
+  selected = d;
+  const el = document.getElementById("detail");
+  if (!d) { el.innerHTML = `<h2>Selected</h2><p class="empty">Select a dot to see what it cites and what cites it.</p>`; return; }
+  const nb = [...adj.get(d.id)].sort((a, b) => b.deg - a.deg || a.id.localeCompare(b.id));
+  const fam = FAMILIES.find(f => f[0] === d.family)[1];
+  el.innerHTML = `<h2>Selected</h2>
+    <h3>${esc(d.title)}</h3>
+    <div class="id">${esc(d.id)}</div>
+    <div>${fam} · ${d.deg} citation${d.deg === 1 ? "" : "s"} · <a href="${d.url}" target="_blank" rel="noopener">Read it on GitHub</a></div>
+    <ul class="nb">${nb.map(n => `<li><button type="button" data-id="${esc(n.id)}"><span class="sw" style="background:${color(n.family)}"></span><span class="t">${esc(short(n))}</span></button></li>`).join("")}</ul>`;
+  el.querySelectorAll(".nb button").forEach(b => b.onclick = () => select(byId.get(b.dataset.id)));
+  fit(d);
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function paint() {}
+
+const legend = document.getElementById("legend");
+FAMILIES.forEach(([f, name]) => {
+  const n = nodes.filter(d => d.family === f).length;
+  legend.insertAdjacentHTML("beforeend",
+    `<label><input type="checkbox" id="f-${f}" checked><span class="sw" style="background:${color(f)}"></span>${name}<span class="n">${n}</span></label>`);
+  document.getElementById(`f-${f}`).onchange = e => { e.target.checked ? shown.add(f) : shown.delete(f); paint(); };
+});
+
+const q = document.getElementById("q");
+q.addEventListener("change", find);
+q.addEventListener("keydown", e => { if (e.key === "Enter") find(); });
+function find() {
+  const s = q.value.trim().toLowerCase();
+  if (!s) return;
+  const hit = byId.get(q.value.trim()) ||
+    nodes.filter(d => (d.id + " " + d.title).toLowerCase().includes(s)).sort((a, b) => b.deg - a.deg)[0];
+  if (hit) select(hit);
+}
+
+const R = DATA.retrieval;
+if (R) {
+  const f = document.getElementById("finding");
+  const row = (name, v) => `<tr><td>${name}</td>${v.map(x => `<td>${x.toFixed(3)}</td>`).join("")}</tr>`;
+  const [d, lo, hi] = R.recall_diff;
+  f.innerHTML = `<h2>What the graph did for retrieval</h2>
+    <p>The graph was tried as a way to answer more of the RAG's golden questions. The five passages a question matched best brought the sections they cite into the reranker's candidates. Recall@5 changed by ${d >= 0 ? "+" : ""}${d.toFixed(3)} (95% interval ${lo.toFixed(3)} to ${hi >= 0 ? "+" : ""}${hi.toFixed(3)}), which is no measurable gain. The citations did bring more gold sections into the candidates, but the reranker passed them over. The graph is a map for a person reading the docs, not yet a better retriever.</p>
+    <div class="tbl"><table><thead><tr><th>Retriever</th><th>recall@5</th><th>MRR</th><th>nDCG@5</th></tr></thead>
+    <tbody>${row("Two-stage", R.rows["two-stage"])}${row("Two-stage with citations", R.rows["two-stage + graph"])}</tbody></table></div>`;
+  f.hidden = false;
+}
+
+document.getElementById("foot").innerHTML =
+  `Built from <a href="https://github.com/mobiumdev/mobium/tree/${DATA.pin}" target="_blank" rel="noopener">mobiumdev/mobium at ${DATA.pin.slice(0, 7)}</a> by <a href="https://github.com/mobiumdev/mobium-rag" target="_blank" rel="noopener">mobium-rag</a>. Citations are read by pattern: “CHALLENGES N”, “defect N” and Markdown links between the docs.`;
+
+readPalette(); resize();
+new ResizeObserver(resize).observe(canvas);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readPalette);
+new MutationObserver(readPalette).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+document.fonts?.ready.then(readPalette);
+requestAnimationFrame(frame);
+</script>

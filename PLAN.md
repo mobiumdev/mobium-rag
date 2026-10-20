@@ -257,3 +257,25 @@ use.
   llama3.1:8b by default, never compared.
 - Whether the golden set is versioned with Mobium's docs, since the answers
   change when the docs do.
+
+**Re-pinned to `7b590a4` and the reranker given the file name
+(2026-10-19).** Every gold section exists at the new pin (1,007 passages),
+but two-stage recall@5 fell to 0.786 and MRR to 0.745, under the floors of
+0.81 and 0.73: 26 new CHALLENGES entries compete with the old ones (q028
+now gets 296, 298 and 334 for 297). The reranker loses what it is given —
+the best reranking of its 20 candidates reaches 0.879, of 40, 0.957 — so
+seven changes were measured against it, each paired and bootstrapped
+(`data/retrieval-report.md`, "Rerankers"): the docs' citations as a graph
+(+0.000), 40 candidates (+0.013), rank fusion with the first stage
+(+0.036), `BAAI/bge-reranker-v2-m3` over 20 and 40 (+0.019, +0.035), that
+fused (+0.029), and the passage's file named in front of its text. Only
+the last cleared zero: MRR +0.023 (+0.005 to +0.045), nDCG@5 +0.021
+(+0.005 to +0.041), recall@5 +0.032 (+0.000 to +0.071). Adopted as the
+default (`retrieve.Index.scores`, generation and the review page too);
+the run is 0.818 and 0.768, the same twice, and the floors are one
+question under it, 0.80 and 0.75. Seven tries on one set of 78 can find
+one by luck, so the held-out check is q079–q082, unreviewed, and more
+unseen questions. The platform questions (q055–q061) still all miss, under
+every reranker: the likelier fix is a section in Mobium's docs that answers
+"which platforms", not retrieval. Stored answers predate both the pin and
+the change; the next generation run covers all 78.

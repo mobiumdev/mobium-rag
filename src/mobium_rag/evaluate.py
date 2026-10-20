@@ -9,15 +9,23 @@ retrievers is paired by question and bootstrapped, with its interval.
 from __future__ import annotations
 
 import json
+import os
 import random
 from statistics import mean
 
-from . import corpus
+from . import corpus, graph
 from .metrics import mrr, ndcg_at, recall_at
-from .retrieve import EMBED, RERANK, Index
+from .retrieve import EMBED, RERANK, RERANK_BGE, Index
 
 K = 5
 FIRST_STAGE = 20
+# The larger reranker is a 2.2 GB download and slow on a CPU, so it is
+# measured by `make retrieval` and left out of the gate's run in CI.
+BGE = os.environ.get("MOBIUM_RAG_BGE") == "1"
+# Reciprocal rank fusion's constant, the usual one.
+RRF_K = 60
+# The bi-encoder's top passages whose cited neighbors join the candidates.
+SEEDS = 5
 GOLDEN = corpus.ROOT / "data" / "golden.jsonl"
 REPORT = corpus.ROOT / "data" / "retrieval-report.md"
 
@@ -53,11 +61,44 @@ def run() -> str:
     ids = [p.id for p in passages]
     index = Index(passages, pin)
 
-    systems: dict[str, dict[str, list[str]]] = {"oracle (control)": {}, "random (control)": {}, "bi-encoder": {}, "two-stage": {}}
+    edges = graph.build(passages)
+    sections = sorted({corpus.section_of(i) for i in ids})
+    random_edges = graph.shuffled(edges, sections)
+    parts: dict[str, list[str]] = {}
+    for i in ids:
+        parts.setdefault(corpus.section_of(i), []).append(i)
+
+    def expanded(question: str, hits: list[tuple[str, float]], g: dict[str, set[str]]) -> list[str]:
+        cands = [pid for pid, _ in hits]
+        for s in sorted(graph.neighbors(g, cands[:SEEDS])):
+            cands += [i for i in parts[s] if i not in cands]
+        return [pid for pid, _ in index.rerank(question, cands, K)]
+
+    systems: dict[str, dict[str, list[str]]] = {
+        "oracle (control)": {}, "random (control)": {}, "bi-encoder": {}, "two-stage": {},
+        "two-stage + graph": {}, "two-stage + shuffled graph (control)": {}, "two-stage, 40 candidates (control)": {},
+        "best reranking of 20 (ceiling)": {}, "best reranking of 40 (ceiling)": {},
+        "two-stage, fused with first stage": {}, "two-stage, heading only (before)": {},
+        **({"bge reranker, 20": {}, "bge reranker, 40": {}, "bge reranker, 40, fused": {}} if BGE else {})}
+
+    def top(scores: dict[str, float]) -> list[str]:
+        return [pid for pid, _ in sorted(scores.items(), key=lambda x: -x[1])[:K]]
+
+    def fused(first: list[str], scores: dict[str, float]) -> list[str]:
+        """Reciprocal rank fusion: each list's rank counts, neither list's score."""
+        by_rr = sorted(first, key=lambda c: -scores[c])
+        rrf = {c: 1 / (RRF_K + first.index(c) + 1) + 1 / (RRF_K + by_rr.index(c) + 1) for c in first}
+        return top(rrf)
+
+    def ceiling(cands: list[str], gold: list[str]) -> list[str]:
+        """The best any reranker could do with these candidates: gold first."""
+        g = [c for c in cands if corpus.section_of(c) in gold]
+        return g + [c for c in cands if c not in g]
     rng = random.Random(0)
     best_sim: dict[str, float] = {}
     for q in qs + [q for q in golden() if not q["gold"]]:
-        hits = index.search(q["question"], FIRST_STAGE)
+        wide = index.search(q["question"], 2 * FIRST_STAGE)
+        hits = wide[:FIRST_STAGE]
         best_sim[q["id"]] = hits[0][1]
         if not q["gold"]:
             continue
@@ -65,6 +106,20 @@ def run() -> str:
         systems["random (control)"][q["id"]] = rng.sample(ids, FIRST_STAGE)
         systems["bi-encoder"][q["id"]] = [pid for pid, _ in hits[:K]]
         systems["two-stage"][q["id"]] = [pid for pid, _ in index.rerank(q["question"], [pid for pid, _ in hits], K)]
+        systems["two-stage + graph"][q["id"]] = expanded(q["question"], hits, edges)
+        systems["two-stage + shuffled graph (control)"][q["id"]] = expanded(q["question"], hits, random_edges)
+        systems["two-stage, 40 candidates (control)"][q["id"]] = [pid for pid, _ in index.rerank(q["question"], [pid for pid, _ in wide], K)]
+        first, first40 = [pid for pid, _ in hits], [pid for pid, _ in wide]
+        mini = index.scores(q["question"], first)
+        systems["best reranking of 20 (ceiling)"][q["id"]] = ceiling(first, q["gold"])
+        systems["best reranking of 40 (ceiling)"][q["id"]] = ceiling(first40, q["gold"])
+        systems["two-stage, fused with first stage"][q["id"]] = fused(first, mini)
+        systems["two-stage, heading only (before)"][q["id"]] = top(index.scores(q["question"], first, with_path=False))
+        if BGE:
+            bge = index.scores(q["question"], first40, RERANK_BGE, with_path=False)
+            systems["bge reranker, 20"][q["id"]] = top({c: bge[c] for c in first})
+            systems["bge reranker, 40"][q["id"]] = top(bge)
+            systems["bge reranker, 40, fused"][q["id"]] = fused(first40, bge)
 
     per = {name: {q["id"]: score(r[q["id"]], q["gold"]) for q in qs} for name, r in systems.items()}
     L = ["# Retrieval\n",
@@ -90,6 +145,36 @@ def run() -> str:
         d, lo, hi = boot_diff(a, b)
         L.append(f"| {key} | {d:+.3f} | {lo:+.3f} to {hi:+.3f} |")
 
+    L.append(f"\n## The docs' citations as a graph\n")
+    L.append(f"{sum(len(v) for v in edges.values()) // 2} edges among {len(sections)} sections, read from "
+             f"\"CHALLENGES N\", \"defect N\" and Markdown links (graph.py); the bi-encoder's top {SEEDS} "
+             "add their cited neighbors to the reranker's candidates. Two controls: the same number of neighbors "
+             f"chosen at random, and {2 * FIRST_STAGE} bi-encoder candidates with no graph.\n")
+    L.append("| Against two-stage | Metric | Difference | 95% interval |")
+    L.append("|---|---|---|---|")
+    for name in ("two-stage + graph", "two-stage + shuffled graph (control)", "two-stage, 40 candidates (control)"):
+        for key in ("recall@5", "mrr", "ndcg@5"):
+            d, lo, hi = boot_diff([per["two-stage"][q["id"]][key] for q in qs], [per[name][q["id"]][key] for q in qs])
+            L.append(f"| {name} | {key} | {d:+.3f} | {lo:+.3f} to {hi:+.3f} |")
+    moved = [(q["id"], per["two-stage"][q["id"]]["recall@5"], per["two-stage + graph"][q["id"]]["recall@5"])
+             for q in qs if per["two-stage"][q["id"]]["recall@5"] != per["two-stage + graph"][q["id"]]["recall@5"]]
+    L.append("\nQuestions whose recall@5 the graph changed: " +
+             (", ".join(f"{i} {a:.2f}→{b:.2f}" for i, a, b in moved) or "none") + ".")
+
+    L.append("\n## Rerankers\n")
+    L.append(f"The ceilings put every gold candidate first: no reranker of those candidates can do better. "
+             f"Fused is reciprocal rank fusion (k={RRF_K}) of the first stage's ranking and the reranker's. " +
+             (f"bge is `{RERANK_BGE[0]}` @{RERANK_BGE[1][:7]}, given the heading only, as it was measured. " if BGE else
+              "The bge rows are left out of this run (`MOBIUM_RAG_BGE=1`, which `make retrieval` sets). ") +
+             "Two-stage reads each passage with its file named; heading only is how it read them before.\n")
+    L.append("| Against two-stage | Metric | Difference | 95% interval |")
+    L.append("|---|---|---|---|")
+    for name in [n for n in ("two-stage, heading only (before)", "two-stage, fused with first stage", "bge reranker, 20",
+                              "bge reranker, 40", "bge reranker, 40, fused") if n in per]:
+        for key in ("recall@5", "mrr", "ndcg@5"):
+            d, lo, hi = boot_diff([per["two-stage"][q["id"]][key] for q in qs], [per[name][q["id"]][key] for q in qs])
+            L.append(f"| {name} | {key} | {d:+.3f} | {lo:+.3f} to {hi:+.3f} |")
+
     L.append("\n## By kind\n")
     L.append("| Kind | Questions | bi-encoder recall@5 | two-stage recall@5 |")
     L.append("|---|---|---|---|")
@@ -114,8 +199,11 @@ def run() -> str:
     return REPORT.read_text()
 
 
-# The regression gate's floors, just under the run at the current pin
-# (2026-10-12, corpus 663b4c8: recall@5 0.836, MRR 0.760): retrieval is
+# The regression gate's floors, one question under the run at the current
+# pin (2026-10-19, corpus 7b590a4, the reranker given the file name:
+# recall@5 0.818, MRR 0.768; heading only it was 0.786 and 0.745, under the
+# old floors of 0.81 and 0.73). Before that (2026-10-12, corpus 663b4c8:
+# recall@5 0.836, MRR 0.760). Retrieval is
 # deterministic — pinned models, a pinned corpus — so a fall below either is a
 # change, not noise. A new pin is a deliberate change to the corpus and moves
 # the floors with it: at 5b27730 they were 0.85 and 0.75 (run 0.887, 0.792),
@@ -124,7 +212,7 @@ def run() -> str:
 # One question is 0.018 of recall@5, and one run in ten at this pin came back
 # 0.818 (q003 missed; not reproduced in nine more, two from a fresh index), so
 # the floors sit one question under the run rather than just under it.
-FLOORS = {"recall@5": 0.81, "mrr": 0.73}
+FLOORS = {"recall@5": 0.80, "mrr": 0.75}
 
 
 def gate() -> int:

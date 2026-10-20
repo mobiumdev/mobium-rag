@@ -18,6 +18,10 @@ reviews the golden set, rules on what the docs cannot settle, labels
 answers and chooses the judge, and how.
 This file is how it fits together and how to run it.
 
+[The citation graph](https://mobiumdev.github.io/mobium-rag/) draws every
+section of Mobium's docs that cites another, in 3D: built by `make graph`
+from the docs' own citations, with no model.
+
 ## Status (2026-10-13)
 
 | Phase | What | State |
@@ -71,12 +75,14 @@ heading is a passage with a stable id: a defect-log entry is
 `CHALLENGES#105`, because that is how the docs and the code cite it. A
 section longer than 1,800 characters is cut into parts
 (`docs/SETUP.md#parallel-runs~2`), and a part retrieved counts for its
-section. Licenses, client code and test data are left out. At `4ca9a44`:
-967 passages from 48 files.
+section. Licenses, client code and test data are left out. At `7b590a4`:
+1,007 passages from 48 files.
 
 **Retrieval** is two stages: `BAAI/bge-small-en-v1.5` over a Chroma index
 takes the top 20, and `cross-encoder/ms-marco-MiniLM-L-6-v2` reranks them to
-5. Both models are pinned by revision and loaded as safetensors only.
+5, reading each passage with its file's path in front of it: a heading does
+not say whether a section is the README's or the roadmap's. Both models are
+pinned by revision and loaded as safetensors only.
 
 **Generation** gives the five passages to `llama3.1:8b` through Ollama,
 numbered P1 to P5 and quoted as data, never as instructions. The model
@@ -181,21 +187,27 @@ wrong answer becomes an eval and the evals check every fix (mobium-evals,
 README, "The improvement loop").
 After review: 52 `fact`, 8 `multi`, 1 `unanswerable`.
 
-## Results at `4ca9a44`
+## Results
+
+Retrieval at `7b590a4`, 78 questions; generation at `4ca9a44`, 61.
 
 | | Value |
 | --- | --- |
-| Retrieval controls | oracle 1.000 on every metric; random 0.017 recall@5 |
-| Bi-encoder | recall@5 0.739, MRR 0.658, nDCG@5 0.643 |
-| Two-stage | recall@5 **0.814**, MRR **0.753**, nDCG@5 0.742; the gate's floors are 0.81 and 0.73 |
-| Two-stage over bi-encoder | recall@5 +0.075 (95% interval +0.025 to +0.142) |
+| Retrieval controls | oracle 1.000 on every metric; random 0.013 recall@5 |
+| Bi-encoder | recall@5 0.773, MRR 0.668, nDCG@5 0.664 |
+| Two-stage | recall@5 **0.818**, MRR **0.768**, nDCG@5 0.755; the gate's floors are 0.80 and 0.75 |
+| Two-stage over bi-encoder | MRR +0.100 (95% interval +0.039 to +0.164); recall@5 +0.045 (−0.019 to +0.110) |
+| The file named for the reranker | MRR +0.023 (+0.005 to +0.045); recall@5 +0.032 (+0.000 to +0.071) |
+| Best reranking of the 20 candidates | recall@5 0.879: the most any reranker of them could reach |
 | Refusals | 1 of 1 unanswerable refused; 0 of 60 answerable refused |
 | Citations | precision 0.656, recall 0.654, over 60 answers; none to a passage not given |
 | Faithfulness | not yet trusted from any judge (above) |
 
 The weakest spot the reviewed set shows: every "does Mobium run on X"
 question misses its gold section (README, "Drivers for other platforms",
-and ROADMAP), outranked by sections that name a device.
+and ROADMAP), outranked by sections that name a device — under every
+reranker tried, a larger one and rank fusion included
+(`data/retrieval-report.md`, "Rerankers").
 
 ## Running it
 
@@ -256,6 +268,8 @@ deliberate corpus change and is reviewed like code.
 | `data/judge-report-run1.md`, `-run2.md` | the judge runs so far |
 | `review/` | the review and labeling pages, their decisions, and the scripts that apply them |
 | `corpus.pin` | the Mobium commit the corpus is built from |
+| `src/mobium_rag/graph.py` | the docs' citations as a graph over sections, read by pattern |
+| `src/mobium_rag/graphpage.py`, `site/` | the citation graph page; `make graph` writes `site/index.html`, published to GitHub Pages |
 
 The index (`data/index/`), `data/corpus.jsonl`, the answers and the
 current reports are generated, and not committed.

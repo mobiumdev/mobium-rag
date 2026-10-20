@@ -1,0 +1,37 @@
+name: pages
+
+# The citation graph page, site/index.html, as committed: `make graph`
+# builds it from the pinned corpus and the retrieval report, which CI does
+# not keep, so the page is built where the report is and committed.
+on:
+  push:
+    branches: [main]
+    paths: [site/**, .github/workflows/pages.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # The private working repository has no Pages site.
+    if: github.repository == 'mobiumdev/mobium-rag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4

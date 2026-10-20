@@ -12,7 +12,7 @@ corpus:
 	uv run python -m mobium_rag.corpus
 
 retrieval: corpus
-	uv run python -m mobium_rag.evaluate
+	MOBIUM_RAG_BGE=1 uv run python -m mobium_rag.evaluate
 
 .PHONY: generation
 generation: corpus
@@ -30,3 +30,9 @@ judge: export DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE := 300
 judge: export DEEPEVAL_PER_TASK_TIMEOUT_SECONDS_OVERRIDE := 900
 judge:
 	uv run python -m mobium_rag.metajudge
+
+# The docs' citations as a page for GitHub Pages: site/index.html. Run after
+# `make retrieval` for the page to say what the graph did for retrieval.
+.PHONY: graph
+graph: corpus
+	uv run python -m mobium_rag.graphpage

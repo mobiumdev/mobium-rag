@@ -13,6 +13,8 @@ from .corpus import ROOT, Passage
 
 EMBED = ("BAAI/bge-small-en-v1.5", "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a")
 RERANK = ("cross-encoder/ms-marco-MiniLM-L-6-v2", "233902d25c440f23af6f7d6e94d2946bac0bee0a")
+# A larger reranker, measured against RERANK (evaluate.py); Apache-2.0.
+RERANK_BGE = ("BAAI/bge-reranker-v2-m3", "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e")
 # bge is trained to read a query with this in front of it, and a passage
 # without.
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
@@ -27,10 +29,10 @@ def embedder():
 
 
 @cache
-def reranker():
+def reranker(model: tuple[str, str] = RERANK):
     from sentence_transformers import CrossEncoder
 
-    return CrossEncoder(RERANK[0], revision=RERANK[1], model_kwargs={"use_safetensors": True})
+    return CrossEncoder(model[0], revision=model[1], max_length=512, model_kwargs={"use_safetensors": True})
 
 
 def _collection(pin: str):
@@ -65,10 +67,20 @@ class Index:
         res = self.col.query(query_embeddings=[q.tolist()], n_results=k)
         return [(pid, 1 - d) for pid, d in zip(res["ids"][0], res["distances"][0])]
 
-    def rerank(self, question: str, candidates: list[str], k: int) -> list[tuple[str, float]]:
-        scores = reranker().predict([(question, self.by_id[c].text) for c in candidates])
-        ranked = sorted(zip(candidates, (float(s) for s in scores)), key=lambda x: -x[1])
-        return ranked[:k]
+    def scores(self, question: str, candidates: list[str], model: tuple[str, str] = RERANK,
+               with_path: bool = True) -> dict[str, float]:
+        """The reranker's score for each candidate, read with the passage's
+        file in front of its text: a section's heading does not say it is
+        the README's or the roadmap's, and with the file named MRR rose by
+        0.023 (95% interval +0.005 to +0.045) at 7b590a4. `with_path` False
+        is the reranker as it was, for comparison."""
+        text = (lambda c: f"{self.by_id[c].path}\n{self.by_id[c].text}") if with_path else (lambda c: self.by_id[c].text)
+        return dict(zip(candidates, (float(s) for s in reranker(model).predict([(question, text(c)) for c in candidates]))))
+
+    def rerank(self, question: str, candidates: list[str], k: int, model: tuple[str, str] = RERANK,
+               with_path: bool = True) -> list[tuple[str, float]]:
+        scores = self.scores(question, candidates, model, with_path)
+        return sorted(scores.items(), key=lambda x: -x[1])[:k]
 
 
 def path() -> Path:
