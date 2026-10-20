@@ -12,7 +12,7 @@ corpus:
 	uv run python -m mobium_rag.corpus
 
 retrieval: corpus
-	MOBIUM_RAG_BGE=1 uv run python -m mobium_rag.evaluate
+	uv run python -m mobium_rag.evaluate
 
 .PHONY: generation
 generation: corpus

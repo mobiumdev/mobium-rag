@@ -9,7 +9,6 @@ retrievers is paired by question and bootstrapped, with its interval.
 from __future__ import annotations
 
 import json
-import os
 import random
 from statistics import mean
 
@@ -19,9 +18,6 @@ from .retrieve import EMBED, RERANK, RERANK_BGE, Index
 
 K = 5
 FIRST_STAGE = 20
-# The larger reranker is a 2.2 GB download and slow on a CPU, so it is
-# measured by `make retrieval` and left out of the gate's run in CI.
-BGE = os.environ.get("MOBIUM_RAG_BGE") == "1"
 # Reciprocal rank fusion's constant, the usual one.
 RRF_K = 60
 # The bi-encoder's top passages whose cited neighbors join the candidates.
@@ -54,7 +50,11 @@ def boot_diff(a: list[float], b: list[float], n: int = 4000, seed: int = 0) -> t
     return mean(d), s[int(0.025 * n)], s[int(0.975 * n) - 1]
 
 
-def run() -> str:
+def run(compare: bool = True) -> str:
+    """The report. `compare` adds the graph, the ceilings and the other
+    rerankers, each a reranking of every question and one a 2.2 GB model:
+    `make retrieval` runs them, the gate leaves them out, since on CI's CPU
+    they took the run past its 20 minutes."""
     pin = corpus.PIN.read_text().strip()
     passages = corpus.load()
     qs = [q for q in golden() if q["gold"]]
@@ -75,11 +75,13 @@ def run() -> str:
         return [pid for pid, _ in index.rerank(question, cands, K)]
 
     systems: dict[str, dict[str, list[str]]] = {
-        "oracle (control)": {}, "random (control)": {}, "bi-encoder": {}, "two-stage": {},
-        "two-stage + graph": {}, "two-stage + shuffled graph (control)": {}, "two-stage, 40 candidates (control)": {},
-        "best reranking of 20 (ceiling)": {}, "best reranking of 40 (ceiling)": {},
-        "two-stage, fused with first stage": {}, "two-stage, heading only (before)": {},
-        **({"bge reranker, 20": {}, "bge reranker, 40": {}, "bge reranker, 40, fused": {}} if BGE else {})}
+        "oracle (control)": {}, "random (control)": {}, "bi-encoder": {}, "two-stage": {}}
+    if compare:
+        systems |= {
+            "two-stage + graph": {}, "two-stage + shuffled graph (control)": {}, "two-stage, 40 candidates (control)": {},
+            "best reranking of 20 (ceiling)": {}, "best reranking of 40 (ceiling)": {},
+            "two-stage, fused with first stage": {}, "two-stage, heading only (before)": {},
+            "bge reranker, 20": {}, "bge reranker, 40": {}, "bge reranker, 40, fused": {}}
 
     def top(scores: dict[str, float]) -> list[str]:
         return [pid for pid, _ in sorted(scores.items(), key=lambda x: -x[1])[:K]]
@@ -106,6 +108,8 @@ def run() -> str:
         systems["random (control)"][q["id"]] = rng.sample(ids, FIRST_STAGE)
         systems["bi-encoder"][q["id"]] = [pid for pid, _ in hits[:K]]
         systems["two-stage"][q["id"]] = [pid for pid, _ in index.rerank(q["question"], [pid for pid, _ in hits], K)]
+        if not compare:
+            continue
         systems["two-stage + graph"][q["id"]] = expanded(q["question"], hits, edges)
         systems["two-stage + shuffled graph (control)"][q["id"]] = expanded(q["question"], hits, random_edges)
         systems["two-stage, 40 candidates (control)"][q["id"]] = [pid for pid, _ in index.rerank(q["question"], [pid for pid, _ in wide], K)]
@@ -115,11 +119,10 @@ def run() -> str:
         systems["best reranking of 40 (ceiling)"][q["id"]] = ceiling(first40, q["gold"])
         systems["two-stage, fused with first stage"][q["id"]] = fused(first, mini)
         systems["two-stage, heading only (before)"][q["id"]] = top(index.scores(q["question"], first, with_path=False))
-        if BGE:
-            bge = index.scores(q["question"], first40, RERANK_BGE, with_path=False)
-            systems["bge reranker, 20"][q["id"]] = top({c: bge[c] for c in first})
-            systems["bge reranker, 40"][q["id"]] = top(bge)
-            systems["bge reranker, 40, fused"][q["id"]] = fused(first40, bge)
+        bge = index.scores(q["question"], first40, RERANK_BGE, with_path=False)
+        systems["bge reranker, 20"][q["id"]] = top({c: bge[c] for c in first})
+        systems["bge reranker, 40"][q["id"]] = top(bge)
+        systems["bge reranker, 40, fused"][q["id"]] = fused(first40, bge)
 
     per = {name: {q["id"]: score(r[q["id"]], q["gold"]) for q in qs} for name, r in systems.items()}
     L = ["# Retrieval\n",
@@ -145,6 +148,15 @@ def run() -> str:
         d, lo, hi = boot_diff(a, b)
         L.append(f"| {key} | {d:+.3f} | {lo:+.3f} to {hi:+.3f} |")
 
+    if compare:
+        compared(L, per, qs, edges, sections)
+    else:
+        L.append("\nThe graph, the ceilings and the other rerankers are left out of this run; "
+                 "`make retrieval` measures them.")
+    return finish(L, per, qs, systems, best_sim)
+
+
+def compared(L: list[str], per: dict, qs: list[dict], edges: dict, sections: list[str]) -> None:
     L.append(f"\n## The docs' citations as a graph\n")
     L.append(f"{sum(len(v) for v in edges.values()) // 2} edges among {len(sections)} sections, read from "
              f"\"CHALLENGES N\", \"defect N\" and Markdown links (graph.py); the bi-encoder's top {SEEDS} "
@@ -163,18 +175,19 @@ def run() -> str:
 
     L.append("\n## Rerankers\n")
     L.append(f"The ceilings put every gold candidate first: no reranker of those candidates can do better. "
-             f"Fused is reciprocal rank fusion (k={RRF_K}) of the first stage's ranking and the reranker's. " +
-             (f"bge is `{RERANK_BGE[0]}` @{RERANK_BGE[1][:7]}, given the heading only, as it was measured. " if BGE else
-              "The bge rows are left out of this run (`MOBIUM_RAG_BGE=1`, which `make retrieval` sets). ") +
+             f"Fused is reciprocal rank fusion (k={RRF_K}) of the first stage's ranking and the reranker's. "
+             f"bge is `{RERANK_BGE[0]}` @{RERANK_BGE[1][:7]}, given the heading only, as it was measured. "
              "Two-stage reads each passage with its file named; heading only is how it read them before.\n")
     L.append("| Against two-stage | Metric | Difference | 95% interval |")
     L.append("|---|---|---|---|")
-    for name in [n for n in ("two-stage, heading only (before)", "two-stage, fused with first stage", "bge reranker, 20",
-                              "bge reranker, 40", "bge reranker, 40, fused") if n in per]:
+    for name in ("two-stage, heading only (before)", "two-stage, fused with first stage", "bge reranker, 20",
+                 "bge reranker, 40", "bge reranker, 40, fused"):
         for key in ("recall@5", "mrr", "ndcg@5"):
             d, lo, hi = boot_diff([per["two-stage"][q["id"]][key] for q in qs], [per[name][q["id"]][key] for q in qs])
             L.append(f"| {name} | {key} | {d:+.3f} | {lo:+.3f} to {hi:+.3f} |")
 
+
+def finish(L: list[str], per: dict, qs: list[dict], systems: dict, best_sim: dict) -> str:
     L.append("\n## By kind\n")
     L.append("| Kind | Questions | bi-encoder recall@5 | two-stage recall@5 |")
     L.append("|---|---|---|---|")
@@ -218,7 +231,7 @@ FLOORS = {"recall@5": 0.80, "mrr": 0.75}
 def gate() -> int:
     """`make ci`: the report, then a failure if a control scored as it must
     not or the two-stage retriever fell below a floor."""
-    text = run()
+    text = run(compare=False)
     print(text)
     failed = []
     if "the metrics can move both ways" not in text:
