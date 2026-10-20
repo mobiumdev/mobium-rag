@@ -189,16 +189,16 @@ After review: 52 `fact`, 8 `multi`, 1 `unanswerable`.
 
 ## Results
 
-Retrieval at `7b590a4`, 78 questions; generation at `4ca9a44`, 61.
+Retrieval at `7b590a4`, 82 questions; generation at `4ca9a44`, 61.
 
 | | Value |
 | --- | --- |
-| Retrieval controls | oracle 1.000 on every metric; random 0.013 recall@5 |
-| Bi-encoder | recall@5 0.773, MRR 0.668, nDCG@5 0.664 |
-| Two-stage | recall@5 **0.818**, MRR **0.768**, nDCG@5 0.755; the gate's floors are 0.80 and 0.75 |
-| Two-stage over bi-encoder | MRR +0.100 (95% interval +0.039 to +0.164); recall@5 +0.045 (−0.019 to +0.110) |
-| The file named for the reranker | MRR +0.023 (+0.005 to +0.045); recall@5 +0.032 (+0.000 to +0.071) |
-| Best reranking of the 20 candidates | recall@5 0.879: the most any reranker of them could reach |
+| Retrieval controls | oracle 1.000 on every metric; random 0.012 recall@5 |
+| Bi-encoder | recall@5 0.772, MRR 0.666, nDCG@5 0.663 |
+| Two-stage | recall@5 **0.815**, MRR **0.767**, nDCG@5 0.755; the gate's floors are 0.80 and 0.75 |
+| Two-stage over bi-encoder | MRR +0.101 (95% interval +0.042 to +0.164); recall@5 +0.043 (−0.019 to +0.105) |
+| The file named for the reranker | MRR +0.022 (+0.006 to +0.043); recall@5 +0.031 (+0.000 to +0.074) |
+| Best reranking of the 20 candidates | recall@5 0.872: the most any reranker of them could reach |
 | Refusals | 1 of 1 unanswerable refused; 0 of 60 answerable refused |
 | Citations | precision 0.656, recall 0.654, over 60 answers; none to a passage not given |
 | Faithfulness | not yet trusted from any judge (above) |

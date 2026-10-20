@@ -279,3 +279,15 @@ unseen questions. The platform questions (q055–q061) still all miss, under
 every reranker: the likelier fix is a section in Mobium's docs that answers
 "which platforms", not retrieval. Stored answers predate both the pin and
 the change; the next generation run covers all 78.
+
+**82 reviewed (2026-10-19).** q079–q082 (CHALLENGES 318–321) went on the
+review page at `7b590a4` with Claude's check of each; Lana decided them in
+chat, since the page had not saved them, and they were written to its
+database as hers: q079, q080 and q082 approved, q081 edited — CHALLENGES
+320 says a range the page stops short fails as `not_confirmed` and names
+no code for an ARIA slider, so the fact says "fails, saying so (as
+not_confirmed for a range)". The gate on 82: two-stage recall@5 0.815, MRR
+0.767, above the floors of 0.80 and 0.75. As a held-out check of the file
+name they do not decide it: the heading-only reranker also ranks q079–q081's
+gold first, and q082's gold is not in the 20 candidates under either, so
+its miss is the first stage's.

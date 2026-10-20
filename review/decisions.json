@@ -942,5 +942,49 @@
   ],
   "note": "Lana, 2026-10-14: approved — the Tizen ruling: not built in, anyone can write a driver (examples/drivers/README.md). Claude's check: Drafted from the driver guide's opening, which names 'a car head unit' among what a driver reaches. The same ruling as Tizen (q058): not built in, anyone can write a driver. Proposed: approve, if that ruling applies to cars too.",
   "question": null
+ },
+ "q079": {
+  "also": [],
+  "at": "2026-10-20T06:00:00Z",
+  "decision": "approve",
+  "facts": [
+   "On iOS that slider reports itself as a plain view with no trait and no value, so nothing outside the app can set it; fill is refused as unsupported.",
+   "The refusal names app_swipe: a drag from its thumb along its track moves it, as a finger does."
+  ],
+  "note": "Lana, 2026-10-19: approved (given in chat; the page had not saved it). Claude's check: 318: MobiumApp's slider library reports each slider on iOS as a plain view with no trait and no value, so app_fill is refused as unsupported, and the remedy is app_swipe from the thumb along the track. Proposed: approve.",
+  "question": null
+ },
+ "q080": {
+  "also": [],
+  "at": "2026-10-20T06:00:00Z",
+  "decision": "approve",
+  "facts": [
+   "A range is a slider: app_fill takes a position from 0 to 1, set from the page's own min, max and step, so it lands exactly.",
+   "app_type on it is refused, naming app_fill; map names it by its label, with its value as its state."
+  ],
+  "note": "Lana, 2026-10-19: approved (given in chat; the page had not saved it). Claude's check: 319: a range is a slider, named by its label with its value as its state; app_fill takes 0 to 1 turned into the page's min, max and step; app_type is refused naming app_fill. Proposed: approve.",
+  "question": null
+ },
+ "q081": {
+  "also": [],
+  "at": "2026-10-20T06:00:00Z",
+  "decision": "edit",
+  "facts": [
+   "Each thumb is its own slider in map: two ranges each by its label, or two ARIA sliders by theirs.",
+   "app_fill moves one thumb to a position from 0 to 1 — a range by its value, an ARIA slider by its arrow keys — and a thumb the page stops short fails, saying so (as not_confirmed for a range)."
+  ],
+  "note": "Lana, 2026-10-19: edit as Claude proposed (given in chat; the page had not saved it). Claude's check: 320 says a range the page stops short fails as not_confirmed, and of an ARIA slider only that the fill fails, saying the page stopped it, naming no code; the second fact now says so.",
+  "question": null
+ },
+ "q082": {
+  "also": [],
+  "at": "2026-10-20T06:00:00Z",
+  "decision": "approve",
+  "facts": [
+   "An agent in Claude Code is handed a failed call's text alone, with no code and no structured remedy.",
+   "So an error's text is its message, then next: and its remedy when the message does not already say it; the structured payload keeps the two apart."
+  ],
+  "note": "Lana, 2026-10-19: approved (given in chat; the page had not saved it). Claude's check: 321: an error's text is its message, then next: and the remedy when the message does not already say it; the structured payload keeps the two apart. Proposed: approve.",
+  "question": null
  }
 }

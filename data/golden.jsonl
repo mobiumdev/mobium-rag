@@ -76,3 +76,7 @@
 {"id": "q076", "question": "Why did map list every switch on a Wear OS settings screen three times?", "kind": "fact", "gold": ["CHALLENGES#316"], "status": "reviewed"}
 {"id": "q077", "question": "Can Mobium turn a Wear OS watch's crown?", "kind": "fact", "gold": ["README.md#platforms"], "status": "reviewed"}
 {"id": "q078", "question": "Can Mobium automate a car's head unit?", "kind": "fact", "gold": ["examples/drivers/README.md#writing-a-mobium-driver"], "status": "reviewed"}
+{"id": "q079", "question": "Why does app_fill refuse MobiumApp's volume slider on iOS, and how do I move it instead?", "kind": "fact", "gold": ["CHALLENGES#318"], "status": "reviewed"}
+{"id": "q080", "question": "How do I set an <input type=\"range\"> on a web page in a WebView?", "kind": "fact", "gold": ["CHALLENGES#319"], "status": "reviewed"}
+{"id": "q081", "question": "How do I move one thumb of a two-thumb slider on a web page?", "kind": "fact", "gold": ["CHALLENGES#320"], "status": "reviewed"}
+{"id": "q082", "question": "Why do some Mobium errors end with a line starting `next:`?", "kind": "fact", "gold": ["CHALLENGES#321"], "status": "reviewed"}

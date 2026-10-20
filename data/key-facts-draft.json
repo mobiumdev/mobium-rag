@@ -575,5 +575,33 @@
    "Not by itself: Mobium drives Android and iOS out of the box.",
    "Anything else — a car head unit among them — is a driver: a program Mobium starts and talks to over a pipe."
   ]
+ },
+ "q079": {
+  "concern": "",
+  "facts": [
+   "On iOS that slider reports itself as a plain view with no trait and no value, so nothing outside the app can set it; fill is refused as unsupported.",
+   "The refusal names app_swipe: a drag from its thumb along its track moves it, as a finger does."
+  ]
+ },
+ "q080": {
+  "concern": "",
+  "facts": [
+   "A range is a slider: app_fill takes a position from 0 to 1, set from the page's own min, max and step, so it lands exactly.",
+   "app_type on it is refused, naming app_fill; map names it by its label, with its value as its state."
+  ]
+ },
+ "q081": {
+  "concern": "",
+  "facts": [
+   "Each thumb is its own slider in map: two ranges each by its label, or two ARIA sliders by theirs.",
+   "app_fill moves one thumb to a position from 0 to 1 — a range by its value, an ARIA slider by its arrow keys — and a thumb the page stops short fails, saying so (as not_confirmed for a range)."
+  ]
+ },
+ "q082": {
+  "concern": "",
+  "facts": [
+   "An agent in Claude Code is handed a failed call's text alone, with no code and no structured remedy.",
+   "So an error's text is its message, then next: and its remedy when the message does not already say it; the structured payload keeps the two apart."
+  ]
  }
 }
