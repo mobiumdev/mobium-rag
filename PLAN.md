@@ -291,3 +291,98 @@ not_confirmed for a range)". The gate on 82: two-stage recall@5 0.815, MRR
 name they do not decide it: the heading-only reranker also ranks q079–q081's
 gold first, and q082's gold is not in the 20 candidates under either, so
 its miss is the first stage's.
+
+## Phase 6b: a judge that can be trusted (planned 2026-10-24)
+
+Where phase 6 stands: no judge is both repeatable and right. qwen2.5:14b
+and mistral-small:24b, at temperature 0, never move and agree with the
+person on 13 and 14 of 20 faithfulness verdicts; Haiku agrees on 15 and
+flips 6 of 20 when asked again (8 on the answers before 7b590a4), three
+votes halve that and do not raise agreement. Relevance is a rubber stamp:
+every judge passes almost every answer, Haiku 6 of the 6 the person
+failed. And the yardstick is weaker than the reports say: of the 20
+labels, 9 are the person's marks made after reading Claude's claim-by-claim
+reading and 11 are Claude's marks accepted in chat, so none is independent
+of Claude, and 6 negatives a metric cannot tell judges apart. Faithfulness
+is "not yet trusted from any judge"; the plan below is how it gets trusted,
+or is shown not to be.
+
+1. **Ground truth first, because everything else is measured against it.**
+   60 blind labels on the existing blind page (`review/answer-labels-blind.html`,
+   no reading shown): 30 to develop on, 30 held out and opened once, to
+   accept or reject a judge. The sample is chosen to contain failures —
+   answers the judges disagreed or flipped on, answers low on key-fact
+   coverage, and planted negatives (another question's answer, an answer
+   cut short) — or relevance stays unmeasurable. A second labeler on 30 of
+   them gives the person-to-person kappa, the ceiling no judge is asked to
+   beat; without one, the person labels 20 again a week later, a weaker
+   ceiling but a number. Today's 20 stay as a set labeled with Claude's
+   reading, reported apart. Labels keep the answer they were made on.
+2. **Deterministic checks, no judge (`checks.py`, `make checks`).** Every
+   identifier in an answer — a backticked token, a quoted string, a number,
+   a code name, a CHALLENGES number — must appear in the passages it was
+   given; one that does not is a claim with nothing under it. Each key fact
+   gets anchors, the tokens a right answer must contain, each with its
+   alternatives, so coverage is a lookup; a fact with no anchor is counted
+   as not checkable here and left to the judge. Anchors are drafted from
+   the facts and reviewed by a person before any coverage number counts.
+   These checks are repeatable by construction and are still measured
+   against the labels, like any judge: repeatable is not right.
+3. **A narrow judge whose output can be checked.** Instead of DeepEval's
+   one faithfulness number: the answer split into claims by code, and for
+   each claim the judge returns supported, not or partly, the passage, and
+   a verbatim quote, which code looks for in that passage; a verdict whose
+   quote is not there is invalid. Relevance asked per key fact ("does the
+   answer state this?") rather than in general. Controls: the three of
+   phase 6, plus an invented quote and a swapped passage. Candidates:
+   qwen2.5:14b at temperature 0, Haiku ×3, and Haiku through the API at
+   temperature 0 if a key is allowed. Tuned on the 30 development labels
+   only.
+4. **Triage: nothing ships on a judge alone.** A deterministic failure
+   fails. Two judge families agreeing, with no flip and every quote found,
+   decide on their own. Anything else goes to a queue page for a person,
+   like the review pages. The report gives the share decided, the share
+   queued, and how often the decided ones match the held-out labels. CI
+   keeps gating on retrieval and the deterministic checks only.
+5. **Acceptance, set now so it is not moved later.** On the 30 held-out
+   labels a judge decides without a person only if it passes every
+   control, flips at most 1 of 20 scored again, comes within 0.1 kappa of
+   the person-to-person ceiling, and passes at most 1 in 10 of the answers
+   the person failed. Otherwise it stays a triage tool, and the README
+   says so.
+
+The generator stays llama3.1:8b throughout, so only the judge changes.
+Steps 1 and 2 run side by side; 3 is tuned on 1's development half; 4 and
+5 follow. Open, for Lana: who the second labeler is, or a relabel a week
+later; whether an API key is allowed for temperature 0; whether 60 labels
+or 40 to start; whether the 11 labels accepted in chat are labeled again
+blind or kept only in the labeled-with-reading set.
+
+**Step 2 built (2026-10-24, `checks.py`, `make checks`, report
+`data/checks-report.md`).** Over the 81 stored answers at `7b590a4`. The
+controls first: an invented identifier added to each answer is flagged 81
+of 81; each answer with a rare identifier of its own, held to as many
+random passages instead, 22 of 23. Held to every identifier, that second
+control was flagged only 46 of 57: `iOS`, `map`, `1` are in a passage
+whatever the passage. So a token in 2% or more of the corpus is evidence of
+nothing and ignored (79 tokens, in 44 answers), and a token the question
+already has is echoed, not introduced (q055, q057, q059: "Does Mobium
+support HarmonyOS?" gives the answer HarmonyOS, true or not).
+
+The finding: **llama3.1:8b almost never invents an identifier.** 34 of 81
+answers carry a rare one, and one answer has one its passages lack (q075's
+`wear_alertdialog_negative_button`, spelled out from the passage's
+`negative_button`, likely right but not quoted). None of the 6 answers the
+person marked unfaithful is flagged: their faults are in the prose — q055
+says HarmonyOS is supported, q057 wires BrowserStack with two unrelated
+variables — where this check cannot reach. It is cheap, repeatable and
+right when it flags; it is not a faithfulness measure, and step 3's judge
+is still needed for the claims.
+
+Anchors are drafted (`make anchors`, `data/key-fact-anchors.json`, every
+entry `draft`) from each fact's rare identifiers: 69 of 200 facts get one,
+8 of those covered by their answer — a hint that the answers are vague
+rather than wrong, not yet a number. Most facts are prose ("reads show
+bullets and the character count") and need word anchors with
+alternatives, which is the person's review: prune each fact's anchors to
+what a right answer must say, add alternatives, mark it `reviewed`.

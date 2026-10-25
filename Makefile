@@ -36,3 +36,13 @@ judge:
 .PHONY: graph
 graph: corpus
 	uv run python -m mobium_rag.graphpage
+
+# Phase 6b's checks with no judge: identifiers held to their passages, and
+# key-fact coverage by anchors (data/checks-report.md). `anchors` drafts
+# anchors for facts that have none; a reviewed fact's are never rewritten.
+.PHONY: checks anchors
+checks:
+	uv run python -m mobium_rag.checks
+
+anchors:
+	uv run python -m mobium_rag.checks anchors

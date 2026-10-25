@@ -237,3 +237,13 @@ The choice and its reasons go in PLAN.md, phase 6.
 - Faithful means supported by the passages shown, not true.
 - On the blind page, mark first, discuss after.
 - A question that finds a defect is a good question: note it.
+
+## Golden set v2 (from 2026-10-24)
+
+100 questions drafted from nothing against Mobium `f232d54`, to
+`review/GOLDEN-V2.md`: `data/golden-v2-proposed.jsonl`, checked by
+`review/check_golden_v2.py`, on their own page built by
+`review/build_review_v2.py` (`review/golden-review-v2.html`). Key facts
+show their anchors after them in ⟦ ⟧: alternatives split by " / ",
+anchors by " ; ". The 82 in `data/golden.jsonl` keep the gate until v2 is
+decided and applied.
